@@ -9,11 +9,12 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javafx.version>16</javafx.version>
+        <java.version>16</java.version>
     </properties>
 
     <dependencies>
@@ -48,6 +49,15 @@
                 <version>0.0.6</version>
                 <configuration>
                     <mainClass>C7.C7Paint</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                 </configuration>
             </plugin>
         </plugins>
