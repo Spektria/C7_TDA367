@@ -1,4 +1,4 @@
-# C7Paint
+# C7.C7Paint
 Project for course TDA367.
 
 
