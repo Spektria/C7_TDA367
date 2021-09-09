@@ -17,7 +17,7 @@ public class C7Paint extends Application {
         var a = getClass().getResource("sample.fxml");
         Parent root = FXMLLoader.load(getClass().getResource("../sample.fxml"));
         primaryStage.setTitle("PaintQlon");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
     }
 
