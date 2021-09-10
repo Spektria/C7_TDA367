@@ -29,7 +29,7 @@ public class Project {
     }
 
     public Color getPixel(int x, int y){
-        Color out = new Color(255, 255, 255, 0);
+        Color out = new Color(1, 1, 1, 0);
         for (ILayer layer:
              layers) {
             out = blend(layer.getPixel(x, y), out);

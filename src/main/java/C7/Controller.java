@@ -73,7 +73,7 @@ public class Controller implements Initializable {
         for (int i = 0; i < y1; i++) {
             for (int j = 0; j < x1; j++) {
                 C7.Color color = currentProject.getPixel(x+j, x+i);
-                gc.setFill(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                gc.setFill(new Color(color.getRed()*255, color.getGreen()*255, color.getBlue()*255, color.getAlpha()*255));
                 //Update to take into account canvas transform
                 gc.fillRect(x+j, y+i, x+j, y+i);
             }
