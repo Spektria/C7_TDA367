@@ -27,7 +27,7 @@ public class Layer implements ILayer {
     @Override
     public void setPixel(int x, int y, Color color) {
         //Maybe better to check if in bounds explicitly?
-        if ( x > 0 && x <)
+        if ( x >= 0 && x < getWidth() && x >= 0 && x < getHeight())
         pixels[x][y] = color;
     }
 
