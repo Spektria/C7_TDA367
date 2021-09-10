@@ -20,6 +20,8 @@ public class Controller implements Initializable {
     boolean primaryPressed;
     boolean secondaryPressed;
 
+    Project currentProject;
+
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
@@ -27,9 +29,9 @@ public class Controller implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 if (primaryPressed) {
-                    draw(event.getX(), event.getY());
+                    useTool(event.getX(), event.getY(), 0);
                 } else if (secondaryPressed) {
-                    erase(event.getX(), event.getY());
+                    useTool(event.getX(), event.getY(), 1);
                 }
             }
         });
@@ -38,11 +40,13 @@ public class Controller implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
+                    secondaryPressed = false;
                     primaryPressed = true;
-                    draw(event.getX(), event.getY());
+                    useTool(event.getX(), event.getY(), 0);
                 } else if (event.getButton() == MouseButton.SECONDARY) {
+                    primaryPressed = false;
                     secondaryPressed = true;
-                    erase(event.getX(), event.getY());
+                    useTool(event.getX(), event.getY(), 1);
                 }
             }
         });
@@ -61,18 +65,18 @@ public class Controller implements Initializable {
         
     }
 
-    public void draw(double x, double y) {
-        //Change to use the current tool
-        //gc.setFill(Color.BLACK);
-        double size = 10;
-        gc.fillOval(x - size/2,y - size/2,size,size);
+    public void useTool(double x, double y, int button) {
+        //Wait for tool interface
     }
 
-    public void erase(double x, double y) {
-        //Probably make erasing just a tool and remove this
-        double size = 10;
-        //gc.setFill(Color.TRANSPARENT);
-        //gc.fillOval(x - size/2,y - size/2,size,size);
-        gc.clearRect(x - size/2,y - size/2,size,size);
+    void updateView(int x, int y, int x1, int y1) {
+        for (int i = 0; i < y1; i++) {
+            for (int j = 0; j < x1; j++) {
+                C7.Color color = currentProject.getPixel(x+j, x+i);
+                gc.setFill(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                //Update to take into account canvas transform
+                gc.fillRect(x+j, y+i, x+j, y+i);
+            }
+        }
     }
 }
