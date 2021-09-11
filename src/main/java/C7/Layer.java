@@ -18,6 +18,28 @@ public class Layer implements ILayer {
         }
     }
 
+    /**
+     * Constructs a new layer from a 2D matrix of Color
+     * @param colorMatrix The matrix of color data of the new layer
+     */
+    public Layer(Color[][] colorMatrix) {
+        /*pixels = colorMatrix; OPTIMIZATION this works faster but is technically bad because
+        * it leaves an open reference somewhere to the new layer's color data
+        * DEFENSIVE COPYING */
+
+        pixels = new Color[colorMatrix.length][];
+
+        for (int y = 0; y < colorMatrix.length; y++) {
+            pixels[y] = new Color[colorMatrix[y].length];
+
+            for (int x = 0; x < colorMatrix[y].length; x++) {
+                Color oldColor = colorMatrix[y][x];
+                //Would like a copy method for copying color data instead of this repeating pattern of GET
+                pixels[y][x] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
+            }
+        }
+    }
+
     @Override
     public Color getPixel(int x, int y) {
         //Throws an error if out of bounds, but I think that's fine?
