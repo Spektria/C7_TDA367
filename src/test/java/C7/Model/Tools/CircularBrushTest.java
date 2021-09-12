@@ -14,7 +14,7 @@ public class CircularBrushTest {
         var brush = ToolFactory.CreateCircularBrush(1, new Color(0,1,0,0));
         brush.draw(0,0, testSurface);
 
-        System.out.println("Surface:\n" + testSurface.getContentAs2DString());
+        //System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         Assert.assertNotEquals(testSurface.getPixel(0,0), null);
         assertNull(testSurface.getPixel(0, 1));
@@ -28,7 +28,7 @@ public class CircularBrushTest {
         var brush = ToolFactory.CreateCircularBrush(11, color);
         brush.draw(10, 10, testSurface);
 
-        System.out.println("Surface:\n" + testSurface.getContentAs2DString());
+        //System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         // Center
         Assert.assertNotEquals(testSurface.getPixel(10, 10), null);
