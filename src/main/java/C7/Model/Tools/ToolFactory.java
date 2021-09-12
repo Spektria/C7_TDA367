@@ -11,5 +11,7 @@ public class ToolFactory {
         return new Calligraphy(strokeSize, color, angle);
     }
 
-
+    public static ITool CreateFillBucket(Color fill, int threshold){
+        return new FillBucket(fill, threshold);
+    }
 }
