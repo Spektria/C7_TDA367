@@ -7,5 +7,9 @@ public class ToolFactory {
         return new CircularBrush(strokeSize, color);
     }
 
+    public static ITool CreateCalligraphyBrush(int strokeSize, Color color, double angle){
+        return new Calligraphy(strokeSize, color, angle);
+    }
+
 
 }
