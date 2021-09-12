@@ -1,5 +1,9 @@
 package C7;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import java.io.FileInputStream;
+
 public class Layer implements ILayer {
 
     Color[][] pixels;
@@ -37,6 +41,44 @@ public class Layer implements ILayer {
                 //Would like a copy method for copying color data instead of this repeating pattern of GET
                 pixels[y][x] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
             }
+        }
+    }
+
+    /**
+     * Constructs a new layer from a filepath
+     * ONLY SUPPORTS 8bit image of type: BMP, GIF, JPEG, PNG.
+     * @param filePath The path to the requested image
+     * @return New Layer created from image data in file, if error has occurred returns NULL
+     */
+    public static Layer fromFile(String filePath){
+        try{
+            FileInputStream fileStream = new FileInputStream(filePath);
+            Image fileImage = new Image(fileStream);
+
+            int width = (int)fileImage.getWidth();
+            int height = (int)fileImage.getHeight();
+            PixelReader reader = fileImage.getPixelReader();
+
+            Color[][] colorData = new Color[height][];
+
+            for (int y = 0; y < height; y++) {
+                colorData[y] = new Color[width];
+                for (int x = 0; x < width; x++) {
+                    javafx.scene.paint.Color color = reader.getColor(x,y);
+                    float r = (float)color.getRed();
+                    float g = (float)color.getGreen();
+                    float b = (float)color.getBlue();
+                    float a = (float)color.getOpacity();
+
+                    colorData[y][x] = new Color(r,g,b,a);
+                }
+            }
+
+            return new Layer(colorData);
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage());
+            return null;
         }
     }
 
