@@ -6,7 +6,8 @@ package C7;
  * retrieved.
  *
  * @author Elias Ersson
- * @version 1.0
+ * @author Love Gustafsson
+ * @version 1.1
  */
 public interface ILayer {
 
