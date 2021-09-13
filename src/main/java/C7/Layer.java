@@ -1,5 +1,11 @@
 package C7;
 
+/**
+ * Represents a basic image layer.
+ * @author Elias Ersson
+ * @author Love Gustafsson
+ * @version 1.0
+ */
 public class Layer implements ILayer {
 
     private Color[][] pixels;   // This layer's pixel data.
