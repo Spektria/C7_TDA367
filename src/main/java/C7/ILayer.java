@@ -50,4 +50,14 @@ public interface ILayer {
      * @param height The desired height of the layer in pixels.
      */
     void setHeight(int height);
+
+    /**
+     * Checks if the pixel at the specified picture-space co-ordinate is located
+     * within the boundaries of this layer.
+     * @param x The x co-ordinate of the pixel.
+     * @param y The y co-ordinate of the pixel.
+     * @return True if the pixel is within this layer, false if the pixel is
+     * outside this layer.
+     */
+    Boolean isPixelOnLayer(int x, int y);
 }
