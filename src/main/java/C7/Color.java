@@ -47,6 +47,22 @@ public final class Color {
     }
 
     /**
+     * Gets the linear difference between two colors.
+     * @param color1 The first color to compare.
+     * @param color2 The second color to compare.
+     * @return The linear difference between the colors.
+     */
+    static float getColorDifference(Color color1, Color color2) {
+        float dr = color2.getRed() - color1.getRed();
+        float dg = color2.getGreen() - color1.getGreen();
+        float db = color2.getBlue() - color1.getBlue();
+        float da = color2.getAlpha() - color1.getAlpha();
+
+        // Get linear distance between the colors.
+        return (float)Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+    }
+
+    /**
      * Gets the current value of the red channel of this color. The value is
      * between 0, representing no intensity, and 1, representing maximum
      * intensity, or above 1, representing colors above maximum display
