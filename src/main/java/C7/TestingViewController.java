@@ -6,14 +6,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
 public class TestingViewController extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        var a = getClass().getResource("sample.fxml");
-        Parent root = FXMLLoader.load(getClass().getResource("../sample.fxml"));
+        var a = getClass().getResource("C7Paint.fxml");
+        Parent root = FXMLLoader.load(getClass().getResource("../C7Paint.fxml"));
         primaryStage.setTitle("PaintQlone");
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
