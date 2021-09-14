@@ -24,7 +24,7 @@ public class Layer implements ILayer {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 // Copy color values
-                pixels[x][y] = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+                pixels[x][y] = new Color(color);
             }
         }
     }
@@ -41,7 +41,7 @@ public class Layer implements ILayer {
         // Get the color at the specified position.
         Color pixelColor = pixels[x][y];
 
-        return new Color(pixelColor.getRed(), pixelColor.getGreen(), pixelColor.getBlue(), pixelColor.getAlpha());
+        return new Color(pixelColor);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class Layer implements ILayer {
             return;
         }
 
-        pixels[x][y] = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+        pixels[x][y] = new Color(color);
     }
 
     @Override
