@@ -1,4 +1,6 @@
-package C7;
+package C7.Layer;
+
+import C7.Color;
 
 /**
  * ILayer is an interface for layers that are part of a picture. Layers hold

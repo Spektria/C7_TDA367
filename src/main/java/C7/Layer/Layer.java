@@ -1,4 +1,6 @@
-package C7;
+package C7.Layer;
+
+import C7.Color;
 
 /**
  * Represents a basic image layer.
