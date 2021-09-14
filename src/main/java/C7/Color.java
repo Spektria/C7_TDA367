@@ -35,6 +35,18 @@ public final class Color {
     }
 
     /**
+     * Constructs a new RGBA32f32f32f32f color object by copying an existing
+     * color object.
+     * @param color The color object to copy.
+     */
+    public Color(Color color) {
+        setRed(color.getRed());
+        setGreen(color.getGreen());
+        setBlue(color.getBlue());
+        setAlpha(color.getAlpha());
+    }
+
+    /**
      * Gets the current value of the red channel of this color. The value is
      * between 0, representing no intensity, and 1, representing maximum
      * intensity, or above 1, representing colors above maximum display
