@@ -6,6 +6,20 @@ import org.junit.Test;
 public class Vector2DTest {
 
     @Test
+    public void RotationTest(){
+        Vector2D a = new Vector2D(5,5);
+        Vector2D b = new Vector2D(0,0);
+
+        Assert.assertEquals(a.rotatedAround(b, 0),a);
+        Assert.assertEquals(a.rotatedAround(b, Math.PI * 201), a.mult(-1));
+        Assert.assertEquals(a.rotatedAround(b,Math.PI/2d), new Vector2D(-5, 5));
+
+        b = new Vector2D(1,4);
+        Assert.assertEquals(a.rotatedAround(b,Math.PI/2d), new Vector2D(0, 8));
+        Assert.assertEquals(a.rotatedAround(b,3 * Math.PI/2d), new Vector2D(2, 0));
+    }
+
+    @Test
     public void AddTest(){
         Vector2D a = new Vector2D(10, 5);
         Vector2D b = new Vector2D(5, 2);

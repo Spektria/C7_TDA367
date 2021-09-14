@@ -100,12 +100,19 @@ public class Vector2D {
         return new Vector2D(this.x / len, this.y / len);
     }
 
+    private boolean doubleEquals(double a, double b){
+        final double equalsPrecision = 1d/1e6;
+        double diff = Math.abs(a - b);
+        return diff <= equalsPrecision;
+    }
+
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vector2D vector2D = (Vector2D) o;
-        return Double.compare(vector2D.x, x) == 0 && Double.compare(vector2D.y, y) == 0;
+        return doubleEquals(vector2D.x, x) && doubleEquals(vector2D.y, y);
     }
 
     @Override
