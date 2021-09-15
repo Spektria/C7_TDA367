@@ -5,8 +5,8 @@ import C7.Model.Vector.Vector2D;
 import java.util.List;
 
 /**
- * A StrokeInterpolator approximates the {@link Vector2D, Vector2Ds} between values between two govem {@link Vector2D, Vector2Ds} with
- * a given precision.
+ * A StrokeInterpolator approximates the {@link Vector2D, Vector2Ds} between two given
+ * {@link Vector2D, Vector2Ds} with a given precision.
  */
 public interface StrokeInterpolator {
 
