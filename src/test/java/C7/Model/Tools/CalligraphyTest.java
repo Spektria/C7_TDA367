@@ -43,7 +43,7 @@ public class CalligraphyTest {
         ITool calligraphy = ToolFactory.CreateCalligraphyBrush(testISurface,8, new Color(1,0,0,0), Math.PI/4);
         calligraphy.beginDraw(new Vector2D(4,4));
 
-        System.out.println("Surface: \n" + testISurface.getContentAs2DString());
+        //System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Extreme points
         Assert.assertNotNull(testISurface.getPixel(4,4)); // Center

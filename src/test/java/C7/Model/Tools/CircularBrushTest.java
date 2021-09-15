@@ -16,7 +16,7 @@ public class CircularBrushTest {
         brush.beginDraw(new Vector2D(0,0));
         brush.endDraw(new Vector2D(0,0));
 
-        System.out.println("Surface:\n" + testSurface.getContentAs2DString());
+        //System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         Assert.assertNotEquals(testSurface.getPixel(0,0), null);
         assertNull(testSurface.getPixel(0, 1));
@@ -31,7 +31,7 @@ public class CircularBrushTest {
         brush.beginDraw(new Vector2D(10, 10));
         brush.endDraw(new Vector2D(10,10));
 
-        System.out.println("Surface:\n" + testSurface.getContentAs2DString());
+        //System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         // Center
         Assert.assertNotEquals(testSurface.getPixel(10, 10), null);
