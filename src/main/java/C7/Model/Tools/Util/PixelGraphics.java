@@ -1,4 +1,4 @@
-package C7.Model.Utils;
+package C7.Model.Tools.Util;
 
 import java.util.function.BiConsumer;
 
@@ -43,17 +43,27 @@ public final class PixelGraphics {
     }
 
     /**
-     * Performs an action at every pixel of a pixel-approximated disk.
-     * @param x0 the x coordinate center of the disk
-     * @param y0 the y coordinate center of the disk
-     * @param radius the radius of the disk
-     * @param doOnEveryPixel the action to be performed at every pixel in the disk
+     * Performs an action at every pixel of a pixel-approximated ellipse with the center (x0, y0).
+     * @param x0 the center point's x coordinate
+     * @param y0 the center point's y coordinate
+     * @param semiMajor the semi-major axis length of the ellipse
+     * @param semiMinor the semi-minor axis length of the ellipse
+     * @param doOnEveryPixel the action to be performed at evey pixel in teh approximated line.
      */
-    public static void pixelDisk(int x0, int y0, double radius, BiConsumer<Integer, Integer> doOnEveryPixel){
-        for (double x = Math.floor(y0 - radius) - 1; x < Math.ceil(y0 + radius) + 1; x++) {
-            for (double y = Math.floor(x0 - radius) - 1; y < Math.ceil(x0 + radius) + 1; y++) {
-                if((x - x0) * (x - x0) + (y - y0) * (y - y0) <= radius * radius)
-                    doOnEveryPixel.accept((int)x, (int)y);
+    public static void pixelDisk(int x0, int y0, double semiMajor,
+                                 double semiMinor,
+                                 BiConsumer<Integer, Integer> doOnEveryPixel){
+
+        // TODO: make it so that the ellipse can be rotated.
+
+        final double xRadius = semiMajor;
+        final double yRadius = semiMinor;
+
+
+        for (double x = -Math.abs(xRadius) ; x <= Math.abs(xRadius); x++) {
+            for (double y = -Math.abs(yRadius); y <= Math.abs(yRadius); y++){
+                if(x * x * yRadius * yRadius + y * y * xRadius * xRadius <= yRadius * yRadius * xRadius * xRadius)
+                    doOnEveryPixel.accept(x0 + (int)x, y0 + (int)y);
             }
         }
     }
