@@ -1,5 +1,7 @@
 package C7;
 
+import java.util.Objects;
+
 /**
  * <code>Color</code> represents an RGBA32f32f32f32f color value, which is the
  * color format used for color processing in C7Paint. A color has four
@@ -32,6 +34,34 @@ public final class Color {
         setBlue(b);
         setGreen(g);
         setAlpha(a);
+    }
+
+    /**
+     * Constructs a new RGBA32f32f32f32f color object by copying an existing
+     * color object.
+     * @param color The color object to copy.
+     */
+    public Color(Color color) {
+        setRed(color.getRed());
+        setGreen(color.getGreen());
+        setBlue(color.getBlue());
+        setAlpha(color.getAlpha());
+    }
+
+    /**
+     * Gets the linear difference between two colors.
+     * @param color1 The first color to compare.
+     * @param color2 The second color to compare.
+     * @return The linear difference between the colors.
+     */
+    static float getColorDifference(Color color1, Color color2) {
+        float dr = color2.getRed() - color1.getRed();
+        float dg = color2.getGreen() - color1.getGreen();
+        float db = color2.getBlue() - color1.getBlue();
+        float da = color2.getAlpha() - color1.getAlpha();
+
+        // Get linear distance between the colors.
+        return (float)Math.sqrt(dr * dr + dg * dg + db * db + da * da);
     }
 
     /**
@@ -140,5 +170,31 @@ public final class Color {
         }
 
         this.a = a;
+    }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+                "r=" + r +
+                ", g=" + g +
+                ", b=" + b +
+                ", a=" + a +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Color color = (Color) o;
+        return Float.compare(color.r, r) == 0
+                && Float.compare(color.g, g) == 0
+                && Float.compare(color.b, b) == 0
+                && Float.compare(color.a, a) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(r, g, b, a);
     }
 }

@@ -1,4 +1,7 @@
-package C7;
+package C7.Layer;
+
+import C7.Color;
+import C7.Model.Vector.Vector2D;
 
 /**
  * ILayer is an interface for layers that are part of a picture. Layers hold
@@ -6,7 +9,8 @@ package C7;
  * retrieved.
  *
  * @author Elias Ersson
- * @version 1.0
+ * @author Love Gustafsson
+ * @version 1.2
  */
 public interface ILayer {
 
@@ -50,4 +54,50 @@ public interface ILayer {
      * @param height The desired height of the layer in pixels.
      */
     void setHeight(int height);
+
+    /**
+     * Checks if the pixel at the specified picture-space co-ordinate is located
+     * within the boundaries of this layer.
+     * @param x The x co-ordinate of the pixel.
+     * @param y The y co-ordinate of the pixel.
+     * @return True if the pixel is within this layer, false if the pixel is
+     * outside this layer.
+     */
+    Boolean isPixelOnLayer(int x, int y);
+
+    /**
+     * Sets the rotation angle of this layer.
+     * @param angle The angle to set this layer to, in radians.
+     */
+    void setRotation(float angle);
+
+    /**
+     * Gets the current rotation angle of this layer in radians.
+     * @return The current angle of this layer.
+     */
+    float getRotation();
+
+    /**
+     * Sets the origin of this layer, relative to the picture.
+     * @param position The position to set this layer to.
+     */
+    void setPosition(Vector2D position);
+
+    /**
+     * Gets the current origin of this layer, relative to the picture.
+     * @return The current position of this layer.
+     */
+    Vector2D getPosition();
+
+    /**
+     * Sets the x- and y-scale of this layer.
+     * @param scale The scale to set this layer to.
+     */
+    void setScale(Vector2D scale);
+
+    /**
+     * Gets the current x- and y-scale of this layer.
+     * @return The current scale of this layer.
+     */
+    Vector2D getScale();
 }

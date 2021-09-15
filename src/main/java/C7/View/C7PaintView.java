@@ -1,21 +1,26 @@
-package C7;
+package C7.View;
 
+import C7.Project;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class Controller implements Initializable {
+public class C7PaintView implements Initializable {
     @FXML Pane canvasPane;
     @FXML Canvas canvas;
     GraphicsContext gc;
+    @FXML javafx.scene.control.ScrollPane scrollPaneTools;
+    @FXML javafx.scene.control.ScrollPane scrollPaneProperties;
 
     boolean primaryPressed;
     boolean secondaryPressed;
