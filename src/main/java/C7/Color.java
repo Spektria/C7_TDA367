@@ -1,5 +1,7 @@
 package C7;
 
+import java.util.Objects;
+
 /**
  * <code>Color</code> represents an RGBA32f32f32f32f color value, which is the
  * color format used for color processing in C7Paint. A color has four
@@ -168,5 +170,31 @@ public final class Color {
         }
 
         this.a = a;
+    }
+
+    @Override
+    public String toString() {
+        return "Color{" +
+                "r=" + r +
+                ", g=" + g +
+                ", b=" + b +
+                ", a=" + a +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Color color = (Color) o;
+        return Float.compare(color.r, r) == 0
+                && Float.compare(color.g, g) == 0
+                && Float.compare(color.b, b) == 0
+                && Float.compare(color.a, a) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(r, g, b, a);
     }
 }
