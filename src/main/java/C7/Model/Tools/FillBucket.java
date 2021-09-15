@@ -71,7 +71,6 @@ class FillBucket implements ITool{
             return false;
 
         float biggestDelta = getBiggestRGBDelta(color, fill);
-        System.out.println("Delta: " + biggestDelta);
         if(biggestDelta == 0)
             return false;
         return biggestDelta <= threshold;

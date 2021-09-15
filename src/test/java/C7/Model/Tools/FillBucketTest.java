@@ -74,7 +74,7 @@ public class FillBucketTest {
         var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,1f), 0.5f);
         brush.beginDraw(new Vector2D(1,1));
 
-        System.out.println("Surface: \n" + testSurface.getContentAs2DString());
+        //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {
