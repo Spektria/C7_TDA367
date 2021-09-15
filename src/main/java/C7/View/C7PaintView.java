@@ -7,11 +7,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
-import java.awt.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,8 +20,8 @@ public class C7PaintView implements Initializable {
     @FXML Pane canvasPane;
     @FXML Canvas canvas;
     GraphicsContext gc;
-    @FXML javafx.scene.control.ScrollPane scrollPaneTools;
-    @FXML javafx.scene.control.ScrollPane scrollPaneProperties;
+    @FXML FlowPane flowPaneTools;
+    @FXML FlowPane flowPaneProperties;
 
     boolean primaryPressed;
     boolean secondaryPressed;
@@ -67,7 +68,12 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        
+        //Test buttons
+        for (int i = 0; i < 20; i++) {
+            ToolButton button = new ToolButton();
+            flowPaneTools.getChildren().add(button);
+            System.out.println(button.getLayoutX());
+        }
     }
 
     public void useTool(double x, double y, int button) {
