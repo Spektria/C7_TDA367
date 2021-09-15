@@ -1,6 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Color;
+import C7.Model.Vector.Vector2D;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,10 +9,10 @@ public class FillBucketTest {
 
     @Test
     public void emptyFillTest(){
-        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10);
+        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
         Color fill = new Color(20, 50 ,30, 255);
-        var brush = ToolFactory.CreateFillBucket(fill, 50);
-        brush.draw(3,3, testSurface);
+        var brush = ToolFactory.CreateFillBucket(testSurface, fill, 50);
+        brush.beginDraw(new Vector2D(3,3));
 
         //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
@@ -24,7 +25,7 @@ public class FillBucketTest {
 
     @Test
     public void rectangleFillTest(){
-        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10);
+        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
 
         for (int i = 0; i < testSurface.getHeight(); i++) {
             for (int j = 0; j < testSurface.getWidth(); j++) {
@@ -33,8 +34,8 @@ public class FillBucketTest {
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(new Color(0,0,0,255), 50);
-        brush.draw(3,3, testSurface);
+        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,255), 50);
+        brush.beginDraw(new Vector2D(3,3));
 
         //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
@@ -59,7 +60,7 @@ public class FillBucketTest {
 
     @Test
     public void thresholdFillTest(){
-        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10);
+        TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {
@@ -67,8 +68,8 @@ public class FillBucketTest {
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(new Color(0,0,0,255), 50);
-        brush.draw(1,1, testSurface);
+        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,255), 50);
+        brush.beginDraw(new Vector2D(1,1));
 
         //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 

@@ -1,13 +1,16 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ISurface;
+import C7.ILayer;
+import C7.Model.Vector.Vector2D;
 
-public class TestISurfaceImpl implements ISurface {
+public class TestISurfaceImpl implements ILayer {
     private Color[][] ar;
+    private Vector2D scale;
 
-    TestISurfaceImpl(int width, int height){
+    TestISurfaceImpl(int width, int height, Vector2D scale){
         ar = new Color[width][height];
+        this.scale = scale;
     }
 
 
@@ -19,6 +22,16 @@ public class TestISurfaceImpl implements ISurface {
     @Override
     public void setPixel(int x, int y, Color color) {
         ar[x][y] = color;
+    }
+
+    @Override
+    public boolean isInBounds(int x, int y) {
+        return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
+    }
+
+    @Override
+    public Vector2D getScale() {
+        return scale;
     }
 
     @Override

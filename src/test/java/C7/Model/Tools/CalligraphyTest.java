@@ -1,6 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Color;
+import C7.Model.Vector.Vector2D;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -8,9 +9,9 @@ public class CalligraphyTest {
 
     @Test
     public void HorizontalCalligraphyClickTest(){
-        TestISurfaceImpl testISurface = new TestISurfaceImpl(20,20);
-        Brush calligraphy = (Brush)ToolFactory.CreateCalligraphyBrush(11, new Color(1,0,0,0), 0);
-        calligraphy.draw(6, 1, testISurface);
+        TestISurfaceImpl testISurface = new TestISurfaceImpl(20,20, new Vector2D(1,1));
+        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(testISurface, 11, new Color(1,0,0,0), 0);
+        calligraphy.beginDraw(new Vector2D(6, 1));
 
         //System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
@@ -38,11 +39,11 @@ public class CalligraphyTest {
 
     @Test
     public void Sloped45degCalligraphyStrokeTest(){
-        TestISurfaceImpl testISurface = new TestISurfaceImpl(8,8);
-        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(8, new Color(1,0,0,0), Math.PI/4);
-        calligraphy.draw(4, 4, testISurface);
+        TestISurfaceImpl testISurface = new TestISurfaceImpl(8,8, new Vector2D(1,1));
+        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(testISurface,8, new Color(1,0,0,0), Math.PI/4);
+        calligraphy.beginDraw(new Vector2D(4,4));
 
-        //System.out.println("Surface: \n" + testISurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Extreme points
         Assert.assertNotNull(testISurface.getPixel(4,4)); // Center

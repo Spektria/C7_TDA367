@@ -1,24 +1,27 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ISurface;
+import C7.ILayer;
+import C7.Model.Vector.Vector2D;
 
 public class FillBucket implements ITool{
 
     private final int threshold;
     private final Color fill;
+    private final ILayer layer;
 
-    FillBucket(Color fill, int threshold){
+    FillBucket(ILayer layer, Color fill, int threshold){
+        this.layer = layer;
         this.fill = fill;
         this.threshold = threshold;
     }
 
-    @Override
-    public void draw(int x, int y, ISurface surface) {
+
+    private void floodFill(int x, int y, ILayer surface) {
         // TODO: if performance proves to be bad, the flood fill methods should
         // TODO: 4 way recursion to a stack and span based flood fill. See https://en.wikipedia.org/wiki/Flood_fill
 
-        if(!isInBounds(x, y, 0, 0, surface.getWidth() - 1, surface.getHeight() - 1))
+        if(!surface.isInBounds(x, y))
             return;
 
         if(!shouldFill(surface.getPixel(x, y)))
@@ -27,16 +30,11 @@ public class FillBucket implements ITool{
 
         surface.setPixel(x, y, fill);
 
-        draw(x + 1, y, surface);
-        draw(x - 1, y, surface);
-        draw(x, y + 1, surface);
-        draw(x, y - 1, surface);
+        floodFill(x + 1, y, surface);
+        floodFill(x - 1, y, surface);
+        floodFill(x, y + 1, surface);
+        floodFill(x, y - 1, surface);
     }
-
-    private static boolean isInBounds(int px, int py, int x, int y, int width, int height){
-        return px >= x && py >= y && px <= x + width && py <= y + height;
-    }
-
 
     private static int getBiggestRGBDelta(Color c1, Color c2){
         // Get the largest delta of the two rgb value multiplied with its alpha.
@@ -58,6 +56,21 @@ public class FillBucket implements ITool{
         if(biggestDelta == 0)
             return false;
         return biggestDelta <= threshold;
+
+    }
+
+    @Override
+    public void beginDraw(Vector2D pos) {
+        floodFill((int)pos.getX(), (int)pos.getY(), layer);
+    }
+
+    @Override
+    public void move(Vector2D pos) {
+        beginDraw(pos);
+    }
+
+    @Override
+    public void endDraw(Vector2D pos) {
 
     }
 }
