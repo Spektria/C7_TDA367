@@ -1,5 +1,7 @@
-package C7;
+package C7.Layer;
 
+import C7.Color;
+import C7.ILayer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import java.io.FileInputStream;
