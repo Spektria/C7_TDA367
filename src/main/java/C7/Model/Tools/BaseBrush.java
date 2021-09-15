@@ -1,7 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ILayer;
+import C7.Layer.ILayer;
 import C7.Model.Tools.StrokeInterpolation.LinearStrokeInterpolator;
 import C7.Model.Tools.StrokeInterpolation.StrokeInterpolator;
 import C7.Model.Vector.Vector2D;

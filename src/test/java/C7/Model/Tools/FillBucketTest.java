@@ -10,8 +10,8 @@ public class FillBucketTest {
     @Test
     public void emptyFillTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
-        Color fill = new Color(20, 50 ,30, 255);
-        var brush = ToolFactory.CreateFillBucket(testSurface, fill, 50);
+        Color fill = new Color(0.2f, 0.5f ,0.3f, 1f);
+        var brush = ToolFactory.CreateFillBucket(testSurface, fill, 0.5f);
         brush.beginDraw(new Vector2D(3,3));
 
         //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
@@ -30,11 +30,11 @@ public class FillBucketTest {
         for (int i = 0; i < testSurface.getHeight(); i++) {
             for (int j = 0; j < testSurface.getWidth(); j++) {
                 if(i == 2 || j == 1 || testSurface.getHeight() - i == 1 + 1 || testSurface.getWidth() - j == 1 + 1)
-                    testSurface.setPixel(j, i, new Color(150, 150, 150, 255));
+                    testSurface.setPixel(j, i, new Color(0.15f, 0.15f, 0.15f, 1f));
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,255), 50);
+        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,1f), 0.05f);
         brush.beginDraw(new Vector2D(3,3));
 
         //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
@@ -44,7 +44,7 @@ public class FillBucketTest {
                 Color pixel = testSurface.getPixel(x, y);
                 if(y == 2 || x == 1 || testSurface.getHeight() - y == 2 || testSurface.getWidth() - x == 2){
 
-                    if(pixel.getGreen() != 150)
+                    if(pixel.getGreen() != 0.15f)
                         Assert.fail();
                 }
                 else if(y > 2 && x > 1 && testSurface.getHeight() - y > 2 && testSurface.getWidth() - x > 2){
@@ -64,22 +64,22 @@ public class FillBucketTest {
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {
-                testSurface.setPixel(x, y, new Color(x * 10, 0, 0, 255));
+                testSurface.setPixel(x, y, new Color(x * 0.1f, 0, 0, 1f));
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,255), 50);
+        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,1f), 0.5f);
         brush.beginDraw(new Vector2D(1,1));
 
-        //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {
                 Color pixel = testSurface.getPixel(x, y);
                 if(x < 6)
-                    Assert.assertEquals(0, pixel.getRed());
+                    Assert.assertEquals(0, Float.compare(0, pixel.getRed()));
                 else
-                    Assert.assertEquals(x * 10, pixel.getRed());
+                    Assert.assertEquals(0, Float.compare(x * 0.1f, pixel.getRed()));
             }
         }
 

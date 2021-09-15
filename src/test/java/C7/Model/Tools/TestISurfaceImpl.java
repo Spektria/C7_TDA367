@@ -1,7 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ILayer;
+import C7.Layer.ILayer;
 import C7.Model.Vector.Vector2D;
 
 public class TestISurfaceImpl implements ILayer {
@@ -25,11 +25,6 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public boolean isInBounds(int x, int y) {
-        return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
-    }
-
-    @Override
     public Vector2D getScale() {
         return scale;
     }
@@ -40,8 +35,48 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
+    public void setHeight(int height) {
+
+    }
+
+    @Override
+    public Boolean isPixelOnLayer(int x, int y) {
+        return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
+    }
+
+    @Override
+    public void setRotation(float angle) {
+
+    }
+
+    @Override
+    public float getRotation() {
+        return 0;
+    }
+
+    @Override
+    public void setPosition(Vector2D position) {
+
+    }
+
+    @Override
+    public Vector2D getPosition() {
+        return null;
+    }
+
+    @Override
+    public void setScale(Vector2D scale) {
+
+    }
+
+    @Override
     public int getWidth() {
         return ar.length;
+    }
+
+    @Override
+    public void setWidth(int width) {
+
     }
 
     public String getContentAs2DString(){

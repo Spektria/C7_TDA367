@@ -1,10 +1,9 @@
 package C7.Model.Tools;
 
-import C7.ILayer;
 import C7.Model.Vector.Vector2D;
 
 /**
- * An ITool performs actions on a {@link ILayer}'s pixels.
+ * An ITool performs actions on a {@link C7.Layer.ILayer}'s pixels.
  */
 public interface ITool {
 

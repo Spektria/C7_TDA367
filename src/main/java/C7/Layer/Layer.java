@@ -1,7 +1,7 @@
 package C7.Layer;
 
 import C7.Color;
-import C7.Vector.Vector2D;
+import C7.Model.Vector.Vector2D;
 
 /**
  * Represents a basic image layer.

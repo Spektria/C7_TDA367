@@ -1,7 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ILayer;
+import C7.Layer.ILayer;
 
 public class ToolFactory {
     public static ITool CreateCircularBrush(ILayer layer, int strokeSize, Color color){
@@ -14,7 +14,7 @@ public class ToolFactory {
         return base;
     }
 
-    public static ITool CreateFillBucket(ILayer layer, Color fill, int threshold){
+    public static ITool CreateFillBucket(ILayer layer, Color fill, float threshold){
         return new FillBucket(layer, fill, threshold);
     }
 }

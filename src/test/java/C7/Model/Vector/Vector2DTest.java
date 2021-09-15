@@ -1,4 +1,4 @@
-package C7.Vector;
+package C7.Model.Vector;
 
 import org.junit.Assert;
 import org.junit.Test;

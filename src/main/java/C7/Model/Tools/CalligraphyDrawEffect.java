@@ -1,13 +1,13 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ILayer;
+import C7.Layer.ILayer;
 import C7.Model.Tools.Util.PixelGraphics;
 import C7.Model.Vector.Vector2D;
 
 import java.util.Map;
 
-public class CalligraphyDrawEffect implements IBrushEffect {
+class CalligraphyDrawEffect implements IBrushEffect {
 
     private final double angle;
     private final int strokeSize;

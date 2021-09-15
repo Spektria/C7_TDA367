@@ -1,12 +1,12 @@
 package C7.Model.Tools;
 
 import C7.Color;
-import C7.ILayer;
+import C7.Layer.ILayer;
 import C7.Model.Vector.Vector2D;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RotationEffect implements IBrushEffect {
+class RotationEffect implements IBrushEffect {
 
     private final double degrees;
 
