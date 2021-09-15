@@ -1,6 +1,7 @@
 package C7.Layer;
 
 import C7.Color;
+import C7.Vector.Vector2D;
 
 /**
  * ILayer is an interface for layers that are part of a picture. Layers hold
@@ -9,7 +10,7 @@ import C7.Color;
  *
  * @author Elias Ersson
  * @author Love Gustafsson
- * @version 1.1
+ * @version 1.2
  */
 public interface ILayer {
 
@@ -63,4 +64,40 @@ public interface ILayer {
      * outside this layer.
      */
     Boolean isPixelOnLayer(int x, int y);
+
+    /**
+     * Sets the rotation angle of this layer.
+     * @param angle The angle to set this layer to, in radians.
+     */
+    void setRotation(float angle);
+
+    /**
+     * Gets the current rotation angle of this layer in radians.
+     * @return The current angle of this layer.
+     */
+    float getRotation();
+
+    /**
+     * Sets the origin of this layer, relative to the picture.
+     * @param position The position to set this layer to.
+     */
+    void setPosition(Vector2D position);
+
+    /**
+     * Gets the current origin of this layer, relative to the picture.
+     * @return The current position of this layer.
+     */
+    Vector2D getPosition();
+
+    /**
+     * Sets the x- and y-scale of this layer.
+     * @param scale The scale to set this layer to.
+     */
+    void setScale(Vector2D scale);
+
+    /**
+     * Gets the current x- and y-scale of this layer.
+     * @return The current scale of this layer.
+     */
+    Vector2D getScale();
 }

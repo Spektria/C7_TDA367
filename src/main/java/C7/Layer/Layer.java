@@ -1,6 +1,7 @@
 package C7.Layer;
 
 import C7.Color;
+import C7.Vector.Vector2D;
 
 /**
  * Represents a basic image layer.
@@ -80,6 +81,36 @@ public class Layer implements ILayer {
     @Override
     public Boolean isPixelOnLayer(int x, int y) {
         return (x >= 0 && x < width && y >= 0 && y < height);
+    }
+
+    @Override
+    public void setRotation(float angle) {
+        // TODO
+    }
+
+    @Override
+    public float getRotation() {
+        return 0;
+    }
+
+    @Override
+    public void setPosition(Vector2D position) {
+        // TODO
+    }
+
+    @Override
+    public Vector2D getPosition() {
+        return new Vector2D(0, 0);
+    }
+
+    @Override
+    public void setScale(Vector2D scale) {
+        // TODO
+    }
+
+    @Override
+    public Vector2D getScale() {
+        return new Vector2D(1, 1);
     }
 
     private void setDimensions(int width, int height) {
