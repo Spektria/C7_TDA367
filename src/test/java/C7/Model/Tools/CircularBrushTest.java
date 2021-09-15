@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class CircularBrushTest {
 
     @Test

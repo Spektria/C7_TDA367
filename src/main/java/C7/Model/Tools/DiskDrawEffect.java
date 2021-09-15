@@ -7,11 +7,20 @@ import C7.Model.Vector.Vector2D;
 
 import java.util.Map;
 
+/**
+ * Creates a set of pixels in a circular disk shape.
+ * @author Hugo Ekstrand
+ */
 class DiskDrawEffect implements IBrushEffect {
 
     private final int strokeSize;
     private final Color color;
 
+    /**
+     * Creates a new instance of this class
+     * @param strokeSize the diameter of the disk
+     * @param color the color of the pixels of the disk
+     */
     DiskDrawEffect(int strokeSize, Color color){
         this.strokeSize = strokeSize;
         this.color = color;

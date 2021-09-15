@@ -4,6 +4,10 @@ import C7.Color;
 import C7.Layer.ILayer;
 import C7.Model.Vector.Vector2D;
 
+/**
+ * Mock class for ILayer implementation
+ * @author Hugo Ekstrand
+ */
 public class TestISurfaceImpl implements ILayer {
     private Color[][] ar;
     private Vector2D scale;

@@ -7,6 +7,8 @@ import java.util.List;
 /**
  * A StrokeInterpolator approximates the {@link Vector2D, Vector2Ds} between two given
  * {@link Vector2D, Vector2Ds} with a given precision.
+ *
+ * @author Hugo Ekstrand
  */
 public interface StrokeInterpolator {
 

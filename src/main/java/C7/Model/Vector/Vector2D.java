@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * Vector2D is a class representing a mathematical 2d vector.
+ * @author Hugo Ekstrand
  */
 public class Vector2D {
 

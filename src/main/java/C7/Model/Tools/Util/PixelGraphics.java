@@ -5,6 +5,8 @@ import java.util.function.BiConsumer;
 /**
  * This class is used for converting 2d geometrical objects into a pixel format.
  * Disks, lines, and other 2d geometric shapes can be approximated by this class.
+ *
+ * @author Hugo Ekstrand
  */
 public final class PixelGraphics {
 

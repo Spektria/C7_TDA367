@@ -5,6 +5,9 @@ import C7.Model.Vector.Vector2D;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class FillBucketTest {
 
     @Test

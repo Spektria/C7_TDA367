@@ -4,12 +4,28 @@ import C7.Color;
 import C7.Layer.ILayer;
 import C7.Model.Vector.Vector2D;
 
-public class FillBucket implements ITool{
+/**
+ * Fills an area inside of a {@link ILayer layer} to a common color. The area is determined by
+ * a given threshold; pixels in the layer which are similar enough to the given fill color are filled,
+ * while the rest are not.
+ * <p>
+ * The threshold works by filling pixels which have a maximum r, g, or b delta smaller
+ * than or equal to the threshold. For example, if the threshold is 0.5f and the fill is (1f,1f,1f) then
+ * (0.49f,1f,1f) will not be filled but (0.51f,0.51f,0.51f) will be filled.
+ * @author Hugo Ekstrand
+ */
+class FillBucket implements ITool{
 
     private final float threshold;
     private final Color fill;
     private final ILayer layer;
 
+    /**
+     * Creates a new instance of this class
+     * @param layer the layer which will be affected
+     * @param fill the color of the fill
+     * @param threshold the threshold of which pixels should be filled
+     */
     FillBucket(ILayer layer, Color fill, float threshold){
         this.layer = layer;
         this.fill = fill;

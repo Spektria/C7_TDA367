@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a brush which doesn't do anything. However, this may be modified with {@link IBrushEffect} which affects
+ * what this brush will do when used on a point on a {@link ILayer layer}.
+ * @author Hugo Ekstrand
+ */
 class BaseBrush implements ITool {
 
     private StrokeInterpolator interpolator = new LinearStrokeInterpolator();

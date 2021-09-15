@@ -7,12 +7,23 @@ import C7.Model.Vector.Vector2D;
 
 import java.util.Map;
 
+/**
+ * Creates a set of pixels in a line with an angle. That is, a line which could be slanted in any
+ * given angle.
+ * @author Hugo Ekstrand
+ */
 class CalligraphyDrawEffect implements IBrushEffect {
 
     private final double angle;
     private final int strokeSize;
     private final Color color;
 
+    /**
+     * Creates a new instance of this class.
+     * @param strokeSize the length of the line which will be created
+     * @param color the color of the pixels which will be created
+     * @param angle the angle of the line which will be created given in radians and counterclockwise
+     */
     CalligraphyDrawEffect(int strokeSize, Color color, double angle) {
         this.angle = angle;
         this.strokeSize = strokeSize;

@@ -6,10 +6,18 @@ import C7.Model.Vector.Vector2D;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Rotates the pixels given to this IBrushEffect by a given amount.
+ * @author Hugo Ekstrand
+ */
 class RotationEffect implements IBrushEffect {
 
     private final double degrees;
 
+    /**
+     * Creates a new instance of this class
+     * @param degrees the rotation in radians counterclockwise.
+     */
     RotationEffect(double degrees){
         this.degrees = degrees;
     }
