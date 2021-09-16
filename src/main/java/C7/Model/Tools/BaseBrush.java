@@ -53,6 +53,7 @@ class BaseBrush implements ITool {
                 .forEach(point ->
                         createStroke(point, layer)
                                 .forEach(this::drawPoint));
+        lastPoint = pos;
 
     }
 
