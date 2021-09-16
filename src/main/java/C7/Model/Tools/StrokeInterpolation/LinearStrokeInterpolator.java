@@ -22,7 +22,7 @@ public class LinearStrokeInterpolator implements StrokeInterpolator{
 
         int amountOfPointsToCreate = (int)(p1.sub(p2).len()/pointsPerDistance);
 
-        Vector2D delta = p1.sub(p2).mult(1d/amountOfPointsToCreate);
+        Vector2D delta = p2.sub(p1).mult(1d/amountOfPointsToCreate);
 
         var points = IntStream.range(0, amountOfPointsToCreate + 1)
                 .mapToObj(index -> p1.add(delta.mult(index)))
