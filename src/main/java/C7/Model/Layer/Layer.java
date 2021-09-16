@@ -3,6 +3,9 @@ package C7.Model.Layer;
 import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Represents a basic image layer.
  * @author Elias Ersson
@@ -134,6 +137,21 @@ public class Layer implements ILayer {
     @Override
     public Vector2D getScale() {
         return new Vector2D(1, 1);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Layer layer = (Layer) o;
+        return width == layer.width && height == layer.height && Arrays.equals(pixels, layer.pixels);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(width, height);
+        result = 31 * result + Arrays.hashCode(pixels);
+        return result;
     }
 
     private void setDimensions(int width, int height) {
