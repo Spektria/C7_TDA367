@@ -23,6 +23,8 @@ public class Layer implements ILayer {
     public Layer(int width, int height, Color color) {
 
         pixels = new Color[width][height];
+        this.width  = width;
+        this.height = height;
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -40,7 +42,6 @@ public class Layer implements ILayer {
         if (!isPixelOnLayer(x, y)) {
             return null;
         }
-
         // Get the color at the specified position.
         Color pixelColor = pixels[x][y];
 
