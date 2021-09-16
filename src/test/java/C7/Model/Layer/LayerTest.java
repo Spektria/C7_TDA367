@@ -62,8 +62,8 @@ public class LayerTest {
 
     @Test
     public void equalsTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = new Layer(2, 2, new Color(0, 0, 0, 1));
 
-        Assert.assertEquals(new Layer(200, 100, new Color(0, 0, 0, 1)), layer);
+        Assert.assertEquals(new Layer(2, 2, new Color(0, 0, 0, 1)), layer);
     }
 }

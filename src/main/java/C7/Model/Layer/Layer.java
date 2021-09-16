@@ -144,7 +144,7 @@ public class Layer implements ILayer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Layer layer = (Layer) o;
-        return width == layer.width && height == layer.height && Arrays.equals(pixels, layer.pixels);
+        return width == layer.width && height == layer.height && Arrays.deepEquals(pixels, layer.pixels);
     }
 
     @Override
