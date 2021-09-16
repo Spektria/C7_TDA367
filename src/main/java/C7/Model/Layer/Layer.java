@@ -1,10 +1,6 @@
-package C7.Layer;
+package C7.Model.Layer;
 
-import C7.Color;
-import C7.Layer.ILayer;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import java.io.FileInputStream;
+import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 
 /**

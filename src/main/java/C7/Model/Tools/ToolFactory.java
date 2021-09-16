@@ -1,7 +1,7 @@
 package C7.Model.Tools;
 
-import C7.Color;
-import C7.Layer.ILayer;
+import C7.Model.Color;
+import C7.Model.Layer.ILayer;
 
 /**
  * This factory is used for creating {@link ITool ITools}.

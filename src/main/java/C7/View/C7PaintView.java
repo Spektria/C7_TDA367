@@ -1,12 +1,11 @@
 package C7.View;
 
-import C7.Layer.ILayer;
-import C7.Layer.Layer;
+import C7.Model.Layer.ILayer;
+import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
-import C7.Model.Tools.PixelPen;
+//import C7.Model.Tools.PixelPen;
 import C7.Model.Tools.ToolFactory;
 import C7.Model.Vector.Vector2D;
-import C7.Project;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,7 +13,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
@@ -37,9 +35,9 @@ public class C7PaintView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(700, 500, new C7.Color(0, 1, 0, 1));
+        layer = new Layer(700, 500, new C7.Model.Color(0, 1, 0, 1));
 
-        currentTool = ToolFactory.CreateCircularBrush(layer, 5, new C7.Color(1, 0, 0, 1));
+        currentTool = ToolFactory.CreateCircularBrush(layer, 5, new C7.Model.Color(1, 0, 0, 1));
         //currentTool = new PixelPen(layer);
 
         canvasPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
@@ -83,7 +81,7 @@ public class C7PaintView implements Initializable {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < height*2; i++) {
             for (int j = 0; j < width*2; j++) {
-                C7.Color color = layer.getPixel(x+j, y+i);
+                C7.Model.Color color = layer.getPixel(x+j, y+i);
                 if (color == null) continue;
                 //Update to take into account canvas transform
                 pw.setColor((x+j-width), (y+i-height), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
@@ -95,7 +93,7 @@ public class C7PaintView implements Initializable {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < layer.getHeight(); i++) {
             for (int j = 0; j < layer.getWidth(); j++) {
-                C7.Color color = layer.getPixel(j, i);
+                C7.Model.Color color = layer.getPixel(j, i);
                 //Update to take into account canvas transform
                 pw.setColor((j), (i), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
             }

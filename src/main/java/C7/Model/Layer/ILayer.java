@@ -1,6 +1,6 @@
-package C7.Layer;
+package C7.Model.Layer;
 
-import C7.Color;
+import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 
 /**

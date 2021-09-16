@@ -3,7 +3,7 @@ package C7.Model.Tools;
 import C7.Model.Vector.Vector2D;
 
 /**
- * An ITool performs actions on a {@link C7.Layer.ILayer}'s pixels. A tool can be used over a time period
+ * An ITool performs actions on a {@link C7.Model.Layer.ILayer}'s pixels. A tool can be used over a time period
  * and should thus, when the position of the tool's usage is changed, be informed when it has moved.
  * It should also be informed when it stops being used.
  * @author Hugo Ekstrand

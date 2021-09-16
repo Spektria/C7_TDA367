@@ -1,4 +1,4 @@
-package C7;
+package C7.Model;
 
 import java.util.Objects;
 
