@@ -7,7 +7,7 @@ import javafx.scene.image.PixelReader;
 
 import java.io.FileInputStream;
 
-public class IO {
+public class LayerIO {
     /**
      * Constructs a new layer from a filepath
      * ONLY SUPPORTS 8bit image of type: BMP, GIF, JPEG, PNG.
