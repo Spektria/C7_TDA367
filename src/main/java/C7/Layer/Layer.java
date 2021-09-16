@@ -1,6 +1,10 @@
 package C7.Layer;
 
 import C7.Color;
+import C7.Layer.ILayer;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import java.io.FileInputStream;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -30,6 +34,28 @@ public class Layer implements ILayer {
             for (int y = 0; y < height; y++) {
                 // Copy color values
                 pixels[x][y] = new Color(color);
+            }
+        }
+    }
+
+    /**
+     * Constructs a new layer from a 2D matrix of Color
+     * @param colorMatrix The matrix of color data of the new layer
+     */
+    public Layer(Color[][] colorMatrix) {
+        /*pixels = colorMatrix; OPTIMIZATION this works faster but is technically bad because
+        * it leaves an open reference somewhere to the new layer's color data
+        * DEFENSIVE COPYING */
+
+        pixels = new Color[colorMatrix.length][];
+
+        for (int x = 0; x < colorMatrix.length; x++) {
+            pixels[x] = new Color[colorMatrix[x].length];
+
+            for (int y = 0; y < colorMatrix[y].length; y++) {
+                Color oldColor = colorMatrix[x][y];
+                //Would like a copy method for copying color data instead of this repeating pattern of GET
+                pixels[x][y] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
             }
         }
     }
