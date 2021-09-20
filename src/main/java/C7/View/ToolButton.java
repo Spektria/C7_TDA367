@@ -1,5 +1,9 @@
 package C7.View;
 
+import C7.Model.Tools.ITool;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -10,7 +14,21 @@ import java.io.IOException;
 
 public class ToolButton extends AnchorPane {
 
-    public ToolButton() {
+    @FXML Button button;
+
+    ITool tool;
+
+    public ToolButton(ITool tool, String text, C7PaintView controller) {
+        button.setText(text);
+
+        this.tool = tool;
+
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                controller.setCurrentTool(tool);
+            }
+        });
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ToolButton.fxml"));
         fxmlLoader.setRoot(this);
