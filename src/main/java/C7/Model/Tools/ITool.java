@@ -1,30 +1,42 @@
 package C7.Model.Tools;
 
+import C7.Model.Layer.ILayer;
 import C7.Model.Vector.Vector2D;
 
+import java.util.Collection;
+
 /**
- * An ITool performs actions on a {@link C7.Model.Layer.ILayer}'s pixels. A tool can be used over a time period
- * and should thus, when the position of the tool's usage is changed, be informed when it has moved.
- * It should also be informed when it stops being used.
+ * An ITool performs actions on a {@link C7.Model.Layer.ILayer}.
  * @author Hugo Ekstrand
  */
 public interface ITool {
 
     /**
-     * Informs the tool it should start affecting the given start position.
-     * @param pos the position
+     * Returns this Tools properties.
+     * @return this Tools properties.
      */
-    void beginDraw(Vector2D pos);
+    Collection<IToolProperty> getProperties();
 
     /**
-     * Informs the tools of its new position.
-     * @param pos the position it has moved to
+     * Applies this Tools effect on a given layer at a given position.
+     * <p>
+     *     Precondition: v0, v1, and layer mustn't be null.
+     *     Postcondition: layer may have been affected.
+     * </p>
+     * @param v0 start position
+     * @param v1 end position
+     * @param layer the affected layer
      */
-    void move(Vector2D pos);
+    void apply(Vector2D v0, Vector2D v1, ILayer layer);
 
     /**
-     * Informs the tool it should stop being used.
-     * @param pos the position where the tool is ceasing usage.
+     * Returns true if this Tool requires continuous positional input,
+     * via the {@link ITool#apply(Vector2D, Vector2D, ILayer), apply} method.
+     * If it doesn't the Tool should be applied once to do its whole effect.
+     * For example, a brush needs a lot of inputs to draw a curvy line while a
+     * straight line only requires 2 positions.
+     * @return if this Tool is continuous.
      */
-    void endDraw(Vector2D pos);
+    boolean isContinuous();
+
 }
