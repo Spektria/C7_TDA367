@@ -19,16 +19,6 @@ public class ToolButton extends AnchorPane {
     ITool tool;
 
     public ToolButton(ITool tool, String text, C7PaintView controller) {
-        button.setText(text);
-
-        this.tool = tool;
-
-        button.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                controller.setCurrentTool(tool);
-            }
-        });
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ToolButton.fxml"));
         fxmlLoader.setRoot(this);
@@ -39,6 +29,17 @@ public class ToolButton extends AnchorPane {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
+        
+        button.setText(text);
+
+        this.tool = tool;
+
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                controller.setCurrentTool(tool);
+            }
+        });
 
     }
 }
