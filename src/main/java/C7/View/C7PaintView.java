@@ -40,7 +40,9 @@ public class C7PaintView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(700, 500, new C7.Model.Color(0, 1, 0, 1));
+        layer = new Layer(700, 500, new C7.Model.Color(0, 0, 0, 0));
+
+        updateView();
 
         currentTool = ToolFactory.CreateCircularBrush(layer, 5, new C7.Model.Color(1, 0, 0, 1));
         //currentTool = new PixelPen(layer);
