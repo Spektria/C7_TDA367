@@ -1,6 +1,7 @@
-package C7.Model.Tools;
+package C7.Model.Tools.ToolProperties;
 
 import C7.Model.Color;
+import C7.Model.Tools.ITool;
 
 
 /**
