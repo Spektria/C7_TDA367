@@ -37,6 +37,8 @@ public class C7PaintView implements Initializable {
 
     ITool currentTool;
 
+    private Vector2D oldPos;
+
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
@@ -44,21 +46,21 @@ public class C7PaintView implements Initializable {
 
         updateView();
 
-        currentTool = ToolFactory.CreateCircularBrush(layer, 5, new C7.Model.Color(1, 0, 0, 1));
+        currentTool = ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1));
         //currentTool = new PixelPen(layer);
 
         //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(layer, 5, new C7.Model.Color(0, 1, 0, 1), 30), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(layer, new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
-
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
 
         canvasPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 //Move stuff like this to the controller later
-                currentTool.move(new Vector2D(event.getX(), event.getY()));
-
+                Vector2D point = new Vector2D(event.getX(), event.getY());
+                currentTool.apply(layer, oldPos, point);
+                oldPos = point;
                 updateView();
             }
         });
@@ -67,7 +69,9 @@ public class C7PaintView implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
-                    currentTool.beginDraw(new Vector2D(event.getX(), event.getY()));
+                    var point = new Vector2D(event.getX(), event.getY());
+                    currentTool.apply(layer, point, point);
+                    oldPos = point;
 
                     updateView();
                 }
@@ -78,7 +82,8 @@ public class C7PaintView implements Initializable {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
-                    currentTool.endDraw(new Vector2D(event.getX(), event.getY()));
+                    var point = new Vector2D(event.getX(), event.getY());
+                    currentTool.apply(layer, point, point);
                 }
             }
         });
