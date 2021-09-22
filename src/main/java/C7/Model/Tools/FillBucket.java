@@ -52,32 +52,38 @@ class FillBucket implements ITool{
     }
 
 
-    private void floodFill(int x, int y, ILayer surface) {
+    private void floodFill(int x, int y, ILayer surface, Color selectedColor) {
         // TODO: if performance proves to be bad, the flood fill methods should
         // TODO: 4 way recursion to a stack and span based flood fill. See https://en.wikipedia.org/wiki/Flood_fill
 
         if(!surface.isPixelOnLayer(x, y))
             return;
 
-        if(!shouldFill(surface.getPixel(x, y)))
+        if(!shouldFill(surface.getPixel(x, y), selectedColor))
             return;
 
 
         surface.setPixel(x, y, fill);
 
-        floodFill(x + 1, y, surface);
-        floodFill(x - 1, y, surface);
-        floodFill(x, y + 1, surface);
-        floodFill(x, y - 1, surface);
+        floodFill(x + 1, y, surface, selectedColor);
+        floodFill(x - 1, y, surface, selectedColor);
+        floodFill(x, y + 1, surface, selectedColor);
+        floodFill(x, y - 1, surface, selectedColor);
     }
 
-    private boolean shouldFill(Color color){
-        if(color == null)
-            return true;
+    private boolean shouldFill(Color color, Color selectedColor){
+
+        // If it is the same as the fill, it has already been filled.
         if(fill.equals(color))
             return false;
 
-        float delta = Color.getColorDifference(fill, color);;
+        // If the color is the same as the color that was first selected it should be filled.
+        if(color.equals(selectedColor))
+            return true;
+
+        // Else if none of these, check how different the color is
+        // and if the difference is low enough fill it.
+        float delta = Color.getColorDifference(selectedColor, color);;
         if(delta == 0)
             return false;
         return delta <= threshold;
@@ -91,7 +97,10 @@ class FillBucket implements ITool{
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
-        floodFill((int)v0.getX(), (int)v1.getY(), layer);
+        int x = (int)v0.getX();
+        int y = (int)v0.getY();
+        if(layer.isPixelOnLayer(x,y))
+            floodFill(x, y, layer, layer.getPixel(x, y));
     }
 
     @Override
