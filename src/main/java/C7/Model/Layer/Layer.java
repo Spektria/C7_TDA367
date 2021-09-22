@@ -105,7 +105,7 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public Boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLayer(int x, int y) {
         return (x >= 0 && x < width && y >= 0 && y < height);
     }
 
@@ -152,6 +152,11 @@ public class Layer implements ILayer {
         int result = Objects.hash(width, height);
         result = 31 * result + Arrays.hashCode(pixels);
         return result;
+    }
+
+    @Override
+    public boolean isPointOnLayer(Vector2D point) {
+        return false;
     }
 
     private void setDimensions(int width, int height) {

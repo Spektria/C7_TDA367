@@ -44,7 +44,7 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public Boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLayer(int x, int y) {
         return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
     }
 
@@ -81,6 +81,11 @@ public class TestISurfaceImpl implements ILayer {
     @Override
     public void setWidth(int width) {
 
+    }
+
+    @Override
+    public boolean isPointOnLayer(Vector2D point) {
+        return false;
     }
 
     public String getContentAs2DString(){
