@@ -51,7 +51,7 @@ public class Layer implements ILayer {
         for (int x = 0; x < colorMatrix.length; x++) {
             pixels[x] = new Color[colorMatrix[x].length];
 
-            for (int y = 0; y < colorMatrix[y].length; y++) {
+            for (int y = 0; y < colorMatrix[x].length; y++) {
                 Color oldColor = colorMatrix[x][y];
                 //Would like a copy method for copying color data instead of this repeating pattern of GET
                 pixels[x][y] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
