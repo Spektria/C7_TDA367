@@ -53,18 +53,17 @@ public final class PixelGraphics {
      * @param doOnEveryPixel the action to be performed at evey pixel in teh approximated line.
      */
     public static void pixelDisk(int x0, int y0, double semiMajor,
-                                 double semiMinor,
+                                 double semiMinor, double rotation,
                                  BiConsumer<Integer, Integer> doOnEveryPixel){
 
-        // TODO: make it so that the ellipse can be rotated.
+        final double sin = Math.sin(rotation);
+        final double cos = Math.cos(rotation);
 
-        final double xRadius = semiMajor;
-        final double yRadius = semiMinor;
+        for (double x = -Math.abs(semiMajor); x <= Math.abs(semiMajor); x++) {
+            for (double y = -Math.abs(semiMinor); y <= Math.abs(semiMinor); y++){
 
-
-        for (double x = -Math.abs(xRadius) ; x <= Math.abs(xRadius); x++) {
-            for (double y = -Math.abs(yRadius); y <= Math.abs(yRadius); y++){
-                if(x * x * yRadius * yRadius + y * y * xRadius * xRadius <= yRadius * yRadius * xRadius * xRadius)
+                if(Math.pow((x * cos + y * sin) / semiMajor, 2)
+                                + Math.pow((x * sin - y * cos)/semiMinor, 2) <= 1)
                     doOnEveryPixel.accept(x0 + (int)x, y0 + (int)y);
             }
         }

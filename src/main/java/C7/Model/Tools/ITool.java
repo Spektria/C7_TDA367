@@ -1,6 +1,7 @@
 package C7.Model.Tools;
 
 import C7.Model.Layer.ILayer;
+import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
 
 import java.util.Collection;
