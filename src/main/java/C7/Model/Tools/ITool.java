@@ -28,11 +28,11 @@ public interface ITool {
      * @param v1 end position
      * @param layer the affected layer
      */
-    void apply(Vector2D v0, Vector2D v1, ILayer layer);
+    void apply(ILayer layer, Vector2D v0, Vector2D v1);
 
     /**
      * Returns true if this Tool requires continuous positional input,
-     * via the {@link ITool#apply(Vector2D, Vector2D, ILayer), apply} method.
+     * via the {@link ITool#apply(ILayer, Vector2D, Vector2D), apply} method.
      * If it doesn't the Tool should be applied once to do its whole effect.
      * For example, a brush needs a lot of inputs to draw a curvy line while a
      * straight line only requires 2 positions.
