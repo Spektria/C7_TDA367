@@ -88,6 +88,11 @@ public class TestISurfaceImpl implements ILayer {
         return false;
     }
 
+    @Override
+    public Vector2D getPixelPositionAtPoint(Vector2D point) {
+        return new Vector2D(0, 0);
+    }
+
     public String getContentAs2DString(){
         StringBuilder sb = new StringBuilder();
         for (int x = 0; x < ar.length; x++) {

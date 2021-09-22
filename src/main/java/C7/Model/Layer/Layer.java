@@ -159,6 +159,11 @@ public class Layer implements ILayer {
         return false;
     }
 
+    @Override
+    public Vector2D getPixelPositionAtPoint(Vector2D point) {
+        return new Vector2D(0, 0);
+    }
+
     private void setDimensions(int width, int height) {
         Color[][] newPixels = new Color[width][height];
 

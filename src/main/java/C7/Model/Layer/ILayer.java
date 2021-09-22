@@ -10,7 +10,7 @@ import C7.Model.Vector.Vector2D;
  *
  * @author Elias Ersson
  * @author Love Gustafsson
- * @version 1.3
+ * @version 1.4
  */
 public interface ILayer {
 
@@ -108,4 +108,14 @@ public interface ILayer {
      * if the point is outside.
      */
     boolean isPointOnLayer(Vector2D point);
+
+    /**
+     * Finds the layer-space integer position of a pixel at the specified
+     * picture-space co-ordinate point.
+     * @param point The point in picture-space co-ordinates to get the layer-
+     *              -space pixel co-ordinates for.
+     * @return Integer layer-space co-ordinates for the pixel at the specified
+     * point.
+     */
+    Vector2D getPixelPositionAtPoint(Vector2D point);
 }
