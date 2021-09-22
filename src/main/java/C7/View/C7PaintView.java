@@ -18,6 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
+import javax.tools.Tool;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -30,15 +31,27 @@ public class C7PaintView implements Initializable {
 
     ILayer layer; //Only one for now
 
+    public void setCurrentTool(ITool tool) {
+        this.currentTool = tool;
+    }
+
     ITool currentTool;
 
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(700, 500, new C7.Model.Color(0, 1, 0, 1));
+        layer = new Layer(700, 500, new C7.Model.Color(0, 0, 0, 0));
+
+        updateView();
 
         currentTool = ToolFactory.CreateCircularBrush(layer, 5, new C7.Model.Color(1, 0, 0, 1));
         //currentTool = new PixelPen(layer);
+
+        //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
+        flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(layer, 5, new C7.Model.Color(0, 1, 0, 1), 30), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(layer, new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
+
 
         canvasPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
@@ -70,11 +83,6 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        //Test buttons
-        for (int i = 0; i < 20; i++) {
-            ToolButton button = new ToolButton();
-            flowPaneTools.getChildren().add(button);
-        }
     }
 
     void updateView(int x, int y, int width, int height) {

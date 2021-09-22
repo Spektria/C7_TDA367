@@ -3,6 +3,7 @@ package C7.Model.Tools.StrokeInterpolation;
 import C7.Model.Vector.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -26,7 +27,7 @@ public class LinearStrokeInterpolator implements StrokeInterpolator{
 
         var points = IntStream.range(0, amountOfPointsToCreate + 1)
                 .mapToObj(index -> p1.add(delta.mult(index)))
-                .toList();
+                .collect(Collectors.toList());
         return points;
     }
 }
