@@ -13,10 +13,10 @@ public class CalligraphyTest {
     @Test
     public void HorizontalCalligraphyClickTest(){
         TestISurfaceImpl testISurface = new TestISurfaceImpl(20,20, new Vector2D(1,1));
-        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(testISurface, 11, new Color(1,0,0,0), 0);
-        calligraphy.beginDraw(new Vector2D(6, 1));
+        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(11, new Color(1,0,0,0));
+        calligraphy.apply(testISurface, new Vector2D(6, 1), new Vector2D(6, 1));
 
-        //System.out.println("Surface: \n" + testISurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Check so that we have the center, top, and bottom points
         Assert.assertNotEquals(testISurface.getPixel(1, 1), null);
@@ -43,10 +43,11 @@ public class CalligraphyTest {
     @Test
     public void Sloped45degCalligraphyStrokeTest(){
         TestISurfaceImpl testISurface = new TestISurfaceImpl(8,8, new Vector2D(1,1));
-        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(testISurface,8, new Color(1,0,0,0), Math.PI/4);
-        calligraphy.beginDraw(new Vector2D(4,4));
+        ITool calligraphy = ToolFactory.CreateCalligraphyBrush(8, new Color(1,0,0,0));
+        calligraphy.getProperties().stream().filter(prop -> prop.name().equals("Rotation")).findFirst().get().setDouble(Math.PI/4d);
+        calligraphy.apply(testISurface, new Vector2D(4,4), new Vector2D(4,4));
 
-        //System.out.println("Surface: \n" + testISurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Extreme points
         Assert.assertNotNull(testISurface.getPixel(4,4)); // Center

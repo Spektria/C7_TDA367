@@ -14,10 +14,10 @@ public class FillBucketTest {
     public void emptyFillTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
         Color fill = new Color(0.2f, 0.5f ,0.3f, 1f);
-        var brush = ToolFactory.CreateFillBucket(testSurface, fill, 0.5f);
-        brush.beginDraw(new Vector2D(3,3));
+        var brush = ToolFactory.CreateFillBucket(fill, 0.5f);
+        brush.apply(testSurface, new Vector2D(3,3),new Vector2D(3,3));
 
-        //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
         for (int i = 0; i < testSurface.getWidth(); i++) {
             for (int j = 0; j < testSurface.getHeight(); j++) {
@@ -37,10 +37,10 @@ public class FillBucketTest {
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,1f), 0.05f);
-        brush.beginDraw(new Vector2D(3,3));
+        var brush = ToolFactory.CreateFillBucket(new Color(0,0,0,1f), 0.05f);
+        brush.apply(testSurface, new Vector2D(3,3), new Vector2D(3,3));
 
-        //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
         for (int y = 0; y < testSurface.getHeight(); y++) {
             for (int x = 0; x < testSurface.getWidth(); x++) {
@@ -71,10 +71,10 @@ public class FillBucketTest {
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket(testSurface, new Color(0,0,0,1f), 0.5f);
-        brush.beginDraw(new Vector2D(1,1));
+        var brush = ToolFactory.CreateFillBucket(new Color(0,0,0,1f), 0.5f);
+        brush.apply(testSurface, new Vector2D(1,1), new Vector2D(1,1));
 
-        //System.out.println("Surface: \n" + testSurface.getContentAs2DString());
+        System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {

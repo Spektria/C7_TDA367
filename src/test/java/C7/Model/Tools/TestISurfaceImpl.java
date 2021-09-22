@@ -25,7 +25,8 @@ public class TestISurfaceImpl implements ILayer {
 
     @Override
     public void setPixel(int x, int y, Color color) {
-        ar[x][y] = color;
+        if(isPixelOnLayer(x, y))
+            ar[x][y] = color;
     }
 
     @Override
