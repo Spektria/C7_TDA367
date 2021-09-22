@@ -2,7 +2,12 @@ package C7.Model.Tools;
 
 import C7.Model.Color;
 import C7.Model.Layer.ILayer;
+import C7.Model.Tools.ToolProperties.IToolProperty;
+import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Model.Vector.Vector2D;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Fills an area inside of a {@link ILayer layer} to a common color. The area is determined by
@@ -16,20 +21,34 @@ import C7.Model.Vector.Vector2D;
  */
 class FillBucket implements ITool{
 
-    private final float threshold;
-    private final Color fill;
-    private final ILayer layer;
+    private float threshold;
+    private Color fill;
+
+    private Collection<IToolProperty> properties;
 
     /**
      * Creates a new instance of this class
-     * @param layer the layer which will be affected
      * @param fill the color of the fill
      * @param threshold the threshold of which pixels should be filled
      */
-    FillBucket(ILayer layer, Color fill, float threshold){
-        this.layer = layer;
+    FillBucket(Color fill, float threshold){
         this.fill = fill;
         this.threshold = threshold;
+
+        properties = Arrays.asList(
+                ToolPropertyFactory.createFloatProperty("Threshold",
+                        "If the color distance of a color c from" +
+                                " the fill of bucket is less than this threshold" +
+                                " then c will be changed to the buckets fill.",
+                        (f) -> this.threshold = f,
+                        () -> this.threshold,
+                        0f, 2f),
+
+                ToolPropertyFactory.createColorProperty("Fill color",
+                        "The fill color of the bucket",
+                        (c) -> this.fill = c,
+                        () -> this.fill)
+        );
     }
 
 
@@ -52,43 +71,31 @@ class FillBucket implements ITool{
         floodFill(x, y - 1, surface);
     }
 
-    private static float getBiggestRGBDelta(Color c1, Color c2){
-        // Get the largest delta of the two rgb value multiplied with its alpha.
-
-        return Math.max(
-                Math.max(
-                    Math.abs(c1.getBlue() - c2.getBlue()),
-                    Math.abs(c1.getRed()- c2.getRed())
-                ),
-                Math.abs(c1.getGreen() - c2.getGreen())
-        );
-    }
-
     private boolean shouldFill(Color color){
         if(color == null)
             return true;
         if(fill.equals(color))
             return false;
 
-        float biggestDelta = getBiggestRGBDelta(color, fill);
-        if(biggestDelta == 0)
+        float delta = Color.getColorDifference(fill, color);;
+        if(delta == 0)
             return false;
-        return biggestDelta <= threshold;
+        return delta <= threshold;
 
     }
 
     @Override
-    public void beginDraw(Vector2D pos) {
-        floodFill((int)pos.getX(), (int)pos.getY(), layer);
+    public Collection<IToolProperty> getProperties() {
+        return null;
     }
 
     @Override
-    public void move(Vector2D pos) {
-        beginDraw(pos);
+    public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
+        floodFill((int)v0.getX(), (int)v1.getY(), layer);
     }
 
     @Override
-    public void endDraw(Vector2D pos) {
-
+    public boolean isContinuous() {
+        return false;
     }
 }
