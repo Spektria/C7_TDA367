@@ -20,9 +20,9 @@ public class CircularBrushTest {
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
-        Assert.assertNotEquals(testSurface.getPixel(0,0), null);
-        assertNull(testSurface.getPixel(0, 1));
-        assertNull(testSurface.getPixel(1, 0));
+        Assert.assertNotEquals(testSurface.getPixel(0,0), testSurface.getBaseColor());
+        assertEquals(testSurface.getPixel(0, 1), testSurface.getBaseColor());
+        assertEquals(testSurface.getPixel(1, 0), testSurface.getBaseColor());
     }
 
     @Test
@@ -35,18 +35,18 @@ public class CircularBrushTest {
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         // Center
-        Assert.assertNotEquals(testSurface.getPixel(10, 10), null);
+        Assert.assertNotEquals(testSurface.getPixel(10, 10), testSurface.getBaseColor());
 
         // Edges
-        Assert.assertNotEquals(testSurface.getPixel(15,10), null);
-        Assert.assertNotEquals(testSurface.getPixel(5,10), null);
-        Assert.assertNotEquals(testSurface.getPixel(10,15), null);
-        Assert.assertNotEquals(testSurface.getPixel(10,5), null);
+        Assert.assertNotEquals(testSurface.getPixel(15,10), testSurface.getBaseColor());
+        Assert.assertNotEquals(testSurface.getPixel(5,10), testSurface.getBaseColor());
+        Assert.assertNotEquals(testSurface.getPixel(10,15), testSurface.getBaseColor());
+        Assert.assertNotEquals(testSurface.getPixel(10,5), testSurface.getBaseColor());
 
         // Curve
-        Assert.assertNotEquals(testSurface.getPixel(6,11), null);
-        Assert.assertNotEquals(testSurface.getPixel(6,12), null);
-        assertNull(testSurface.getPixel(6, 14));
+        Assert.assertNotEquals(testSurface.getPixel(6,11), testSurface.getBaseColor());
+        Assert.assertNotEquals(testSurface.getPixel(6,12), testSurface.getBaseColor());
+        assertEquals(testSurface.getPixel(6, 14), testSurface.getBaseColor());
 
     }
 
