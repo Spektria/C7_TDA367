@@ -15,6 +15,12 @@ public class TestISurfaceImpl implements ILayer {
     TestISurfaceImpl(int width, int height, Vector2D scale){
         ar = new Color[width][height];
         this.scale = scale;
+
+        for (int i = 0; i < ar.length; i++) {
+            for (int j = 0; j < ar[i].length; j++) {
+                ar[i][j] = getBaseColor();
+            }
+        }
     }
 
 
@@ -25,7 +31,8 @@ public class TestISurfaceImpl implements ILayer {
 
     @Override
     public void setPixel(int x, int y, Color color) {
-        ar[x][y] = color;
+        if(isPixelOnLayer(x, y))
+            ar[x][y] = color;
     }
 
     @Override
@@ -97,10 +104,14 @@ public class TestISurfaceImpl implements ILayer {
         StringBuilder sb = new StringBuilder();
         for (int x = 0; x < ar.length; x++) {
             for (int y = 0; y < ar[x].length; y++) {
-                sb.append(ar[x][y] == null ? "-" : "#").append(" ");
+                sb.append(ar[x][y].equals(getBaseColor()) ? "-" : "#").append(" ");
             }
             sb.append("\n");
         }
         return sb.toString();
+    }
+
+    public Color getBaseColor() {
+        return new Color(0,0,0,0);
     }
 }

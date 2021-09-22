@@ -37,6 +37,20 @@ public interface IToolProperty {
     ToolPropertyType getType();
 
 
+    /**
+     * Returns the max value this property can have if it is a number.
+     * @throws UnsupportedOperationException if the property is not a number type.
+     * @return returns the max allowed numerical value of this property.
+     */
+    Number upperBound();
+
+    /**
+     * Returns the minimum value this property can have if it is a number.
+     * @throws UnsupportedOperationException if the property is not a number type.
+     * @return returns the minimum allowed numerical value of this property.
+     */
+    Number lowerBound();
+
     // Getters and setters ----------------------------------------------------------
     // for property value  ----------------------------------------------------------
 

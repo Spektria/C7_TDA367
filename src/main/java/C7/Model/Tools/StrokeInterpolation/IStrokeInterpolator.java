@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Hugo Ekstrand
  */
-public interface StrokeInterpolator {
+public interface IStrokeInterpolator {
 
     List<Vector2D> interpolate(Vector2D p1, Vector2D p2, double pointsPerDistance);
 

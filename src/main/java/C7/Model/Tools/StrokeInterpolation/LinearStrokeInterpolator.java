@@ -8,13 +8,13 @@ import java.util.stream.IntStream;
 
 
 /**
- * LinearStrokeInterpolator is a {@link StrokeInterpolator} which adds extra {@link Vector2D, Vector2Ds} to
+ * LinearStrokeInterpolator is a {@link IStrokeInterpolator} which adds extra {@link Vector2D, Vector2Ds} to
  * an interval between two given {@link Vector2D, Vector2Ds} linearly. This means that every interpolated
  * {@link Vector2D, Vector2Ds} will be on the line between the two given {@link Vector2D, Vector2Ds}.
  *
  * @author Hugo Ekstrand
  */
-public class LinearStrokeInterpolator implements StrokeInterpolator{
+public class LinearStrokeInterpolator implements IStrokeInterpolator {
 
     @Override
     public List<Vector2D> interpolate(Vector2D p1, Vector2D p2, double pointsPerDistance) {

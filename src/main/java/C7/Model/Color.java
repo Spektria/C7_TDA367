@@ -54,7 +54,7 @@ public final class Color {
      * @param color2 The second color to compare.
      * @return The linear difference between the colors.
      */
-    static float getColorDifference(Color color1, Color color2) {
+    public static float getColorDifference(Color color1, Color color2) {
         float dr = color2.getRed() - color1.getRed();
         float dg = color2.getGreen() - color1.getGreen();
         float db = color2.getBlue() - color1.getBlue();
