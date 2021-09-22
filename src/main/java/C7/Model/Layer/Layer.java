@@ -57,6 +57,11 @@ public class Layer implements ILayer {
                 pixels[x][y] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
             }
         }
+
+        //Some sketchy stuff that will surely get replaced by more robust code later
+        width = colorMatrix.length;
+        if (width == 0) height = 0;
+        else height = colorMatrix[0].length;
     }
 
     @Override
