@@ -96,7 +96,7 @@ class FillBucket implements ITool{
                 }
 
                 // Do the same for below as for above. Except with y + 1.
-                if(!below && y < surface.getHeight() - 1 && shouldFill(surface.getPixel(y + 1, x1), selectedColor)){
+                if(!below && y < surface.getHeight() - 1 && shouldFill(surface.getPixel(x1, y+1), selectedColor)){
                     stack.push(new int[]{ x1, y+1 });
                     below = true;
                 }
