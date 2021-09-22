@@ -21,7 +21,7 @@ public class ToolPropertyFactory {
      * @param max the minimum allowed value of this property
      * @return the property
      */
-    public static IToolProperty CreateFloatProperty(String name, String description, Consumer<Float> setter, Supplier<Float> getter, Number min, Number max){
+    public static IToolProperty createFloatProperty(String name, String description, Consumer<Float> setter, Supplier<Float> getter, Number min, Number max){
         return new FloatToolProperty(name, description, setter, getter, min, max);
     }
 
@@ -35,7 +35,7 @@ public class ToolPropertyFactory {
      * @param max the minimum allowed value of this property
      * @return the property
      */
-    public static IToolProperty CreateDoubleProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, Number min, Number max){
+    public static IToolProperty createDoubleProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, Number min, Number max){
         return new DoubleToolProperty(name, description, setter, getter, min, max);
     }
 
@@ -49,7 +49,7 @@ public class ToolPropertyFactory {
      * @param max the minimum allowed value of this property
      * @return the property
      */
-    public static IToolProperty CreateIntegerProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, Number min, Number max){
+    public static IToolProperty createIntegerProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, Number min, Number max){
         return new IntegerToolProperty(name, description, setter, getter, min, max);
     }
 
@@ -61,7 +61,7 @@ public class ToolPropertyFactory {
      * @param getter the getter method for the property
      * @return the property
      */
-    public static IToolProperty CreateBooleanProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter, Number min, Number max){
+    public static IToolProperty createBooleanProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter, Number min, Number max){
         return new BooleanToolProperty(name, description, setter, getter);
     }
 
@@ -73,7 +73,7 @@ public class ToolPropertyFactory {
      * @param getter the getter method for the property
      * @return the property
      */
-    public static IToolProperty CreateColorProperty(String name, String description, Consumer<Color> setter, Supplier<Color> getter){
+    public static IToolProperty createColorProperty(String name, String description, Consumer<Color> setter, Supplier<Color> getter){
         return new ColorToolProperty(name, description, setter, getter);
     }
 }
