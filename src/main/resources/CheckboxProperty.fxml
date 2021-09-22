@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 
-<AnchorPane prefHeight="50.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="50.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <CheckBox fx:id="checkBox" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="270.0" text="CheckBox" />
    </children>
