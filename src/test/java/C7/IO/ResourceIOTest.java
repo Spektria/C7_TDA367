@@ -7,7 +7,7 @@ public class ResourceIOTest {
 
     @Test
     public void globalResourceIO() {
-        Assert.assertNotEquals(null, ResourceIO.getGlobalResource(this, "C7\\IO\\DeepIO"));
+        Assert.assertNotEquals(null, ResourceIO.getGlobalResource(this, "C7/IO/DeepIO"));
         Assert.assertEquals(null, ResourceIO.getGlobalResource(this, "DeepIO"));
     }
 
