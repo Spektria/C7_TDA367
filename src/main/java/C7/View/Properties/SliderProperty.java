@@ -1,15 +1,10 @@
 package C7.View.Properties;
 
 import C7.Model.Tools.ToolProperties.IToolProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -41,13 +36,12 @@ public class SliderProperty extends AnchorPane {
         slider.setMin(prop.lowerBound().doubleValue());
         slider.setMax(prop.upperBound().doubleValue());
 
-        slider.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                double value = slider.getValue();
-                prop.setDouble(value);
-                valueLabel.setText("" + value);
-            }
+        slider.valueProperty().addListener((observableValue, oldVal, newVal) -> {
+            prop.setDouble(newVal.doubleValue());
+            var valueDisplayStr = "" + newVal;
+            // TODO: Change to some form of Math.round(value, decimals) method instead of substring since if
+            // TODO: the value is > 999 it will not be displayed properly.
+            valueLabel.setText(valueDisplayStr.length() > 3 ? valueDisplayStr.substring(0, 4) : valueDisplayStr);
         });
     }
 }
