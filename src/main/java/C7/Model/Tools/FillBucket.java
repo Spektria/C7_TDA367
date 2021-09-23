@@ -34,12 +34,12 @@ class FillBucket implements ITool{
         this.threshold = threshold;
 
         properties = Arrays.asList(
-                ToolPropertyFactory.createFloatProperty("Threshold",
+                ToolPropertyFactory.createDoubleProperty("Threshold",
                         "If the color distance of a color c from" +
                                 " the fill of bucket is less than this threshold" +
                                 " then c will be changed to the buckets fill.",
-                        (f) -> this.threshold = f,
-                        () -> this.threshold,
+                        (d) -> this.threshold = d.floatValue(),
+                        () -> (double)this.threshold,
                         0f, 2f),
 
                 ToolPropertyFactory.createColorProperty("Fill color",
@@ -59,22 +59,18 @@ class FillBucket implements ITool{
             return;
 
 
-        Deque<int[]> stack = new ArrayDeque<>();
-        stack.push(new int[]{ x, y});
+        Deque<Integer> stack = new ArrayDeque<>();
+        stack.push(x);
+        stack.push(y);
 
         while(!stack.isEmpty()){
-            int[] coords = stack.pop();
-            x = coords[0];
-            y = coords[1];
+            y = stack.pop();
+            x = stack.pop();
             int x1 = x;
 
             // Do a scan on a horizontal line so that we find the first x which should not be filled.
             while(x1 >= 0 && shouldFill(surface.getPixel(x1, y), selectedColor)) x1--;
             x1++;
-
-            boolean above = false;
-            boolean below = false;
-
 
             while(x1 < surface.getWidth() && shouldFill(surface.getPixel(x1,y), selectedColor)){
 
@@ -82,26 +78,17 @@ class FillBucket implements ITool{
                 surface.setPixel(x1, y, fill);
 
                 // Check if the y - 1 line should be filled, if it has not already been checked.
-                if(!above && y > 0 && shouldFill(surface.getPixel(x1, y-1), selectedColor)){
+                if(y > 0 && shouldFill(surface.getPixel(x1, y-1), selectedColor)){
 
                     // If it should be filled, push another coordinate in the stack
-                    stack.push(new int[]{x1, y-1});
-
-                    // We have now checked, so we mustn't again.
-                    above = true;
-                }
-                // Check that we should still fill above.
-                else if(above && y > 0 && surface.getPixel(x1, y-1).equals(fill)){
-                    above = false;
+                    stack.push(x1);
+                    stack.push(y - 1);
                 }
 
                 // Do the same for below as for above. Except with y + 1.
-                if(!below && y < surface.getHeight() - 1 && shouldFill(surface.getPixel(x1, y+1), selectedColor)){
-                    stack.push(new int[]{ x1, y+1 });
-                    below = true;
-                }
-                else if(below && y < surface.getHeight() - 1 && surface.getPixel(x1, y+1).equals(fill)){
-                    below = false;
+                if(y < surface.getHeight() - 1 && shouldFill(surface.getPixel(x1, y+1), selectedColor)){
+                    stack.push(x1);
+                    stack.push(y+1);
                 }
 
                 // Next pixel in the line.
