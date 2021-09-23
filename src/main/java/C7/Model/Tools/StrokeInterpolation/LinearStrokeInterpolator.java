@@ -21,7 +21,7 @@ public class LinearStrokeInterpolator implements IStrokeInterpolator {
         if(p1.equals(p2))
             return List.of(p1);
 
-        int amountOfPointsToCreate = (int)(p1.sub(p2).len()/pointsPerDistance);
+        int amountOfPointsToCreate = (int)(p1.sub(p2).len() * pointsPerDistance);
 
         Vector2D delta = p2.sub(p1).mult(1d/amountOfPointsToCreate);
 
