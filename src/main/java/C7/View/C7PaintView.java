@@ -1,5 +1,6 @@
 package C7.View;
 
+import C7.IO.LayerIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
@@ -18,13 +19,16 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
 import javax.tools.Tool;
+import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class C7PaintView implements Initializable {
@@ -79,6 +83,47 @@ public class C7PaintView implements Initializable {
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
+
+
+        canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                if (event.getGestureSource() != canvasPane
+                        && event.getDragboard().hasFiles()) {
+                    /* allow for both copying and moving, whatever user chooses */
+                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+                }
+                event.consume();
+            }
+        });
+
+        canvasPane.setOnDragDropped(new EventHandler<DragEvent>() {
+
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean success = false;
+                if (db.hasFiles()) {
+                    success = true;
+
+                    List<File> files = db.getFiles();
+
+                    for (int i = 0; i < files.size(); i++) {
+                        Layer importedLayer = LayerIO.layerFromFile(files.get(i).getPath());
+                        if (importedLayer != null) {
+                            layer = importedLayer;
+                            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
+                            updateView();
+                        }
+                    }
+                }
+
+                event.setDropCompleted(success);
+
+                event.consume();
+            }
+        });
 
         canvasPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
