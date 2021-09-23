@@ -30,7 +30,7 @@ class Brush implements ITool {
     private double rotation = 0; // Radians
     private Vector2D scale = new Vector2D(1, 1);
     private Color color;
-    private double pointFrequency = 1; // points per pixel
+    private double pointFrequency = 1.5; // points per pixel
 
     private IStrokeInterpolator strokeInterpolator;
 
