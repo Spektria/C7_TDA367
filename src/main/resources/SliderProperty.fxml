@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root prefHeight="50.0" prefWidth="360.0" type="AnchorPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Slider fx:id="slider" layoutX="86.0" layoutY="18.0" prefHeight="14.0" prefWidth="198.0" />
+      <Label fx:id="label" alignment="CENTER" layoutX="14.0" layoutY="5.0" prefHeight="38.0" prefWidth="62.0" text="Label test very long very very long" textOverrun="LEADING_WORD_ELLIPSIS" wrapText="true" />
+      <Label fx:id="valueLabel" layoutX="304.0" layoutY="6.0" prefHeight="38.0" prefWidth="50.0" text="Value Display" textOverrun="CLIP" wrapText="true" />
+   </children>
+</fx:root>
