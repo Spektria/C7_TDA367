@@ -49,17 +49,17 @@ class Brush implements ITool {
         // Add all modifiable properties to list
         properties.addAll(Arrays.asList(
                 ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
-                        (i) -> this.size = i, () -> this.size, 0, 500),
+                        (i) -> this.size = i, () -> this.size, 0, 50),
                 ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
                         (rot) -> this.rotation = rot, () -> this.rotation, 0, Math.PI * 2),
                 ToolPropertyFactory.createDoubleProperty("Y-scale", "The scale of the brush stroke in the y axis",
-                        (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 100),
+                        (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 5),
                 ToolPropertyFactory.createDoubleProperty("X-scale", "The scale of the brush stroke in the x axis",
-                        (x) -> this.scale = new Vector2D(x, scale.getY()), () -> this.scale.getY(), 0, 100),
+                        (x) -> this.scale = new Vector2D(x, scale.getY()), () -> this.scale.getY(), 0, 5),
                 ToolPropertyFactory.createColorProperty("Stroke color", "The color of the stroke",
                         (c) -> this.color = c, () -> this.color),
                 ToolPropertyFactory.createDoubleProperty("Point frequency", "How many times the brush should draw per pixel",
-                        (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 1)
+                        (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
         ));
     }
 
