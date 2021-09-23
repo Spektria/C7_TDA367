@@ -51,7 +51,7 @@ class Brush implements ITool {
                 ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
                         (i) -> this.size = i, () -> this.size, 0, 500),
                 ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
-                        (rot) -> this.rotation = rot, () -> this.rotation, 0, Math.PI * 2),
+                        (rot) -> this.rotation = Math.toRadians(rot), () -> Math.toDegrees(this.rotation), 0, 360),
                 ToolPropertyFactory.createDoubleProperty("Y-scale", "The scale of the brush stroke in the y axis",
                         (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 100),
                 ToolPropertyFactory.createDoubleProperty("X-scale", "The scale of the brush stroke in the x axis",
