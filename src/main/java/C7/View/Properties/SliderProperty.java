@@ -38,10 +38,8 @@ public class SliderProperty extends AnchorPane {
 
         slider.valueProperty().addListener((observableValue, oldVal, newVal) -> {
             prop.setDouble(newVal.doubleValue());
-            var valueDisplayStr = "" + newVal;
-            // TODO: Change to some form of Math.round(value, decimals) method instead of substring since if
-            // TODO: the value is > 999 it will not be displayed properly.
-            valueLabel.setText(valueDisplayStr.length() > 3 ? valueDisplayStr.substring(0, 4) : valueDisplayStr);
+            var valueDisplayStr = "" + ((double)Math.round(newVal.doubleValue() * 100))/100;
+            valueLabel.setText(valueDisplayStr);
         });
     }
 }
