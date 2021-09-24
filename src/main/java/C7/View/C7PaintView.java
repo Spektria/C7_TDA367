@@ -10,6 +10,7 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
 import C7.View.Properties.CheckboxProperty;
 import C7.View.Properties.ColorProperty;
+import C7.View.Properties.IntProperty;
 import C7.View.Properties.SliderProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -55,7 +56,7 @@ public class C7PaintView implements Initializable {
 
                 case BOOLEAN -> widget = new CheckboxProperty(property);
 
-                //case INTEGER ->
+                case INTEGER -> widget = new IntProperty(property);
 
                 default -> { System.out.println("Unrecognized property type: " + property.getType());
                 continue; }
