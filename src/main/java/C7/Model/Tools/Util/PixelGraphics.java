@@ -59,8 +59,14 @@ public final class PixelGraphics {
         final double sin = Math.sin(rotation);
         final double cos = Math.cos(rotation);
 
-        for (double x = -Math.abs(semiMajor); x <= Math.abs(semiMajor); x++) {
-            for (double y = -Math.abs(semiMinor); y <= Math.abs(semiMinor); y++){
+        // formula for non-axis aligned bounds of a rotated ellipse:
+        //https://math.stackexchange.com/questions/91132/how-to-get-the-limits-of-rotated-ellipse
+
+        final double halfWidth = Math.sqrt(Math.pow(semiMajor * cos, 2) + Math.pow(semiMinor * sin, 2));
+        final double halfHeight = Math.sqrt(Math.pow(semiMajor * sin, 2) + Math.pow(semiMinor * cos, 2));
+
+        for (double x = -Math.abs(halfWidth); x <= Math.abs(halfWidth); x++) {
+            for (double y = -Math.abs(halfHeight); y <= Math.abs(halfHeight); y++){
 
                 if(Math.pow((x * cos + y * sin) / semiMajor, 2)
                                 + Math.pow((x * sin - y * cos)/semiMinor, 2) <= 1)
