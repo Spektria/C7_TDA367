@@ -2,7 +2,7 @@ package C7.Model.Tools;
 
 import C7.Model.Color;
 import C7.Model.Layer.ILayer;
-import C7.Model.Tools.Pattern.IPatternStrategy;
+import C7.Model.Tools.Pattern.IPattern;
 import C7.Model.Tools.StrokeInterpolation.IStrokeInterpolator;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
@@ -34,9 +34,9 @@ class Brush implements ITool {
 
     private IStrokeInterpolator strokeInterpolator;
 
-    private IPatternStrategy strokePattern;
+    private IPattern strokePattern;
 
-    Brush(Color color, int size, IPatternStrategy strokePattern, IStrokeInterpolator strokeInterpolator){
+    Brush(Color color, int size, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
         Objects.requireNonNull(strokeInterpolator);
         Objects.requireNonNull(strokePattern);
         Objects.requireNonNull(color);

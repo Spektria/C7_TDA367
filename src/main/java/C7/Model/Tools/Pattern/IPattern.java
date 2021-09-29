@@ -5,12 +5,12 @@ import C7.Model.Vector.Vector2D;
 import java.util.Collection;
 
 /**
- * An IPatternStrategy is a strategy which calculates a collection of points by a given size, scale, and rotation.
+ * An IPattern is a strategy which calculates a collection of points by a given size, scale, and rotation.
  * It may be a circle, star, or any other pattern which may be described with discreet points in 2d space.
  * The pattern is centered at (0,0) and should thus be translated if one doesn't want the points at this position.
  * @author Hugo Ekstrand
  */
-public interface IPatternStrategy {
+public interface IPattern {
 
     /**
      * Returns a list of discreet points for this pattern.
