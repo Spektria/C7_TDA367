@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class IntegerToolPropertyTest {
 
     private int internalProp = 1337;

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-
+/**
+ * @author Hugo Ekstrand
+ */
 public class ColorToolPropertyTest {
 
     private Color internalProp = new Color(1f, 1f, 1f, 1f);
