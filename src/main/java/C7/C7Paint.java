@@ -1,5 +1,6 @@
 package C7;
 
+import C7.View.TestViewApp;
 import javafx.stage.Stage;
 
 /***
@@ -9,5 +10,6 @@ import javafx.stage.Stage;
 public class C7Paint {
 
     public static void main(String[] args) {
+        TestViewApp.main(args);
     }
 }
