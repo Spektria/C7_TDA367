@@ -1,23 +1,25 @@
 package C7.IO;
 
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class ResourceIOTest {
 
     @Test
     public void globalResourceIO() {
-        Assert.assertNotEquals(null, ResourceIO.getGlobalResource(this, "C7/IO/DeepIO"));
-        Assert.assertEquals(null, ResourceIO.getGlobalResource(this, "DeepIO"));
+        Assertions.assertNotEquals(null, ResourceIO.getGlobalResource(this, "C7/IO/DeepIO"));
+        Assertions.assertEquals(null, ResourceIO.getGlobalResource(this, "DeepIO"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void packageResourceIOIllegalArgument(){
-        ResourceIO.getGlobalResource(this, "/DeepIO");
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> ResourceIO.getGlobalResource(this, "/DeepIO"));
     }
 
     @Test
     public void packageResourceIO() {
-        Assert.assertNotEquals(null, ResourceIO.getPackageResource(this, "DeepIO"));
+        Assertions.assertNotEquals(null, ResourceIO.getPackageResource(this, "DeepIO"));
     }
 }

@@ -2,9 +2,9 @@ package C7.IO;
 
 import C7.Model.Color;
 import C7.Model.Layer.Layer;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 
@@ -14,11 +14,10 @@ public class LayerIOTest {
     Layer importedLayer;
 
 
-    @Test
-    @Before
+    @BeforeEach
     public void importTest(){
         importedLayer = LayerIO.layerFromFile(imagePath.getPath());
-        Assert.assertNotEquals(null, importedLayer);
+        Assertions.assertNotEquals(null, importedLayer);
     }
 
     @Test
@@ -29,8 +28,8 @@ public class LayerIOTest {
         colors[2] = importedLayer.getPixel(1,2);
         colors[3] = importedLayer.getPixel(3,2);
 
-        Assert.assertTrue(colors[0].equals(colors[2]));
-        Assert.assertTrue(colors[0].equals(colors[3]));
-        Assert.assertFalse(colors[0].equals(colors[1]));
+        Assertions.assertTrue(colors[0].equals(colors[2]));
+        Assertions.assertTrue(colors[0].equals(colors[3]));
+        Assertions.assertFalse(colors[0].equals(colors[1]));
     }
 }

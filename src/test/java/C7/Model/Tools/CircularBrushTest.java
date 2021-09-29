@@ -2,10 +2,8 @@ package C7.Model.Tools;
 
 import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
-import org.junit.Assert;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author Hugo Ekstrand
@@ -20,9 +18,9 @@ public class CircularBrushTest {
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
-        Assert.assertNotEquals(testSurface.getPixel(0,0), testSurface.getBaseColor());
-        assertEquals(testSurface.getPixel(0, 1), testSurface.getBaseColor());
-        assertEquals(testSurface.getPixel(1, 0), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(0,0), testSurface.getBaseColor());
+        Assertions.assertEquals(testSurface.getPixel(0, 1), testSurface.getBaseColor());
+        Assertions.assertEquals(testSurface.getPixel(1, 0), testSurface.getBaseColor());
     }
 
     @Test
@@ -35,18 +33,18 @@ public class CircularBrushTest {
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
         // Center
-        Assert.assertNotEquals(testSurface.getPixel(10, 10), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(10, 10), testSurface.getBaseColor());
 
         // Edges
-        Assert.assertNotEquals(testSurface.getPixel(15,10), testSurface.getBaseColor());
-        Assert.assertNotEquals(testSurface.getPixel(5,10), testSurface.getBaseColor());
-        Assert.assertNotEquals(testSurface.getPixel(10,15), testSurface.getBaseColor());
-        Assert.assertNotEquals(testSurface.getPixel(10,5), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(15,10), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(5,10), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(10,15), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(10,5), testSurface.getBaseColor());
 
         // Curve
-        Assert.assertNotEquals(testSurface.getPixel(6,11), testSurface.getBaseColor());
-        Assert.assertNotEquals(testSurface.getPixel(6,12), testSurface.getBaseColor());
-        assertEquals(testSurface.getPixel(6, 14), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(6,11), testSurface.getBaseColor());
+        Assertions.assertNotEquals(testSurface.getPixel(6,12), testSurface.getBaseColor());
+        Assertions.assertEquals(testSurface.getPixel(6, 14), testSurface.getBaseColor());
 
     }
 

@@ -1,8 +1,8 @@
 package C7.Model.Tools.ToolProperties;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class BooleanToolPropertyTest {
 
@@ -17,21 +17,21 @@ public class BooleanToolPropertyTest {
 
     @Test
     public void getValueTest(){
-        Assert.assertEquals(internalProp, boolProp.getBoolean());
+        Assertions.assertEquals(internalProp, boolProp.getBoolean());
     }
 
     @Test
     public void setValueTest(){
         boolProp.setBoolean(true);
-        Assert.assertTrue(boolProp.getBoolean());
+        Assertions.assertTrue(boolProp.getBoolean());
 
         boolProp.setBoolean(false);
-        Assert.assertFalse(boolProp.getBoolean());
+        Assertions.assertFalse(boolProp.getBoolean());
     }
 
     @Test
     public void getTypeTest(){
-        Assert.assertEquals(IToolProperty.ToolPropertyType.BOOLEAN, boolProp.getType());
+        Assertions.assertEquals(IToolProperty.ToolPropertyType.BOOLEAN, boolProp.getType());
     }
 
 }

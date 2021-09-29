@@ -1,8 +1,8 @@
 package C7.Model.Tools.ToolProperties;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class IntegerToolPropertyTest {
 
@@ -17,27 +17,27 @@ public class IntegerToolPropertyTest {
 
     @Test
     public void getValueTest(){
-        Assert.assertEquals(1337, intProp.getInteger());
+        Assertions.assertEquals(1337, intProp.getInteger());
     }
 
     @Test
     public void setValueTest(){
         intProp.setInteger(50);
-        Assert.assertEquals(50, intProp.getInteger());
+        Assertions.assertEquals(50, intProp.getInteger());
 
         intProp.setInteger(0);
-        Assert.assertEquals(0, intProp.getInteger());
+        Assertions.assertEquals(0, intProp.getInteger());
     }
 
     @Test
     public void getTypeTest(){
-        Assert.assertEquals(IToolProperty.ToolPropertyType.INTEGER, intProp.getType());
+        Assertions.assertEquals(IToolProperty.ToolPropertyType.INTEGER, intProp.getType());
     }
 
     @Test
     public void getLimitsTest(){
-        Assert.assertEquals(5, intProp.lowerBound());
-        Assert.assertEquals(1e6,intProp.upperBound());
+        Assertions.assertEquals(5, intProp.lowerBound());
+        Assertions.assertEquals(1e6,intProp.upperBound());
     }
 
 }
