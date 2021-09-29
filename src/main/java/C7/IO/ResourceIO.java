@@ -2,6 +2,9 @@ package C7.IO;
 
 import java.net.URL;
 
+/**
+ * ResourceIO contains static methods facilitating easy creation of {@link URL} pointing to objects in program resources.
+ */
 public class ResourceIO {
 
     /**
