@@ -15,7 +15,7 @@ public interface IToolProperty {
      * Consists of all the types a {@link IToolProperty} can be.
      */
     enum ToolPropertyType {
-        INTEGER, DOUBLE, FLOAT, BOOLEAN, COLOR
+        INTEGER, DOUBLE, BOOLEAN, COLOR
     }
 
     /**
@@ -81,20 +81,6 @@ public interface IToolProperty {
      * @return the value of this property.
      */
     double getDouble();
-
-    /**
-     * Sets the value of this property as a float.
-     * @throws UnsupportedOperationException if this is the wrong type of this property
-     * @param f the value this property will be set to.
-     */
-    void setFloat(float f);
-
-    /**
-     * Returns the value of this property as a float.
-     * @throws UnsupportedOperationException if this is the wrong type of this property
-     * @return the value of this property.
-     */
-    float getFloat();
 
     /**
      * Sets the value of this property as a boolean.

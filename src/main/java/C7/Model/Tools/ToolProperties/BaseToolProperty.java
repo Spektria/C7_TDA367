@@ -64,16 +64,6 @@ abstract class BaseToolProperty<T> implements IToolProperty {
     }
 
     @Override
-    public void setFloat(float f) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public float getFloat() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public void setBoolean(boolean bool) {
         throw new UnsupportedOperationException();
     }
