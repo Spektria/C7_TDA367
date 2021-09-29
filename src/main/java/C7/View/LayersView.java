@@ -93,7 +93,7 @@ public class LayersView extends AnchorPane {
 
             return cell;
         });
-
+/*
         thumbnail.setCellValueFactory(new Callback< TableColumn.CellDataFeatures<Layer, Image>, ObservableValue<Layer> >() {
             @Override
             public ObservableValue<CheckBox> call(
@@ -162,7 +162,7 @@ public class LayersView extends AnchorPane {
 
             return row ;
         });
-
+*/
 
     }
 }
