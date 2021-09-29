@@ -12,6 +12,13 @@ import java.util.List;
  */
 public interface IStrokeInterpolator {
 
-    List<Vector2D> interpolate(Vector2D p1, Vector2D p2, double pointsPerDistance);
+    /**
+     * Interpolates a collection of points from the given points and returns the interpolated points and the given points.
+     * The given points may be the same points. The returned points include the given points.
+     * @param pointsPerDistance how many points should be interpolated per distance unit
+     * @param points the given points to interpolate form.
+     * @return the interpolated points including the given points.
+     */
+    List<Vector2D> interpolate(double pointsPerDistance, Vector2D...points);
 
 }

@@ -2,7 +2,7 @@ package C7.Model.Tools;
 
 import C7.Model.Color;
 import C7.Model.Tools.Pattern.PatternFactory;
-import C7.Model.Tools.StrokeInterpolation.LinearStrokeInterpolator;
+import C7.Model.Tools.StrokeInterpolation.StrokeInterpolatorFactory;
 
 /**
  * This factory is used for creating {@link ITool ITools}.
@@ -17,7 +17,7 @@ public class ToolFactory {
      * @return the created brush
      */
     public static ITool CreateCircularBrush(int strokeSize, Color color){
-        return new Brush(color, strokeSize, PatternFactory.createDiskPattern(), new LinearStrokeInterpolator());
+        return new Brush(color, strokeSize, PatternFactory.createDiskPattern(), StrokeInterpolatorFactory.createLinearInterpolator());
     }
 
     /**
@@ -28,7 +28,7 @@ public class ToolFactory {
      * @return the created brush
      */
     public static ITool CreateCalligraphyBrush(int strokeSize, Color color){
-        return new Brush(color, strokeSize, PatternFactory.createLinePattern(), new LinearStrokeInterpolator());
+        return new Brush(color, strokeSize, PatternFactory.createLinePattern(), StrokeInterpolatorFactory.createLinearInterpolator());
 
     }
 
