@@ -38,6 +38,7 @@ public class C7PaintView implements Initializable {
     GraphicsContext gc;
     @FXML FlowPane flowPaneTools;
     @FXML FlowPane flowPaneProperties;
+    @FXML AnchorPane layersArea;
 
     ILayer layer; //Only one for now
 
@@ -159,6 +160,8 @@ public class C7PaintView implements Initializable {
                 }
             }
         });
+
+        layersArea.getChildren().add(new LayersView());
 
     }
 
