@@ -6,7 +6,7 @@ import C7.Model.Vector.Vector2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
-class LinePattern implements IPatternStrategy {
+class LinePattern implements IPattern {
 
     @Override
     public Collection<Vector2D> getPoints(int size, Vector2D scale, double rotation) {

@@ -10,7 +10,7 @@ import C7.Model.Vector.Vector2D;
  *
  * @author Elias Ersson
  * @author Love Gustafsson
- * @version 1.2
+ * @version 1.4
  */
 public interface ILayer {
 
@@ -63,7 +63,7 @@ public interface ILayer {
      * @return True if the pixel is within this layer, false if the pixel is
      * outside this layer.
      */
-    Boolean isPixelOnLayer(int x, int y);
+    boolean isPixelOnLayer(int x, int y);
 
     /**
      * Sets the rotation angle of this layer.
@@ -100,4 +100,22 @@ public interface ILayer {
      * @return The current scale of this layer.
      */
     Vector2D getScale();
+
+    /**
+     * Checks whether the given point is within the boundaries of this layer.
+     * @param point The point to check.
+     * @return true if the point is within the boundaries of this layer, false
+     * if the point is outside.
+     */
+    boolean isPointOnLayer(Vector2D point);
+
+    /**
+     * Finds the layer-space integer position of a pixel at the specified
+     * picture-space co-ordinate point.
+     * @param point The point in picture-space co-ordinates to get the layer-
+     *              -space pixel co-ordinates for.
+     * @return Integer layer-space co-ordinates for the pixel at the specified
+     * point.
+     */
+    Vector2D getPixelPositionAtPoint(Vector2D point);
 }

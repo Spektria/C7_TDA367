@@ -51,12 +51,17 @@ public class Layer implements ILayer {
         for (int x = 0; x < colorMatrix.length; x++) {
             pixels[x] = new Color[colorMatrix[x].length];
 
-            for (int y = 0; y < colorMatrix[y].length; y++) {
+            for (int y = 0; y < colorMatrix[x].length; y++) {
                 Color oldColor = colorMatrix[x][y];
                 //Would like a copy method for copying color data instead of this repeating pattern of GET
                 pixels[x][y] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
             }
         }
+
+        //Some sketchy stuff that will surely get replaced by more robust code later
+        width = colorMatrix.length;
+        if (width == 0) height = 0;
+        else height = colorMatrix[0].length;
     }
 
     @Override
@@ -105,7 +110,7 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public Boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLayer(int x, int y) {
         return (x >= 0 && x < width && y >= 0 && y < height);
     }
 
@@ -152,6 +157,16 @@ public class Layer implements ILayer {
         int result = Objects.hash(width, height);
         result = 31 * result + Arrays.hashCode(pixels);
         return result;
+    }
+
+    @Override
+    public boolean isPointOnLayer(Vector2D point) {
+        return false;
+    }
+
+    @Override
+    public Vector2D getPixelPositionAtPoint(Vector2D point) {
+        return new Vector2D(0, 0);
     }
 
     private void setDimensions(int width, int height) {
