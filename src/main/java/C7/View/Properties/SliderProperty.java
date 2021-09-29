@@ -31,15 +31,19 @@ public class SliderProperty extends AnchorPane {
 
         double value = prop.getDouble();
         slider.setValue(value);
-        valueLabel.setText("" + value);
+        valueLabel.setText("" + round2Decimals(value));
 
         slider.setMin(prop.lowerBound().doubleValue());
         slider.setMax(prop.upperBound().doubleValue());
 
         slider.valueProperty().addListener((observableValue, oldVal, newVal) -> {
             prop.setDouble(newVal.doubleValue());
-            var valueDisplayStr = "" + ((double)Math.round(newVal.doubleValue() * 100))/100;
+            var valueDisplayStr = "" + round2Decimals(newVal.doubleValue());
             valueLabel.setText(valueDisplayStr);
         });
+    }
+
+    double round2Decimals(double input) {
+        return ((double)Math.round(input * 100))/100;
     }
 }
