@@ -12,20 +12,6 @@ import java.util.function.Supplier;
 public class ToolPropertyFactory {
 
     /**
-     * Creates a property for a Float.
-     * @param name the name of the property
-     * @param description the description of what the property does
-     * @param setter the setter method for the property
-     * @param getter the getter method for the property
-     * @param min the minimum allowed value of this property
-     * @param max the minimum allowed value of this property
-     * @return the property
-     */
-    public static IToolProperty createFloatProperty(String name, String description, Consumer<Float> setter, Supplier<Float> getter, Number min, Number max){
-        return new FloatToolProperty(name, description, setter, getter, min, max);
-    }
-
-    /**
      * Creates a property for a Double.
      * @param name the name of the property
      * @param description the description of what the property does
@@ -61,7 +47,7 @@ public class ToolPropertyFactory {
      * @param getter the getter method for the property
      * @return the property
      */
-    public static IToolProperty createBooleanProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter, Number min, Number max){
+    public static IToolProperty createBooleanProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter){
         return new BooleanToolProperty(name, description, setter, getter);
     }
 
