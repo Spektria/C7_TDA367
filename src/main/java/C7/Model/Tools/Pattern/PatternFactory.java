@@ -9,7 +9,7 @@ public class PatternFactory {
 
     /**
      * Creates a filled disk shaped pattern.
-     * @return the pattern strategy.
+     * @return the pattern.
      */
     public static IPattern createDiskPattern(){
         return new DiskPattern();
@@ -17,7 +17,7 @@ public class PatternFactory {
 
     /**
      * Creates a line shaped pattern.
-     * @return the pattern strategy.
+     * @return the pattern.
      */
     public static IPattern createLinePattern(){
         return new LinePattern();
