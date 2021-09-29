@@ -15,9 +15,7 @@ public class ResourceIO {
     public static URL getGlobalResource(String file){
         //Make file path global in scope unless it already is
         if (file.startsWith("/") == false) file = "/" + file;
-        Object o = ResourceIO.class.getResource(file);
-
-        return ResourceIO.class.getClassLoader().getResource(file);
+        return ResourceIO.class.getResource(file);
     }
 
     /**
