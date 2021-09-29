@@ -26,11 +26,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
-import javax.tools.Tool;
+
 import java.io.File;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+
 
 public class C7PaintView implements Initializable {
     @FXML AnchorPane canvasPane;
@@ -79,12 +80,12 @@ public class C7PaintView implements Initializable {
 
         updateView();
 
-        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
+        setCurrentTool(ToolFactory.CreateCircularBrush());
 
         //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(), "Fill", this));
 
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
