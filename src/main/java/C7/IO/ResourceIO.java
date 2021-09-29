@@ -9,14 +9,15 @@ public class ResourceIO {
 
     /**
      * Return file system path of resource file from global scope
-     * @param classToRetriveFrom The class to request the file from. The class' package is not relevant.
      * @param file The file name to retrive. Folder levels seperated by "/"
      * @return URL to resource from global scope, NULL if resource does not exist
-     * @throws IllegalArgumentException Is thrown if file parameter starts with illegal character "/"
      */
-    public static URL getGlobalResource(Object classToRetriveFrom, String file){
-        if (file.startsWith("/")) throw new IllegalArgumentException("Global path can not start with \"/\"");
-        return classToRetriveFrom.getClass().getClassLoader().getResource(file);
+    public static URL getGlobalResource(String file){
+        //Make file path global in scope unless it already is
+        if (file.startsWith("/") == false) file = "/" + file;
+        Object o = ResourceIO.class.getResource(file);
+
+        return ResourceIO.class.getClassLoader().getResource(file);
     }
 
     /**

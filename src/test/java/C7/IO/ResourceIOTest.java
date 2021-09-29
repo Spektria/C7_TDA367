@@ -8,14 +8,8 @@ public class ResourceIOTest {
 
     @Test
     public void globalResourceIO() {
-        Assertions.assertNotEquals(null, ResourceIO.getGlobalResource(this, "C7/IO/DeepIO"));
-        Assertions.assertEquals(null, ResourceIO.getGlobalResource(this, "DeepIO"));
-    }
-
-    @Test
-    public void packageResourceIOIllegalArgument(){
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> ResourceIO.getGlobalResource(this, "/DeepIO"));
+        Assertions.assertNotEquals(null, ResourceIO.getGlobalResource("C7/IO/DeepIO"));
+        Assertions.assertEquals(null, ResourceIO.getGlobalResource("DeepIO"));
     }
 
     @Test
