@@ -3,7 +3,7 @@ package C7.Model.Tools.ToolProperties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class BooleanToolProperty extends BaseToolProperty<Boolean> {
+class BooleanToolProperty extends BaseToolProperty<Boolean> {
 
 
     BooleanToolProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter) {
