@@ -75,7 +75,7 @@ class Brush implements ITool {
         final Collection<Vector2D> points = strokePattern.getPoints(size, scale, rotation);
 
         // Interpolate the given points so that any "holes" of empty points are filled.
-        strokeInterpolator.interpolate(v0, v1, pointFrequency)
+        strokeInterpolator.interpolate(pointFrequency, v0, v1)
                 .parallelStream()
 
                 // For each point, translate it to the current

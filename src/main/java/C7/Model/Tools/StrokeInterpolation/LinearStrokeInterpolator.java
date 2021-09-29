@@ -2,7 +2,10 @@ package C7.Model.Tools.StrokeInterpolation;
 
 import C7.Model.Vector.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -14,9 +17,8 @@ import java.util.stream.IntStream;
  *
  * @author Hugo Ekstrand
  */
-public class LinearStrokeInterpolator implements IStrokeInterpolator {
+class LinearStrokeInterpolator implements IStrokeInterpolator {
 
-    @Override
     public List<Vector2D> interpolate(Vector2D p1, Vector2D p2, double pointsPerDistance) {
         if(p1.equals(p2))
             return List.of(p1);
@@ -29,5 +31,21 @@ public class LinearStrokeInterpolator implements IStrokeInterpolator {
                 .mapToObj(index -> p1.add(delta.mult(index)))
                 .collect(Collectors.toList());
         return points;
+    }
+
+    @Override
+    public List<Vector2D> interpolate(double pointsPerDistance, Vector2D... points) {
+        Objects.requireNonNull(points);
+
+        if(points.length == 1)
+            return List.of(points[0]);
+        else {
+            ArrayList<Vector2D> interpolatedPoints = new ArrayList<>();
+
+            for(int i = 1; i < points.length; i++){
+                interpolatedPoints.addAll(interpolate(points[i - 1], points[i], pointsPerDistance));
+            }
+            return interpolatedPoints;
+        }
     }
 }
