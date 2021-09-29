@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class IntProperty extends AnchorPane {
 
         label.setText(prop.name());
 
-
+        spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(prop.lowerBound().intValue(), prop.upperBound().intValue(), prop.getInteger()));
 
         spinner.valueProperty().addListener((observableValue, oldVal, newVal) -> {
                 prop.setInteger((Integer) newVal);
