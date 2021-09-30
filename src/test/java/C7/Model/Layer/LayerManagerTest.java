@@ -2,8 +2,8 @@ package C7.Model.Layer;
 
 import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LayerManagerTest {
 
@@ -15,7 +15,7 @@ public class LayerManagerTest {
 		ILayerManager layerManager = new LayerManager();
 
 		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
-		Assert.assertNotEquals(id, 0);
+		Assertions.assertNotEquals(id, 0);
 	}
 
 	/**
@@ -28,7 +28,7 @@ public class LayerManagerTest {
 		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
 
 		ILayer layer = layerManager.getLayer(id);
-		Assert.assertNotNull(layer);
+		Assertions.assertNotNull(layer);
 	}
 
 	@Test
@@ -39,6 +39,6 @@ public class LayerManagerTest {
 
 		ILayer layer = layerManager.getLayer(id);
 
-		Assert.assertEquals(new Layer(16, 16, new Color(0, 0, 0, 0)), layer);
+		Assertions.assertEquals(new Layer(16, 16, new Color(0, 0, 0, 0)), layer);
 	}
 }
