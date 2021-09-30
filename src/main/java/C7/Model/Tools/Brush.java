@@ -79,9 +79,11 @@ class Brush implements ITool {
                 // interpolated point's position.
                 .forEach(point ->
                         points.stream()
+                                .parallel()
                                 .map(v -> v.add(point))
                                 // Then draw the translated points onto the layer
-                                .forEach(v -> layer.setPixel((int)v.getX(), (int)v.getY(), color)));
+                                .filter(layer::isPointOnLayer)
+                                .forEach(v -> layer.setGlobalPixel((int)v.getX(), (int)v.getY(), color)));
     }
 
     @Override
