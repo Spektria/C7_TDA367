@@ -8,7 +8,6 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Model.Vector.Vector2D;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
@@ -23,31 +22,30 @@ import java.util.Objects;
  */
 class Brush implements ITool {
 
-    private final Collection<IToolProperty> properties = new ArrayList<>();
+    private final Collection<IToolProperty> properties;
 
     // Common properties for all brushes.
     private int size;
     private double rotation = 0; // Radians
-    private Vector2D scale = new Vector2D(1, 1);
+    private Vector2D scale = new Vector2D(1,1);
     private Color color;
-    private double pointFrequency = 1.5; // points per pixel
+    private double pointFrequency  = 1.5d; // points per pixel
 
-    private IStrokeInterpolator strokeInterpolator;
+    private final IStrokeInterpolator strokeInterpolator;
 
-    private IPattern strokePattern;
+    private final IPattern strokePattern;
 
-    Brush(Color color, int size, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
+    Brush(int size, Color color, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
         Objects.requireNonNull(strokeInterpolator);
         Objects.requireNonNull(strokePattern);
-        Objects.requireNonNull(color);
+
+        this.size = size;
+        this.color = color;
 
         this.strokePattern = strokePattern;
         this.strokeInterpolator = strokeInterpolator;
-        this.color = color;
-        this.size = size;
 
-        // Add all modifiable properties to list
-        properties.addAll(Arrays.asList(
+        this.properties = Arrays.asList(
                 ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
                         (i) -> this.size = i, () -> this.size, 0, 50),
                 ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
@@ -60,7 +58,7 @@ class Brush implements ITool {
                         (c) -> this.color = c, () -> this.color),
                 ToolPropertyFactory.createDoubleProperty("Point frequency", "How many times the brush should draw per pixel",
                         (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
-        ));
+        );
     }
 
     @Override
@@ -90,5 +88,10 @@ class Brush implements ITool {
     @Override
     public boolean isContinuous() {
         return true;
+    }
+
+    @Override
+    public void setToDefault() {
+        properties.forEach(IToolProperty::setToDefault);
     }
 }

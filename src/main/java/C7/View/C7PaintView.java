@@ -83,7 +83,7 @@ public class C7PaintView implements Initializable {
         //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(new C7.Model.Color(0, 0, 1, 1), 0.2f), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
 
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {

@@ -40,4 +40,9 @@ public interface ITool {
      */
     boolean isContinuous();
 
+    /**
+     * Sets this tool to its default value.
+     * By calling this method this tools properties will be reset to their default values.
+     */
+    void setToDefault();
 }

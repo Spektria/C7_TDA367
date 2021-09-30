@@ -22,16 +22,14 @@ class FillBucket implements ITool{
     private float threshold;
     private Color fill;
 
-    private Collection<IToolProperty> properties;
+    private final Collection<IToolProperty> properties;
 
     /**
      * Creates a new instance of this class
-     * @param fill the color of the fill
-     * @param threshold the threshold of which pixels should be filled
      */
-    FillBucket(Color fill, float threshold){
-        this.fill = fill;
+    FillBucket(float threshold, Color fill){
         this.threshold = threshold;
+        this.fill = fill;
 
         properties = Arrays.asList(
                 ToolPropertyFactory.createDoubleProperty("Threshold",
@@ -136,5 +134,10 @@ class FillBucket implements ITool{
     @Override
     public boolean isContinuous() {
         return false;
+    }
+
+    @Override
+    public void setToDefault() {
+        properties.forEach(IToolProperty::setToDefault);
     }
 }
