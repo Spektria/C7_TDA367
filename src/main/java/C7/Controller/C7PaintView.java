@@ -4,7 +4,6 @@ import C7.IO.LayerIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
-//import C7.Model.Tools.PixelPen;
 import C7.Model.Tools.ToolFactory;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
@@ -14,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -31,8 +31,9 @@ import java.util.ResourceBundle;
 
 
 public class C7PaintView implements Initializable {
-    @FXML AnchorPane canvasPane;
-    @FXML Canvas canvas;
+    //@FXML AnchorPane canvas;
+    Canvas canvas;
+    @FXML ScrollPane scrollPane;
     GraphicsContext gc;
     @FXML FlowPane flowPaneTools;
     @FXML FlowPane flowPaneProperties;
@@ -85,9 +86,18 @@ public class C7PaintView implements Initializable {
     private Vector2D oldPos;
 
     public void initialize(URL location, ResourceBundle resources) {
+
+        layer = new Layer(600, 500, new C7.Model.Color(0, 0, 0, 0));
+
+        canvas = new Canvas();
+
+        canvas.setWidth(layer.getWidth());
+        canvas.setHeight(layer.getHeight());
+
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(600, 400, new C7.Model.Color(0, 0, 0, 0));
+        scrollPane.setContent(canvas);
+
 
         updateView();
 
@@ -99,11 +109,11 @@ public class C7PaintView implements Initializable {
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(), "Fill", this));
 
 
-        canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
+        canvas.setOnDragOver(new EventHandler<DragEvent>() {
 
             @Override
             public void handle(DragEvent event) {
-                if (event.getGestureSource() != canvasPane
+                if (event.getGestureSource() != canvas
                         && event.getDragboard().hasFiles()) {
                     /* allow for both copying and moving, whatever user chooses */
                     event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
@@ -112,7 +122,7 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        canvasPane.setOnDragDropped(new EventHandler<DragEvent>() {
+        canvas.setOnDragDropped(new EventHandler<DragEvent>() {
 
             @Override
             public void handle(DragEvent event) {
@@ -139,7 +149,7 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        canvasPane.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 //Move stuff like this to the controller later
@@ -150,7 +160,7 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        canvasPane.setOnMousePressed(new EventHandler<MouseEvent>() {
+        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
@@ -163,7 +173,7 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        canvasPane.setOnMouseReleased(new EventHandler<MouseEvent>() {
+        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (event.getButton() == MouseButton.PRIMARY) {
