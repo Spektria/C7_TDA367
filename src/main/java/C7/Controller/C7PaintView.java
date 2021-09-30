@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -33,9 +34,15 @@ import java.util.ResourceBundle;
 public class C7PaintView implements Initializable {
     //@FXML AnchorPane canvas;
     Canvas canvas;
-    @FXML ScrollPane scrollPane;
+    @FXML ScrollPane scrollPaneCanvas;
     GraphicsContext gc;
+    @FXML SplitPane splitPaneToolsProps;
+    @FXML AnchorPane contentPaneToolsProps;
+    @FXML AnchorPane contentPaneTools;
+    @FXML ScrollPane scrollPaneTools;
     @FXML FlowPane flowPaneTools;
+    @FXML AnchorPane contentPaneProperties;
+    @FXML ScrollPane scrollPaneProperties;
     @FXML FlowPane flowPaneProperties;
     @FXML AnchorPane layersArea;
 
@@ -96,10 +103,15 @@ public class C7PaintView implements Initializable {
 
         gc = canvas.getGraphicsContext2D();
 
-        scrollPane.setContent(canvas);
+        scrollPaneCanvas.setContent(canvas);
 
+        updateCanvas();
 
-        updateView();
+        splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
+        scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
+        scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
+
+        layersArea.getChildren().add(new LayersView());
 
         setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
 
@@ -138,7 +150,7 @@ public class C7PaintView implements Initializable {
                         if (importedLayer != null) {
                             layer = importedLayer;
                             gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
-                            updateView();
+                            updateCanvas();
                         }
                     }
                 }
@@ -152,11 +164,13 @@ public class C7PaintView implements Initializable {
         canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //Move stuff like this to the controller later
-                Vector2D point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, oldPos, point);
-                oldPos = point;
-                updateView();
+                if (event.getButton() == MouseButton.PRIMARY) {
+                    //Move stuff like this to the controller later
+                    Vector2D point = new Vector2D(event.getX(), event.getY());
+                    currentTool.apply(layer, oldPos, point);
+                    oldPos = point;
+                    updateCanvas();
+                }
             }
         });
 
@@ -168,7 +182,7 @@ public class C7PaintView implements Initializable {
                     currentTool.apply(layer, point, point);
                     oldPos = point;
 
-                    updateView();
+                    updateCanvas();
                 }
             }
         });
@@ -183,11 +197,9 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        layersArea.getChildren().add(new LayersView());
-
     }
 
-    void updateView(int x, int y, int width, int height) {
+    void updateCanvas(int x, int y, int width, int height) {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < height*2; i++) {
             for (int j = 0; j < width*2; j++) {
@@ -199,7 +211,7 @@ public class C7PaintView implements Initializable {
         }
     }
 
-    void updateView() {
+    void updateCanvas() {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < layer.getHeight(); i++) {
             for (int j = 0; j < layer.getWidth(); j++) {

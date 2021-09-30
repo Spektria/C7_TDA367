@@ -1,7 +1,6 @@
 package C7;
 
-import C7.Controller.TestViewApp;
-import javafx.stage.Stage;
+import C7.Controller.PaintApplication;
 
 /***
  * C7.C7Paint simply initializes the application.
@@ -10,6 +9,6 @@ import javafx.stage.Stage;
 public class C7Paint {
 
     public static void main(String[] args) {
-        TestViewApp.main(args);
+        PaintApplication.main(args);
     }
 }
