@@ -10,13 +10,19 @@ import java.util.Objects;
  * Represents a basic image layer.
  * @author Elias Ersson
  * @author Love Gustafsson
- * @version 1.0
+ * @author Hugo Ekstrand
+ * @version 2.0
  */
 public class Layer implements ILayer {
 
     private Color[][] pixels;   // This layer's pixel data.
     private int width;          // The width, in pixels, of this layer.
     private int height;         // The height, in pixels of this layer.
+
+    private double rotation = 0;    // Rotation in radians
+    private Vector2D position = Vector2D.ZERO;
+    private Vector2D scale = new Vector2D(1,1);
+
 
     /**
      * Constructs a new empty layer
@@ -65,28 +71,48 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public Color getPixel(int x, int y) {
+    public Color getGlobalPixel(int x, int y) {
+
+        Vector2D localPos = getPixelPositionAtPoint(new Vector2D(x, y));
+        int localX = (int)localPos.getX();
+        int localY = (int)localPos.getY();
 
         // Check if pixel is on this layer.
-        // Maybe we should change this to an exception later?
-        if (!isPixelOnLayer(x, y)) {
-            return null;
+        if (!isPixelOnLayer(localX, localY)) {
+            throw new IllegalArgumentException();
         }
         // Get the color at the specified position.
-        Color pixelColor = pixels[x][y];
+        Color pixelColor = pixels[localX][localY];
 
         return new Color(pixelColor);
     }
 
     @Override
-    public void setPixel(int x, int y, Color color) {
+    public Color getLocalPixel(int x, int y) {
+        if(!isPixelOnLayer(x, y))
+           throw new IllegalArgumentException();
+        return pixels[x][y];
+    }
+
+    @Override
+    public void setGlobalPixel(int x, int y, Color color) {
+        Vector2D localPos = getPixelPositionAtPoint(new Vector2D(x, y));
+        int localX = (int)localPos.getX();
+        int localY = (int)localPos.getY();
+
         // Check if pixel is on this layer.
-        // Maybe we should change this to an exception later?
-        if (!isPixelOnLayer(x, y)) {
-            return;
+        if (!isPixelOnLayer(localX, localY)) {
+            throw new IllegalArgumentException();
         }
 
-        pixels[x][y] = new Color(color);
+        pixels[localX][localY] = new Color(color);
+    }
+
+    @Override
+    public void setLocalPixel(int x, int y, Color color) {
+        if(!isPixelOnLayer(x, y))
+            throw new IllegalArgumentException();
+        pixels[x][y] = color;
     }
 
     @Override
@@ -111,37 +137,51 @@ public class Layer implements ILayer {
 
     @Override
     public boolean isPixelOnLayer(int x, int y) {
-        return (x >= 0 && x < width && y >= 0 && y < height);
+        return x >= 0 && x < width && y >= 0 && y < height;
+    }
+
+    private Vector2D getLocalCenterPoint(){
+        return new Vector2D(width / 2d, height / 2d);
+    }
+
+    private Vector2D toGlobal(Vector2D point){
+        //Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY()); // TODO: scaling
+        return point.rotatedAround(getLocalCenterPoint(), rotation).add(position);//.scale(inverseScale);
+    }
+
+    private Vector2D toLocal(Vector2D point){
+        //Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY()); // TODO: scaling
+        return point.sub(position).rotatedAround(getLocalCenterPoint(), -rotation);//.scale(inverseScale);
     }
 
     @Override
-    public void setRotation(float angle) {
-        // TODO
+    public void setRotation(double angle) {
+        this.rotation = angle;
     }
 
     @Override
-    public float getRotation() {
-        return 0;
+    public double getRotation() {
+        return this.rotation;
     }
 
     @Override
     public void setPosition(Vector2D position) {
-        // TODO
+        this.position = new Vector2D(position);
     }
 
     @Override
     public Vector2D getPosition() {
-        return new Vector2D(0, 0);
+        return this.position;
     }
 
     @Override
     public void setScale(Vector2D scale) {
-        // TODO
+        this.scale = new Vector2D(scale);
     }
 
     @Override
     public Vector2D getScale() {
-        return new Vector2D(1, 1);
+        return this.scale;
     }
 
     @Override
@@ -161,12 +201,15 @@ public class Layer implements ILayer {
 
     @Override
     public boolean isPointOnLayer(Vector2D point) {
-        return false;
+        Vector2D localPosition = toLocal(point);
+        return localPosition.getX() >= 0 && localPosition.getX() < width
+                && localPosition.getY() >= 0 && localPosition.getY() < height;
     }
 
     @Override
     public Vector2D getPixelPositionAtPoint(Vector2D point) {
-        return new Vector2D(0, 0);
+        Vector2D localPoint = toLocal(point);
+        return new Vector2D((int)localPoint.getX(), (int)localPoint.getY());
     }
 
     private void setDimensions(int width, int height) {
@@ -174,11 +217,16 @@ public class Layer implements ILayer {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                if (!isPixelOnLayer(x, y)) {
+
+                // If the current pixel would still have existed on
+                // the old layer, copy it, else write (0,0,0,1) to it.
+                if (x < this.width && y < this.height) {
+                    newPixels[x][y] = pixels[x][y];
+                }
+                else
+                {
                     newPixels[x][y] = new Color(0, 0, 0, 1);
                 }
-
-                newPixels[x][y] = getPixel(x, y);
             }
         }
 
