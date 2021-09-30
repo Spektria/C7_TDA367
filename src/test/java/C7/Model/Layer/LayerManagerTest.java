@@ -41,4 +41,21 @@ public class LayerManagerTest {
 
 		Assertions.assertEquals(new Layer(16, 16, new Color(0, 0, 0, 0)), layer);
 	}
+
+	/**
+	 * Tests that accessing a layer through an ID which was previously created
+	 * and subsequently destroyed returns null.
+	 */
+	@Test
+	public void destroyLayerTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0,  new Vector2D(1, 1));
+
+		layerManager.destroyLayer(id);
+
+		ILayer layer = layerManager.getLayer(id);
+
+		Assertions.assertNull(layer);
+	}
 }
