@@ -7,11 +7,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class TestViewApp extends Application {
+public class PaintApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(ResourceIO.getPackageResource(this, "/C7PaintView.fxml"));
+        Parent root = FXMLLoader.load(ResourceIO.getPackageResource(this, "/MainWindow.fxml"));
         primaryStage.setTitle("PaintQlone");
         primaryStage.setScene(new Scene(root, 1280, 720));
         primaryStage.show();
