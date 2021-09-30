@@ -29,10 +29,10 @@ public final class Color {
      * @param g Value of green channel
      * @param a Value of alpha channel
      */
-    public Color(float r, float b, float g, float a) {
+    public Color(float r, float g, float b, float a) {
         setRed(r);
-        setBlue(b);
         setGreen(g);
+        setBlue(b);
         setAlpha(a);
     }
 
