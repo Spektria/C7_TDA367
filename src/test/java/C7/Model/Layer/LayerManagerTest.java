@@ -58,4 +58,21 @@ public class LayerManagerTest {
 
 		Assertions.assertNull(layer);
 	}
+
+	/**
+	 * Tests that getAllLayerIds returns an array with the same size as the total
+	 * number of layers created.
+	 */
+	@Test
+	public void layerCountTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		layerManager.createLayer(16, 16, new Vector2D(0, 0), 0,  new Vector2D(1, 1));
+		int destroyId = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0,  new Vector2D(1, 1));
+		layerManager.destroyLayer(destroyId);
+		layerManager.createLayer(16, 16, new Vector2D(0, 0), 0,  new Vector2D(1, 1));
+		layerManager.createLayer(16, 16, new Vector2D(0, 0), 0,  new Vector2D(1, 1));
+
+		Assertions.assertEquals(3, layerManager.getAllLayerIds().length);
+	}
 }

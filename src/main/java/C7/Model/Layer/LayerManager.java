@@ -12,11 +12,13 @@ import java.util.*;
 public class LayerManager implements ILayerManager {
 
 	private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
-	private int nextId;						// ID to assign to the next created layer.
+	private int nextId;									// ID number to assign to the next created layer.
+	private int activeLayerId;							// The ID number of the currently active layer.
 
 	public LayerManager() {
-		layers		= new ArrayList<>();
-		nextId		= 1;
+		layers			= new ArrayList<>();
+		nextId			= 1;
+		activeLayerId	= 0;
 	}
 
 	@Override
@@ -41,8 +43,7 @@ public class LayerManager implements ILayerManager {
 
 	@Override
 	public int getActiveLayerId() {
-		// TODO
-		return 0;
+		return activeLayerId;
 	}
 
 	@Override
@@ -60,7 +61,15 @@ public class LayerManager implements ILayerManager {
 
 	@Override
 	public int[] getAllLayerIds() {
-		// TODO
-		return new int[0];
+		// Create integer array to hold all IDs
+		int[] ids = new int[layers.size()];
+		int i = 0;
+
+		// Iterate over layers and add all IDs to array
+		for (Map.Entry<Integer, ILayer> entry : layers) {
+			ids[i++] = entry.getKey();
+		}
+
+		return ids;
 	}
 }
