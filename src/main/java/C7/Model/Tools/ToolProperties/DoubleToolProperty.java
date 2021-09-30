@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 class DoubleToolProperty extends NumericalToolProperty<Double> {
 
 
-    DoubleToolProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, Number min, Number max) {
+    DoubleToolProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, double min, double max) {
         super(name, description, setter, getter, min, max);
     }
 
@@ -23,6 +23,7 @@ class DoubleToolProperty extends NumericalToolProperty<Double> {
 
     @Override
     public void setDouble(double d) {
+        requireBounds(d);
         this.setter.accept(d);
     }
 }
