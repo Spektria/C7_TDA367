@@ -25,9 +25,9 @@ public interface ILayerManager {
     /**
      * Destroys the specified layer and removes it from this layer manager. If
      * the layer does not exist in this layer manager, it will not be destroyed.
-     * @param layer The ID of the layer to destroy.
+     * @param id The ID of the layer to destroy.
      */
-    void destroyLayer(int layer);
+    void destroyLayer(int id);
 
     /**
      * Gets the ID of the currently active layer.
