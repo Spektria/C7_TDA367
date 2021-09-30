@@ -90,4 +90,21 @@ public class Vector2DTest {
         a = new Vector2D(-3, 4);
         Assertions.assertEquals(a.normalized(), new Vector2D(-3d/5, 4d/5));
     }
+
+    @Test
+    public void scaleTest(){
+        Vector2D a = new Vector2D(20, 20);
+        Vector2D scalar = new Vector2D(1,2);
+
+        Assertions.assertEquals(new Vector2D(20, 40), a.scale(scalar));
+
+        scalar = new Vector2D(5, 0);
+        Assertions.assertEquals(new Vector2D(100, 0), a.scale(scalar));
+
+        scalar = new Vector2D(1,1);
+        Assertions.assertEquals(a, a.scale(scalar));
+
+        scalar = new Vector2D(1/2d, 1/4d);
+        Assertions.assertEquals(new Vector2D(10, 5), a.scale(scalar));
+    }
 }

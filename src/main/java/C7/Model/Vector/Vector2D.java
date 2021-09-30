@@ -8,6 +8,8 @@ import java.util.Objects;
  */
 public class Vector2D {
 
+    public static final Vector2D ZERO = new Vector2D(0,0);
+
     private final double x, y;
 
     /**
@@ -18,6 +20,15 @@ public class Vector2D {
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    /**
+     * Creates a clone of a given 2d vector.
+     * @param vec the vector to be cloned.
+     */
+    public Vector2D(Vector2D vec){
+        this.x = vec.x;
+        this.y = vec.y;
     }
 
     /**
@@ -90,6 +101,15 @@ public class Vector2D {
         return Math.sqrt(
                 this.x * this.x + this.y * this.y
         );
+    }
+
+    /**
+     * Scales this vector with a given scalar in both the x- and y-axis.
+     * @param scaling the vector representing the x and y scalar.
+     * @return the scaled vector.
+     */
+    public Vector2D scale(Vector2D scaling){
+        return new Vector2D(this.x * scaling.x, this.y * scaling.y);
     }
 
     /**
