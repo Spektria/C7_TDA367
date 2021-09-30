@@ -1,6 +1,6 @@
 package C7;
 
-import C7.View.TestViewApp;
+import C7.Controller.TestViewApp;
 import javafx.stage.Stage;
 
 /***
