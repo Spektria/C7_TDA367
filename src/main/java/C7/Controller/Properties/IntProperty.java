@@ -1,11 +1,8 @@
-package C7.View.Properties;
+package C7.Controller.Properties;
 
 import C7.Model.Tools.ToolProperties.IToolProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;

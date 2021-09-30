@@ -1,23 +1,16 @@
-package C7.View;
+package C7.Controller;
 
-import C7.Model.Color;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
-import C7.Model.Tools.ToolProperties.IToolProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
@@ -71,7 +64,7 @@ public class LayersView extends AnchorPane {
 
         });
 
-        TableColumn thumbnail = tableView.getColumns().get(1); //Definitely change this, give them an fxid or something
+        TableColumn thumbnail = tableView.getColumns().get(1); //Definitely change this, give them an fxid or something //Actually maybe it doesn't matter idk
 
         thumbnail.setCellFactory(param -> {
             //Set up the ImageView

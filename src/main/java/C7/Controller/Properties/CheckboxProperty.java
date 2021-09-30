@@ -1,4 +1,4 @@
-package C7.View.Properties;
+package C7.Controller.Properties;
 
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import javafx.event.ActionEvent;
