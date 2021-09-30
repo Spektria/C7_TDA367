@@ -26,23 +26,24 @@ class Brush implements ITool {
 
     // Common properties for all brushes.
     private int size;
-    private double rotation; // Radians
-    private Vector2D scale;
+    private double rotation = 0; // Radians
+    private Vector2D scale = new Vector2D(1,1);
     private Color color;
-    private double pointFrequency; // points per pixel
+    private double pointFrequency  = 1.5d; // points per pixel
 
     private final IStrokeInterpolator strokeInterpolator;
 
     private final IPattern strokePattern;
 
-    Brush(IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
+    Brush(int size, Color color, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
         Objects.requireNonNull(strokeInterpolator);
         Objects.requireNonNull(strokePattern);
+        Objects.requireNonNull(color);
 
         this.strokePattern = strokePattern;
         this.strokeInterpolator = strokeInterpolator;
-
-        setToDefault();
+        this.color = color;
+        this.size = size;
 
         this.properties = Arrays.asList(
                 ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
@@ -91,10 +92,6 @@ class Brush implements ITool {
 
     @Override
     public void setToDefault() {
-        this.size = 11;
-        this.rotation = 0;
-        this.scale = new Vector2D(1,1);
-        this.color = new Color(0,0,0,1f);
-        this.pointFrequency = 1.5d;
+        properties.forEach(IToolProperty::setToDefault);
     }
 }

@@ -13,8 +13,7 @@ public class CircularBrushTest {
     @Test
     public void BrushDrawTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
-        var brush = ToolFactory.CreateCircularBrush();
-        brush.getProperties().stream().filter(str -> str.name().equals("Stroke size")).findFirst().get().setInteger(1);
+        var brush = ToolFactory.CreateCircularBrush(1, new Color(1,1,1,1));
         brush.apply(testSurface, new Vector2D(0,0), new Vector2D(0,0));
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
@@ -27,8 +26,7 @@ public class CircularBrushTest {
     @Test
     public void BrushDrawCircularTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(20, 20, new Vector2D(1, 1));
-        var brush = ToolFactory.CreateCircularBrush();
-        brush.getProperties().stream().filter(str -> str.name().equals("Stroke size")).findFirst().get().setInteger(11);
+        var brush = ToolFactory.CreateCircularBrush(11, new Color(1,1,1,1));
         brush.apply(testSurface, new Vector2D(10, 10), new Vector2D(10,10));
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());

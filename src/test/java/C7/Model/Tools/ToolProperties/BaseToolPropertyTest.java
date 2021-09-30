@@ -99,4 +99,16 @@ public class BaseToolPropertyTest {
         Assertions.assertThrows(UnsupportedOperationException.class, prop::lowerBound);
     }
 
+    @Test
+    public void setValueToDefaultTest(){
+        integer = 50; // 50 should become props default.
+        var prop = ToolPropertyFactory.createIntegerProperty("d","d", (i) -> integer = i, () -> integer, 0, 100);
+
+        prop.setInteger(10);
+        prop.setInteger(90);
+        prop.setToDefault();
+
+        Assertions.assertEquals(50, prop.getInteger());
+    }
+
 }

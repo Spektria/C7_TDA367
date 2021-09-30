@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class IntegerToolPropertyTest {
 
     private int internalProp = 1337;
-    private IToolProperty intProp = ToolPropertyFactory.createIntegerProperty("testIntProp", "testing", (i) -> internalProp = i, () -> internalProp, 5, 1e6);
+    private IToolProperty intProp = ToolPropertyFactory.createIntegerProperty("testIntProp", "testing", (i) -> internalProp = i, () -> internalProp, 5, 1000000);
 
     @BeforeEach
     public void init(){
@@ -28,8 +28,8 @@ public class IntegerToolPropertyTest {
         intProp.setInteger(50);
         Assertions.assertEquals(50, intProp.getInteger());
 
-        intProp.setInteger(0);
-        Assertions.assertEquals(0, intProp.getInteger());
+        intProp.setInteger(10);
+        Assertions.assertEquals(10, intProp.getInteger());
     }
 
     @Test
@@ -40,7 +40,7 @@ public class IntegerToolPropertyTest {
     @Test
     public void getLimitsTest(){
         Assertions.assertEquals(5, intProp.lowerBound());
-        Assertions.assertEquals(1e6,intProp.upperBound());
+        Assertions.assertEquals(1000000,intProp.upperBound());
     }
 
 }

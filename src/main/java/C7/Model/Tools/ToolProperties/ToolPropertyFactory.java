@@ -21,12 +21,12 @@ public class ToolPropertyFactory {
      * @param max the minimum allowed value of this property
      * @return the property
      */
-    public static IToolProperty createDoubleProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, Number min, Number max){
+    public static IToolProperty createDoubleProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, double min, double max){
         return new DoubleToolProperty(name, description, setter, getter, min, max);
     }
 
     /**
-     * Creates a property for a Integer.
+     * Creates a property for an Integer.
      * @param name the name of the property
      * @param description the description of what the property does
      * @param setter the setter method for the property
@@ -35,7 +35,7 @@ public class ToolPropertyFactory {
      * @param max the minimum allowed value of this property
      * @return the property
      */
-    public static IToolProperty createIntegerProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, Number min, Number max){
+    public static IToolProperty createIntegerProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, int min, int max){
         return new IntegerToolProperty(name, description, setter, getter, min, max);
     }
 

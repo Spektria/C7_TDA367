@@ -2,6 +2,7 @@ package C7.Model.Tools.ToolProperties;
 
 import C7.Model.Color;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -12,15 +13,26 @@ abstract class BaseToolProperty<T> implements IToolProperty {
     protected final Consumer<T> setter;
     protected final Supplier<T> getter;
 
+    private final T defaultValue;
+
 
     BaseToolProperty(String name, String description,
                  Consumer<T> setter,
                  Supplier<T> getter){
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(setter);
+        Objects.requireNonNull(getter);
 
         this.name = name;
         this.description = description;
         this.setter = setter;
         this.getter = getter;
+        this.defaultValue = getter.get();
+    }
+
+    @Override
+    public void setToDefault(){
+        this.setter.accept(defaultValue);
     }
 
     @Override
