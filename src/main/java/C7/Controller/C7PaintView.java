@@ -9,6 +9,7 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -220,5 +221,10 @@ public class C7PaintView implements Initializable {
                 pw.setColor((j), (i), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
             }
         }
+    }
+
+    @FXML
+    void onImport (Event event){
+        System.out.println("test");
     }
 }

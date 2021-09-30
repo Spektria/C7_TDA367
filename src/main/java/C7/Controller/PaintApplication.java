@@ -13,7 +13,7 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(ResourceIO.getPackageResource(this, "/MainWindow.fxml"));
         primaryStage.setTitle("PaintQlone");
-        primaryStage.setScene(new Scene(root, 1280, 720));
+        primaryStage.setScene(new Scene(root, 1280, 720+25));
         primaryStage.show();
     }
 
