@@ -91,12 +91,12 @@ public class C7PaintView implements Initializable {
 
         updateView();
 
-        setCurrentTool(ToolFactory.CreateCircularBrush());
+        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
 
         //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
 
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {

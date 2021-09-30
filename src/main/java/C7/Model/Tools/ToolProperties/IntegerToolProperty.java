@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 class IntegerToolProperty extends NumericalToolProperty<Integer> {
 
 
-    IntegerToolProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, Number min, Number max) {
+    IntegerToolProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, int min, int max) {
         super(name, description, setter, getter, min, max);
     }
 
@@ -22,6 +22,7 @@ class IntegerToolProperty extends NumericalToolProperty<Integer> {
 
     @Override
     public void setInteger(int i) {
+        requireBounds(i);
         this.setter.accept(i);
     }
 }
