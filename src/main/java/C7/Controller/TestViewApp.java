@@ -1,4 +1,4 @@
-package C7.View;
+package C7.Controller;
 
 import C7.IO.ResourceIO;
 import javafx.application.Application;

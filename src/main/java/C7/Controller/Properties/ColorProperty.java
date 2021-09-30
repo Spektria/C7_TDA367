@@ -1,4 +1,4 @@
-package C7.View.Properties;
+package C7.Controller.Properties;
 
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import javafx.event.ActionEvent;
@@ -7,8 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 

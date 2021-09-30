@@ -7,6 +7,9 @@ import javafx.scene.image.PixelReader;
 
 import java.io.FileInputStream;
 
+/**
+ * LayerIO contains any input/output operations to/from a {@link Layer}.
+ */
 public class LayerIO {
     /**
      * Constructs a new layer from a filepath

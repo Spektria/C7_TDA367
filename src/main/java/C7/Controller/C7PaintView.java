@@ -1,4 +1,4 @@
-package C7.View;
+package C7.Controller;
 
 import C7.IO.LayerIO;
 import C7.Model.Layer.ILayer;
@@ -8,7 +8,7 @@ import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
-import C7.View.Properties.*;
+import C7.Controller.Properties.*;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +20,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
