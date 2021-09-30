@@ -146,6 +146,9 @@ public class C7PaintView implements Initializable {
                 Vector2D point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, oldPos, point);
                 oldPos = point;
+
+                // Rotation for debugging
+                //layer.setRotation((layer.getRotation() + Math.PI / 100) % (Math.PI * 2));
                 updateView();
             }
         });
@@ -177,24 +180,18 @@ public class C7PaintView implements Initializable {
 
     }
 
-    void updateView(int x, int y, int width, int height) {
-        PixelWriter pw = gc.getPixelWriter();
-        for (int i = 0; i < height*2; i++) {
-            for (int j = 0; j < width*2; j++) {
-                C7.Model.Color color = layer.getPixel(x+j, y+i);
-                if (color == null) continue;
-                //Update to take into account canvas transform
-                pw.setColor((x+j-width), (y+i-height), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-            }
-        }
-    }
 
     void updateView() {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < layer.getHeight(); i++) {
             for (int j = 0; j < layer.getWidth(); j++) {
-                C7.Model.Color color = layer.getPixel(j, i);
-                //Update to take into account canvas transform
+                C7.Model.Color color = new C7.Model.Color(0,0,0,0);
+
+                // If the point is on the layer, take the layers color, else put transparent.
+                if(layer.isPointOnLayer(new Vector2D(j, i))){
+                    color = layer.getGlobalPixel(j, i);
+                }
+
                 pw.setColor((j), (i), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
             }
         }
