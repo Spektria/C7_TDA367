@@ -24,6 +24,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 
 
 import java.io.File;
@@ -33,7 +34,6 @@ import java.util.ResourceBundle;
 
 
 public class C7PaintView implements Initializable {
-    //@FXML AnchorPane canvas;
     Canvas canvas;
     @FXML ScrollPane scrollPaneCanvas;
     GraphicsContext gc;
@@ -147,12 +147,7 @@ public class C7PaintView implements Initializable {
                     List<File> files = db.getFiles();
 
                     for (int i = 0; i < files.size(); i++) {
-                        Layer importedLayer = LayerIO.layerFromFile(files.get(i).getPath());
-                        if (importedLayer != null) {
-                            layer = importedLayer;
-                            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
-                            updateCanvas();
-                        }
+                        importFileAsLayer(files.get(i));
                     }
                 }
 
@@ -200,6 +195,15 @@ public class C7PaintView implements Initializable {
 
     }
 
+    void importFileAsLayer(File file) {
+        Layer importedLayer = LayerIO.layerFromFile(file.getPath());
+        if (importedLayer != null) {
+            layer = importedLayer;
+            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
+            updateCanvas();
+        }
+    }
+
     void updateCanvas(int x, int y, int width, int height) {
         PixelWriter pw = gc.getPixelWriter();
         for (int i = 0; i < height*2; i++) {
@@ -224,7 +228,13 @@ public class C7PaintView implements Initializable {
     }
 
     @FXML
-    void onImport (Event event){
-        System.out.println("test");
+    void onImport (Event event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose image to import");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")));
+
+        //Feels very hacky to get the scene from an arbitrary node
+        File file = fileChooser.showOpenDialog(scrollPaneCanvas.getScene().getWindow());
+        if (file != null) importFileAsLayer(file);
     }
 }
