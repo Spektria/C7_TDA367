@@ -84,6 +84,7 @@ class Brush implements ITool {
                                 // Then draw the translated points onto the layer
                                 .filter(layer::isPointOnLayer)
                                 .forEach(v -> layer.setGlobalPixel((int)v.getX(), (int)v.getY(), color)));
+        layer.update();
     }
 
     @Override

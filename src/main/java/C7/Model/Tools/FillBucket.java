@@ -127,6 +127,7 @@ class FillBucket implements ITool{
             int x = (int)localVec.getX();
             int y = (int)localVec.getY();
             floodFill(x, y, layer, layer.getLocalPixel(x, y));
+            layer.update();
         }
 
     }

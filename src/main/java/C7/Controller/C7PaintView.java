@@ -1,12 +1,15 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
+import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
 //import C7.Model.Tools.PixelPen;
 import C7.Model.Tools.ToolFactory;
 import C7.Model.Tools.ToolProperties.IToolProperty;
+import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import javafx.event.ActionEvent;
@@ -26,8 +29,9 @@ import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class C7PaintView implements Initializable {
@@ -87,7 +91,7 @@ public class C7PaintView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(600, 400, new C7.Model.Color(0, 0, 0, 0));
+        layer = new Layer(3840, 2160, new C7.Model.Color(0, 0, 0, 0));
 
         updateView();
 
@@ -97,7 +101,6 @@ public class C7PaintView implements Initializable {
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(), "Calligraphy", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(), "Fill", this));
-
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
 
@@ -146,10 +149,6 @@ public class C7PaintView implements Initializable {
                 Vector2D point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, oldPos, point);
                 oldPos = point;
-
-                // Rotation for debugging
-                //layer.setRotation((layer.getRotation() + Math.PI / 100) % (Math.PI * 2));
-                updateView();
             }
         });
 
@@ -160,8 +159,6 @@ public class C7PaintView implements Initializable {
                     var point = new Vector2D(event.getX(), event.getY());
                     currentTool.apply(layer, point, point);
                     oldPos = point;
-
-                    updateView();
                 }
             }
         });
@@ -176,15 +173,37 @@ public class C7PaintView implements Initializable {
             }
         });
 
+        layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                updateView((int)data.getVal1().getX(), (int)data.getVal1().getY(),
+                        (int)data.getVal2().getX() + 1, (int)data.getVal2().getY() + 1);
+                drawRect(data.getVal1(), data.getVal2());
+            }
+        });
+
         layersArea.getChildren().add(new LayersView());
 
     }
 
-
-    void updateView() {
+    void drawRect(Vector2D v0, Vector2D v1){
         PixelWriter pw = gc.getPixelWriter();
-        for (int i = 0; i < layer.getHeight(); i++) {
-            for (int j = 0; j < layer.getWidth(); j++) {
+        int x0 = (int)Math.min(v0.getX(), v1.getX());
+        int x1 = (int)Math.max(v0.getX(), v1.getX());
+        int y0 = (int)Math.min(v0.getY(), v1.getY());
+        int y1 = (int)Math.max(v0.getY(), v1.getY());
+        for (int x = x0; x <= x1; x++) {
+            for (int y = y0; y <= y1; y++) {
+                if((y == y0 || y == y1) || (x == x1 || x == x0))
+                    pw.setColor(x, y, new Color(1, 0, 0, 1));
+            }
+        }
+    }
+
+    void updateView(int x0, int y0, int x1, int y1){
+        PixelWriter pw = gc.getPixelWriter();
+        for (int i = y0; i < y1; i++) {
+            for (int j = x0; j < x1; j++) {
                 C7.Model.Color color = new C7.Model.Color(0,0,0,0);
 
                 // If the point is on the layer, take the layers color, else put transparent.
@@ -195,5 +214,9 @@ public class C7PaintView implements Initializable {
                 pw.setColor((j), (i), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
             }
         }
+    }
+
+    void updateView() {
+        updateView(0, 0, layer.getWidth(), layer.getHeight());
     }
 }
