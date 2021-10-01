@@ -45,6 +45,13 @@ public interface ILayerManager {
     int getActiveLayerId();
 
     /**
+     * Sets which layer is currently active. The ID specified must be the ID of
+     * a layer that is managed by this LayerManager. If the ID is not a valid
+     * layer, the active layer will not change.
+     */
+    void setActiveLayer(int id);
+
+    /**
      * Gets the layer object for the specified ID.
      * @param id The ID of the layer to get.
      * @return The layer object associated with the specified ID.

@@ -62,6 +62,16 @@ public class LayerManager implements ILayerManager {
 	}
 
 	@Override
+	public void setActiveLayer(int id) {
+		for (Map.Entry<Integer, ILayer> entry : layers) {
+			if (entry.getKey().equals(id)) {
+				activeLayerId = id;
+				return;
+			}
+		}
+	}
+
+	@Override
 	public ILayer getLayer(int id) {
 		// Find the layer with the associated ID.
 		for (Map.Entry<Integer, ILayer> entry : layers) {
