@@ -176,9 +176,11 @@ public class C7PaintView implements Initializable {
         layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
             @Override
             public void notify(Tuple2<Vector2D, Vector2D> data) {
+                // Draw are of layer which has been modified
                 updateView((int)data.getVal1().getX(), (int)data.getVal1().getY(),
                         (int)data.getVal2().getX() + 1, (int)data.getVal2().getY() + 1);
-                drawRect(data.getVal1(), data.getVal2());
+
+                //drawRect(data.getVal1(), data.getVal2()); // For debugging
             }
         });
 
@@ -186,6 +188,10 @@ public class C7PaintView implements Initializable {
 
     }
 
+    /**
+     * NOTE: for debugging
+     * TODO: remove in future
+     */
     void drawRect(Vector2D v0, Vector2D v1){
         PixelWriter pw = gc.getPixelWriter();
         int x0 = (int)Math.min(v0.getX(), v1.getX());
