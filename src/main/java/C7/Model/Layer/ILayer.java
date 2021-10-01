@@ -1,6 +1,8 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObservable;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -12,7 +14,7 @@ import C7.Model.Vector.Vector2D;
  * @author Love Gustafsson
  * @version 1.4
  */
-public interface ILayer {
+public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Gets the pixel color at the specified picture-space x and y co-ordinates.
@@ -20,7 +22,15 @@ public interface ILayer {
      * @param y The y co-ordinate in picture space to get the color at.
      * @return The color at the specified co-ordinates.
      */
-    Color getPixel(int x, int y);
+    Color getGlobalPixel(int x, int y);
+
+    /**
+     * Gets the pixel color at the specified layer-space x and y co-ordinates.
+     * @param x The x co-ordinate in picture space to get the color at.
+     * @param y The y co-ordinate in picture space to get the color at.
+     * @return The color at the specified co-ordinates.
+     */
+    Color getLocalPixel(int x, int y);
 
     /**
      * Sets the pixel color at the specified picture-space x and y co-ordinates.
@@ -28,7 +38,15 @@ public interface ILayer {
      * @param y The y co-ordinate in picture space to set the color at.
      * @param color The color to set the pixel at the specified co-ordinates to.
      */
-    void setPixel(int x, int y, Color color);
+    void setGlobalPixel(int x, int y, Color color);
+
+    /**
+     * Sets the pixel color at the specified layer-space x and y co-ordinates.
+     * @param x The x co-ordinate in picture space to set the color at.
+     * @param y The y co-ordinate in picture space to set the color at.
+     * @param color The color to set the pixel at the specified co-ordinates to.
+     */
+    void setLocalPixel(int x, int y, Color color);
 
     /**
      * Gets the current width of the layer.
@@ -56,7 +74,7 @@ public interface ILayer {
     void setHeight(int height);
 
     /**
-     * Checks if the pixel at the specified picture-space co-ordinate is located
+     * Checks if the pixel at the specified layer-space co-ordinate is located
      * within the boundaries of this layer.
      * @param x The x co-ordinate of the pixel.
      * @param y The y co-ordinate of the pixel.
@@ -69,13 +87,13 @@ public interface ILayer {
      * Sets the rotation angle of this layer.
      * @param angle The angle to set this layer to, in radians.
      */
-    void setRotation(float angle);
+    void setRotation(double angle);
 
     /**
      * Gets the current rotation angle of this layer in radians.
      * @return The current angle of this layer.
      */
-    float getRotation();
+    double getRotation();
 
     /**
      * Sets the origin of this layer, relative to the picture.
@@ -118,4 +136,6 @@ public interface ILayer {
      * point.
      */
     Vector2D getPixelPositionAtPoint(Vector2D point);
+
+
 }

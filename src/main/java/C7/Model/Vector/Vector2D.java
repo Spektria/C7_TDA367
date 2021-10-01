@@ -3,10 +3,12 @@ package C7.Model.Vector;
 import java.util.Objects;
 
 /**
- * Vector2D is a class representing a mathematical 2d vector.
+ * Vector2D is a class representing an immutable mathematical 2d vector.
  * @author Hugo Ekstrand
  */
-public class Vector2D {
+public final class Vector2D {
+
+    public static final Vector2D ZERO = new Vector2D(0,0);
 
     private final double x, y;
 
@@ -90,6 +92,15 @@ public class Vector2D {
         return Math.sqrt(
                 this.x * this.x + this.y * this.y
         );
+    }
+
+    /**
+     * Scales this vector with a given scalar in both the x- and y-axis.
+     * @param scaling the vector representing the x and y scalar.
+     * @return the scaled vector.
+     */
+    public Vector2D scale(Vector2D scaling){
+        return new Vector2D(this.x * scaling.x, this.y * scaling.y);
     }
 
     /**

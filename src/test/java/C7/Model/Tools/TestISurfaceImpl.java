@@ -6,6 +6,8 @@ import C7.Model.Vector.Vector2D;
 
 /**
  * Mock class for ILayer implementation
+ * The class does not support rotation, translation, or scaling.
+ * It simply is a drawing surface in global space.
  * @author Hugo Ekstrand
  */
 public class TestISurfaceImpl implements ILayer {
@@ -25,12 +27,22 @@ public class TestISurfaceImpl implements ILayer {
 
 
     @Override
-    public Color getPixel(int x, int y) {
+    public Color getGlobalPixel(int x, int y) {
         return ar[x][y];
     }
 
     @Override
-    public void setPixel(int x, int y, Color color) {
+    public Color getLocalPixel(int x, int y) {
+        return ar[x][y];
+    }
+
+    @Override
+    public void setGlobalPixel(int x, int y, Color color) {
+        ar[x][y] = color;
+    }
+
+    @Override
+    public void setLocalPixel(int x, int y, Color color) {
         if(isPixelOnLayer(x, y))
             ar[x][y] = color;
     }
@@ -56,12 +68,12 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public void setRotation(float angle) {
+    public void setRotation(double angle) {
 
     }
 
     @Override
-    public float getRotation() {
+    public double getRotation() {
         return 0;
     }
 
@@ -92,12 +104,12 @@ public class TestISurfaceImpl implements ILayer {
 
     @Override
     public boolean isPointOnLayer(Vector2D point) {
-        return false;
+        return true;
     }
 
     @Override
     public Vector2D getPixelPositionAtPoint(Vector2D point) {
-        return new Vector2D(0, 0);
+        return point;
     }
 
     public String getContentAs2DString(){
