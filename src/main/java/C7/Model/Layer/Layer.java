@@ -5,10 +5,7 @@ import C7.Model.IObserver;
 import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Represents a basic image layer.
@@ -29,6 +26,11 @@ public class Layer implements ILayer {
     private Vector2D position = Vector2D.ZERO;
     private Vector2D scale = new Vector2D(1,1);
 
+    // represents the rectangle in which any pixel has been modified. E.g.
+    // if one were to modify pixel (20, 20), (25, 20), and (30, 30) the rectangle of change would be ((20,20), (30,30)).
+    private Optional<Vector2D> rectangleOfChangeMin = Optional.empty(); // Stores smallest x and y
+    private Optional<Vector2D> rectangleOfChangeMax = Optional.empty(); // Stores largest x and y
+
 
     /**
      * Constructs a new empty layer
@@ -36,6 +38,9 @@ public class Layer implements ILayer {
      * @param height The desired height of the new layer in pixels
      */
     public Layer(int width, int height, Color color) {
+        Objects.requireNonNull(color);
+        if(width < 0 || height < 0)
+            throw new IllegalArgumentException();
 
         pixels = new Color[width][height];
         this.width  = width;
@@ -83,14 +88,7 @@ public class Layer implements ILayer {
         int localX = (int)localPos.getX();
         int localY = (int)localPos.getY();
 
-        // Check if pixel is on this layer.
-        if (!isPixelOnLayer(localX, localY)) {
-            throw new IllegalArgumentException();
-        }
-        // Get the color at the specified position.
-        Color pixelColor = pixels[localX][localY];
-
-        return new Color(pixelColor);
+        return getLocalPixel(localX, localY);
     }
 
     @Override
@@ -106,19 +104,56 @@ public class Layer implements ILayer {
         int localX = (int)localPos.getX();
         int localY = (int)localPos.getY();
 
-        // Check if pixel is on this layer.
-        if (!isPixelOnLayer(localX, localY)) {
-            throw new IllegalArgumentException();
-        }
-
-        pixels[localX][localY] = new Color(color);
+        setLocalPixel(localX, localY, color);
     }
 
     @Override
     public void setLocalPixel(int x, int y, Color color) {
         if(!isPixelOnLayer(x, y))
             throw new IllegalArgumentException();
+
+        updateRectangleOfChange(x, y);
         pixels[x][y] = color;
+    }
+
+    /**
+     * Checks if the given local coordinate is outside
+     * the current rectangle of change and enlarges the rectangle if
+     * it is. If it is not, nothing happens.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     */
+    private void updateRectangleOfChange(int x, int y){
+        // Check if there exists any values, if not make the rect points the given point
+        if(rectangleOfChangeMin.isEmpty())
+            rectangleOfChangeMin = Optional.of(new Vector2D(x, y));
+        if(rectangleOfChangeMax.isEmpty())
+            rectangleOfChangeMax = Optional.of(new Vector2D(x, y));
+
+        int xMin = (int) rectangleOfChangeMin.get().getX();
+        int yMin = (int) rectangleOfChangeMin.get().getY();
+        int xMax = (int) rectangleOfChangeMax.get().getX();
+        int yMax = (int) rectangleOfChangeMax.get().getY();
+
+        // Check if the point is outside the rect. If it is change the rect so that it
+        // encompasses the point.
+        if(x < xMin)
+            rectangleOfChangeMin = Optional.of(new Vector2D(x, yMin));
+        if(y < yMin)
+            rectangleOfChangeMin = Optional.of(new Vector2D(xMin, y));
+        if(x > xMax)
+            rectangleOfChangeMax = Optional.of(new Vector2D(x, yMax));
+        if(y > yMax)
+            rectangleOfChangeMax = Optional.of(new Vector2D(xMax, y));
+    }
+
+    /**
+     * Makes the rectangle of change be for the whole layer. That is
+     * makes the rectangle points be (0, 0) and (width, height).
+     */
+    private void maxRectangleOfChange(){
+        rectangleOfChangeMin = Optional.of(new Vector2D(0, 0));
+        rectangleOfChangeMax = Optional.of(new Vector2D(width, height));
     }
 
     @Override
@@ -155,6 +190,11 @@ public class Layer implements ILayer {
         return point.rotatedAround(getLocalCenterPoint(), rotation).add(position);//.scale(inverseScale);
     }
 
+    private Vector2D toGlobalPixel(Vector2D point){
+        Vector2D globalPoint = toGlobal(point);
+        return new Vector2D((int)globalPoint.getX(), (int)globalPoint.getY());
+    }
+
     private Vector2D toLocal(Vector2D point){
         //Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY()); // TODO: scaling
         return point.sub(position).rotatedAround(getLocalCenterPoint(), -rotation);//.scale(inverseScale);
@@ -163,6 +203,7 @@ public class Layer implements ILayer {
     @Override
     public void setRotation(double angle) {
         this.rotation = angle;
+        maxRectangleOfChange();
     }
 
     @Override
@@ -172,7 +213,9 @@ public class Layer implements ILayer {
 
     @Override
     public void setPosition(Vector2D position) {
+        Objects.requireNonNull(position);
         this.position = position;
+        maxRectangleOfChange();
     }
 
     @Override
@@ -182,7 +225,9 @@ public class Layer implements ILayer {
 
     @Override
     public void setScale(Vector2D scale) {
+        Objects.requireNonNull(scale);
         this.scale = scale;
+        maxRectangleOfChange();
     }
 
     @Override
@@ -219,6 +264,9 @@ public class Layer implements ILayer {
     }
 
     private void setDimensions(int width, int height) {
+        if(width < 0 || height < 0)
+            throw new IllegalArgumentException();
+
         Color[][] newPixels = new Color[width][height];
 
         final Color emptyColor = new Color(0, 0, 0, 1);
@@ -237,6 +285,7 @@ public class Layer implements ILayer {
         pixels      = newPixels;
         this.width  = width;
         this.height = height;
+        maxRectangleOfChange();
     }
 
 
@@ -246,7 +295,37 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public void removeListener(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+    public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
         observers.remove(observer);
+    }
+
+    @Override
+    public void update() {
+        if(rectangleOfChangeMin.isPresent() && rectangleOfChangeMax.isPresent()){
+
+            // convert rectangle to global coordinates
+            Vector2D minAsGlobal = toGlobalPixel(rectangleOfChangeMin.get());
+            Vector2D maxAsGlobal = toGlobalPixel(rectangleOfChangeMax.get());
+
+            // We want the first vector to contain the global min and second to contain the global max
+            // Since these have been mapped to global coordinates they may not still be the min and max if
+            // as they were before (e.g. 180 degrees spin would flip them).
+            Vector2D min = new Vector2D(
+                    Math.min(minAsGlobal.getX(), maxAsGlobal.getX()),
+                    Math.min(minAsGlobal.getY(), maxAsGlobal.getY())
+            );
+
+            Vector2D max = new Vector2D(
+                    Math.max(minAsGlobal.getX(), maxAsGlobal.getX()),
+                    Math.max(minAsGlobal.getY(), maxAsGlobal.getY())
+            );
+
+            // Notify each and every observer
+            observers.forEach(ob -> ob.notify(new Tuple2<>(min, max)));
+
+            // Reset triangle
+            rectangleOfChangeMin = Optional.empty();
+            rectangleOfChangeMax = Optional.empty();
+        }
     }
 }
