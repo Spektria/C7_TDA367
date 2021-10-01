@@ -75,4 +75,46 @@ public class LayerManagerTest {
 
 		Assertions.assertEquals(3, layerManager.getAllLayerIds().length);
 	}
+
+	/**
+	 * Tests that adding an existing layer returns a valid ID.
+	 */
+	@Test
+	public void addLayerTest() {
+		ILayerManager layerManager = new LayerManager();
+		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+
+		int id = layerManager.addLayer(layer);
+
+		Assertions.assertNotEquals(0, id);
+	}
+
+	/**
+	 * Tests that adding an existing layer to a layer manager multiple times
+	 * always returns the same ID.
+	 */
+	@Test
+	public void addLayerSameIdTest() {
+		ILayerManager layerManager = new LayerManager();
+		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+
+		int existingId = layerManager.addLayer(layer);
+		int newId = layerManager.addLayer(layer);
+
+		Assertions.assertEquals(existingId, newId);
+	}
+
+	/**
+	 * Tests that adding an existing layer to a layer manager and then retrieving it
+	 * results in retrieving the same layer.
+	 */
+	@Test
+	public void addLayerEqualsTest() {
+		ILayerManager layerManager = new LayerManager();
+		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+
+		int id = layerManager.addLayer(layer);
+
+		Assertions.assertEquals(layer, layerManager.getLayer(id));
+	}
 }
