@@ -20,6 +20,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * Gets the pixel color at the specified picture-space x and y co-ordinates.
      * @param x The x co-ordinate in picture space to get the color at.
      * @param y The y co-ordinate in picture space to get the color at.
+     * @throws IllegalArgumentException if (x,y) is outside of bounds of this layer
      * @return The color at the specified co-ordinates.
      */
     Color getGlobalPixel(int x, int y);
@@ -28,6 +29,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * Gets the pixel color at the specified layer-space x and y co-ordinates.
      * @param x The x co-ordinate in picture space to get the color at.
      * @param y The y co-ordinate in picture space to get the color at.
+     * @throws IllegalArgumentException if (x,y) is outside of bounds of this layer
      * @return The color at the specified co-ordinates.
      */
     Color getLocalPixel(int x, int y);
@@ -56,6 +58,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Sets the width of the layer.
+     * @throws IllegalArgumentException if width < 0
      * @param width The desired width of the layer in pixels.
      */
     void setWidth(int width);
@@ -69,6 +72,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Set the height of the layer.
+     * @throws IllegalArgumentException if height < 0
      * @param height The desired height of the layer in pixels.
      */
     void setHeight(int height);
@@ -137,5 +141,8 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      */
     Vector2D getPixelPositionAtPoint(Vector2D point);
 
-
+    /**
+     * Forces this ILayer to notify its observers of any currently buffered change.
+     */
+    void update();
 }

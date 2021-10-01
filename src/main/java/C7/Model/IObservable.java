@@ -18,5 +18,5 @@ public interface IObservable<T> {
      * Removes an observer to this observable object.
      * @param observer the observer to be added
      */
-    void removeListener(IObserver<T> observer);
+    void removeObserver(IObserver<T> observer);
 }
