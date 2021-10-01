@@ -1,9 +1,13 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObserver;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -14,6 +18,8 @@ import java.util.Objects;
  * @version 2.0
  */
 public class Layer implements ILayer {
+
+    private final Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
     private Color[][] pixels;   // This layer's pixel data.
     private int width;          // The width, in pixels, of this layer.
@@ -215,23 +221,32 @@ public class Layer implements ILayer {
     private void setDimensions(int width, int height) {
         Color[][] newPixels = new Color[width][height];
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        final Color emptyColor = new Color(0, 0, 0, 1);
 
-                // If the current pixel would still have existed on
-                // the old layer, copy it, else write (0,0,0,1) to it.
-                if (x < this.width && y < this.height) {
-                    newPixels[x][y] = pixels[x][y];
-                }
-                else
-                {
-                    newPixels[x][y] = new Color(0, 0, 0, 1);
-                }
+        for (int x = 0; x < width; x++) {
+            if(x < this.width){
+                System.arraycopy(pixels[x], 0, newPixels[x], 0, Math.min(pixels[x].length, newPixels[x].length) - 1);
+                if(newPixels[x].length - pixels[x].length > 0)
+                    Arrays.fill(newPixels[x], pixels[x].length, newPixels[x].length, emptyColor);
+            }
+            else{
+                Arrays.fill(newPixels[x], emptyColor);
             }
         }
 
         pixels      = newPixels;
         this.width  = width;
         this.height = height;
+    }
+
+
+    @Override
+    public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeListener(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+        observers.remove(observer);
     }
 }

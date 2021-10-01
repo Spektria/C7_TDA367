@@ -1,6 +1,8 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObservable;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -12,7 +14,7 @@ import C7.Model.Vector.Vector2D;
  * @author Love Gustafsson
  * @version 1.4
  */
-public interface ILayer {
+public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Gets the pixel color at the specified picture-space x and y co-ordinates.
@@ -134,4 +136,6 @@ public interface ILayer {
      * point.
      */
     Vector2D getPixelPositionAtPoint(Vector2D point);
+
+
 }
