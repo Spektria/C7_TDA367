@@ -1,9 +1,13 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObserver;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LayerTest {
 
@@ -13,6 +17,18 @@ public class LayerTest {
 
         Assertions.assertEquals(200, layer.getWidth());
         Assertions.assertEquals(100, layer.getHeight());
+    }
+
+    @Test
+    public void invalidSizeConstructorTest(){
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(-1, -1, new Color(0, 0, 0, 1)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(-1, 5, new Color(0, 0, 0, 1)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(5, -1, new Color(0, 0, 0, 1)));
+    }
+
+    @Test
+    public void invalidColorConstructorTest(){
+        Assertions.assertThrows(NullPointerException.class, () -> new Layer(5, 5, null));
     }
 
     @Test
@@ -33,6 +49,7 @@ public class LayerTest {
         layer.setWidth(400);
 
         Assertions.assertEquals(400, layer.getWidth());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setWidth(-1));
     }
 
     @Test
@@ -42,6 +59,7 @@ public class LayerTest {
         layer.setHeight(400);
 
         Assertions.assertEquals(400, layer.getHeight());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setHeight(-1));
     }
 
     @Test
@@ -65,6 +83,18 @@ public class LayerTest {
         ILayer layer = new Layer(2, 2, new Color(0, 0, 0, 1));
 
         Assertions.assertEquals(new Layer(2, 2, new Color(0, 0, 0, 1)), layer);
+        Assertions.assertNotEquals(layer, new Object());
+        Assertions.assertNotEquals(new Layer(3,2, new Color(0, 0, 0, 1)), layer);
+        Assertions.assertNotEquals(new Layer(2,2, new Color(0, 0, 0.1f, 1)), layer);
+    }
+
+    @Test
+    public void setPixelOutOfBounds(){
+        ILayer layer = new Layer(2, 2, new Color(0, 0, 0, 1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setGlobalPixel(3,1, new Color(0,0,0,0)));
+        layer.setPosition(new Vector2D(5,5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setGlobalPixel(2,2, new Color(0,0,0,0)));
+
     }
 
     @Test
@@ -100,6 +130,14 @@ public class LayerTest {
     }
 
     @Test
+    public void getPixelOutOfBounds(){
+        ILayer layer = new Layer(100, 100, new Color(0,0,0,1));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 5));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(5, 500));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 500));
+    }
+
+    @Test
     public void getGlobalPixel(){
         int w = 30;
         int h = 30;
@@ -119,6 +157,85 @@ public class LayerTest {
         // This should be the rightmost edge. Which, if rotated 45 degrees, will be, if rotated back, the bottom right corner.
         var leftCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(-w / 2d, 0).mult(Math.sqrt(2) - 0.1d));
         Assertions.assertEquals(new Color(1,1,1,1), layer.getGlobalPixel((int)leftCorner.getX(), (int)leftCorner.getY()));
+    }
+
+    @Test
+    public void rectangleOfChangeSetPixelTest(){
+        AtomicBoolean wasNotified = new AtomicBoolean(false);
+        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                Assertions.assertEquals(new Vector2D(30, 30), data.getVal1());
+                Assertions.assertEquals(new Vector2D(85, 36), data.getVal2());
+                wasNotified.set(true);
+            }
+        });
+
+        // Set some pixels where the lowest x = 30, lowest y = 30, largest x = 85, and largest y = 36
+        layer.setLocalPixel(60, 32, new Color(1,1,0,1));
+        layer.setLocalPixel(85, 30, new Color(1,1,0,1));
+        layer.setLocalPixel(30,30, new Color(1,1,0,1));
+        layer.setLocalPixel(35, 36, new Color(1,1,0,1));
+        layer.setLocalPixel(40,33, new Color(1,1,0,1));
+
+        layer.update();
+        // Should be notified directly after update call
+        Assertions.assertTrue(wasNotified.get());
+    }
+
+    @Test
+    public void addObserverAndRemoveObserverTest(){
+        AtomicBoolean shouldBeNotified = new AtomicBoolean(true);
+        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        IObserver<Tuple2<Vector2D, Vector2D>> ob = new IObserver<Tuple2<Vector2D, Vector2D>>() {
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                if(shouldBeNotified.get()) {
+                    Assertions.assertEquals(data.getVal1(), Vector2D.ZERO);
+                    Assertions.assertEquals(data.getVal2(), Vector2D.ZERO);
+                }
+                else {
+                    Assertions.fail();
+                }
+            }
+        };
+
+        layer.setLocalPixel(0,0, new Color(1,1,1,0)); // Draw a pixel so we have something to notify about
+        layer.addObserver(ob);
+        layer.update(); // Notify
+        layer.removeObserver(ob);
+        layer.setLocalPixel(1,1, new Color(1,1,1,0)); // Draw another so the "buffer" is not empty
+        shouldBeNotified.set(false); // Should now not be notified since ob is not an observer anymore
+        layer.update(); // Notify
+    }
+
+    @Test
+    public void rectangleOfChangeRotateTest(){
+        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                Assertions.assertEquals(Vector2D.ZERO, data.getVal1());
+                Assertions.assertEquals(new Vector2D(layer.getWidth(),layer.getHeight()), data.getVal2());
+            }
+        });
+        layer.setRotation(Math.PI);
+        layer.update();
+    }
+
+    @Test
+    public void rectangleOfChangeTranslateTest(){
+        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                Assertions.assertEquals(new Vector2D(5, 5), data.getVal1());
+                Assertions.assertEquals(new Vector2D(layer.getWidth() + 5,layer.getHeight() + 5), data.getVal2());
+            }
+        });
+        layer.setPosition(new Vector2D(5,5));
+        layer.update();
     }
 
 
