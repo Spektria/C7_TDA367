@@ -6,6 +6,7 @@ import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Represents a basic image layer.
@@ -112,7 +113,8 @@ public class Layer implements ILayer {
         if(!isPixelOnLayer(x, y))
             throw new IllegalArgumentException();
 
-        updateRectangleOfChange(x, y);
+        Vector2D global = toGlobal(new Vector2D(x, y));
+        updateRectangleOfChange((int)global.getX(), (int)global.getY());
         pixels[x][y] = color;
     }
 
@@ -152,8 +154,21 @@ public class Layer implements ILayer {
      * makes the rectangle points be (0, 0) and (width, height).
      */
     private void maxRectangleOfChange(){
-        rectangleOfChangeMin = Optional.of(new Vector2D(0, 0));
-        rectangleOfChangeMax = Optional.of(new Vector2D(width, height));
+        Vector2D v0 = toGlobalPixel(Vector2D.ZERO);
+        Vector2D v1 = toGlobalPixel(new Vector2D(0, width));
+        Vector2D v2 = toGlobalPixel(new Vector2D(height, 0));
+        Vector2D v3 = toGlobalPixel(new Vector2D(width, height));
+
+        var xVals = List.of(v0.getX(), v1.getX(), v2.getX(), v3.getX());
+        var yVals = List.of(v0.getY(), v1.getY(), v2.getY(), v3.getY());
+
+        int xMin = xVals.stream().min(Double::compareTo).get().intValue();
+        int xMax = xVals.stream().max(Double::compareTo).get().intValue();
+        int yMin = yVals.stream().min(Double::compareTo).get().intValue();
+        int yMax = yVals.stream().max(Double::compareTo).get().intValue();
+
+        rectangleOfChangeMin = Optional.of(new Vector2D(xMin, yMin));
+        rectangleOfChangeMax = Optional.of(new Vector2D(xMax, yMax));
     }
 
     @Override
@@ -303,7 +318,7 @@ public class Layer implements ILayer {
     public void update() {
         if(rectangleOfChangeMin.isPresent() && rectangleOfChangeMax.isPresent()){
 
-            // convert rectangle to global coordinates
+            /*// convert rectangle to global coordinates
             Vector2D minAsGlobal = toGlobalPixel(rectangleOfChangeMin.get());
             Vector2D maxAsGlobal = toGlobalPixel(rectangleOfChangeMax.get());
 
@@ -318,10 +333,10 @@ public class Layer implements ILayer {
             Vector2D max = new Vector2D(
                     Math.max(minAsGlobal.getX(), maxAsGlobal.getX()),
                     Math.max(minAsGlobal.getY(), maxAsGlobal.getY())
-            );
+            );*/
 
             // Notify each and every observer
-            observers.forEach(ob -> ob.notify(new Tuple2<>(min, max)));
+            observers.forEach(ob -> ob.notify(new Tuple2<>(rectangleOfChangeMin.get(), rectangleOfChangeMax.get())));
 
             // Reset triangle
             rectangleOfChangeMin = Optional.empty();
