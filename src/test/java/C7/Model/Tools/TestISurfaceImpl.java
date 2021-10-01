@@ -1,7 +1,9 @@
 package C7.Model.Tools;
 
 import C7.Model.Color;
+import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -112,6 +114,11 @@ public class TestISurfaceImpl implements ILayer {
         return point;
     }
 
+    @Override
+    public void update() {
+
+    }
+
     public String getContentAs2DString(){
         StringBuilder sb = new StringBuilder();
         for (int x = 0; x < ar.length; x++) {
@@ -125,5 +132,15 @@ public class TestISurfaceImpl implements ILayer {
 
     public Color getBaseColor() {
         return new Color(0,0,0,0);
+    }
+
+    @Override
+    public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+
+    }
+
+    @Override
+    public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+
     }
 }
