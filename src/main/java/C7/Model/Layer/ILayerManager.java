@@ -23,6 +23,15 @@ public interface ILayerManager {
     int createLayer(int width, int height, Vector2D position, double rotation, Vector2D scale);
 
     /**
+     * Adds an existing layer to this layer manager, and returns its new layer ID.
+     * If the layer already exists in this manager, the existing ID for it is
+     * returned.
+     * @param layer     The layer to add.
+     * @return The ID of the added layer.
+     */
+    int addLayer(ILayer layer);
+
+    /**
      * Destroys the specified layer and removes it from this layer manager. If
      * the layer does not exist in this layer manager, it will not be destroyed.
      * @param id The ID of the layer to destroy.

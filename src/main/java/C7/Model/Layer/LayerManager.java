@@ -36,6 +36,21 @@ public class LayerManager implements ILayerManager {
 	}
 
 	@Override
+	public int addLayer(ILayer layer) {
+		// Check if this layer already exists in this manager
+		for (Map.Entry<Integer, ILayer> entry : layers) {
+			if (entry.getValue() == layer) {
+				return entry.getKey();
+			}
+		}
+
+		// Add layer to manager
+		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
+
+		return nextId++;
+	}
+
+	@Override
 	public void destroyLayer(int id) {
 		// Remove the entry with matching key
 		layers.removeIf(entry -> entry.getKey().equals(id));
