@@ -3,10 +3,10 @@ package C7.Model.Vector;
 import java.util.Objects;
 
 /**
- * Vector2D is a class representing a mathematical 2d vector.
+ * Vector2D is a class representing an immutable mathematical 2d vector.
  * @author Hugo Ekstrand
  */
-public class Vector2D {
+public final class Vector2D {
 
     public static final Vector2D ZERO = new Vector2D(0,0);
 
@@ -20,15 +20,6 @@ public class Vector2D {
     public Vector2D(double x, double y) {
         this.x = x;
         this.y = y;
-    }
-
-    /**
-     * Creates a clone of a given 2d vector.
-     * @param vec the vector to be cloned.
-     */
-    public Vector2D(Vector2D vec){
-        this.x = vec.x;
-        this.y = vec.y;
     }
 
     /**

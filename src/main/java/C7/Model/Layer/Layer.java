@@ -172,7 +172,7 @@ public class Layer implements ILayer {
 
     @Override
     public void setPosition(Vector2D position) {
-        this.position = new Vector2D(position);
+        this.position = position;
     }
 
     @Override
@@ -182,7 +182,7 @@ public class Layer implements ILayer {
 
     @Override
     public void setScale(Vector2D scale) {
-        this.scale = new Vector2D(scale);
+        this.scale = scale;
     }
 
     @Override
