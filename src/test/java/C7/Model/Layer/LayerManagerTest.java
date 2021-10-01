@@ -117,4 +117,37 @@ public class LayerManagerTest {
 
 		Assertions.assertEquals(layer, layerManager.getLayer(id));
 	}
+
+	/**
+	 * Tests that setting the active layer changes the active layer ID.
+	 */
+	@Test
+	public void setActiveLayerChangesTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+
+		layerManager.setActiveLayer(id);
+
+		Assertions.assertEquals(id, layerManager.getActiveLayerId());
+	}
+
+	/**
+	 * Tests that setting the active layer to an invalid ID does not change the
+	 * active layer ID.
+	 */
+	@Test
+	public void setActiveLayerInvalidTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+
+		layerManager.setActiveLayer(id);
+
+		// Invalid ID
+		layerManager.setActiveLayer(id + 1);
+
+		Assertions.assertEquals(id, layerManager.getActiveLayerId());
+	}
 }
