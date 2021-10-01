@@ -13,6 +13,7 @@ import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,11 +28,16 @@ import javafx.scene.canvas.*;
 import javafx.scene.paint.Color;
 
 
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
+import java.time.Instant;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class C7PaintView implements Initializable {
@@ -91,7 +97,7 @@ public class C7PaintView implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         gc = canvas.getGraphicsContext2D();
 
-        layer = new Layer(3840, 2160, new C7.Model.Color(0, 0, 0, 0));
+        layer = new Layer(500, 500, new C7.Model.Color(0, 0, 0, 0));
 
         updateView();
 
@@ -101,6 +107,51 @@ public class C7PaintView implements Initializable {
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(), "Calligraphy", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket(), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(new ITool() {
+            @Override
+            public Collection<IToolProperty> getProperties() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
+                layer.setPosition(layer.getPosition().add(v1.sub(v0)));
+                layer.update();
+            }
+
+            @Override
+            public boolean isContinuous() {
+                return false;
+            }
+
+            @Override
+            public void setToDefault() {
+
+            }
+        }, "Translation", this));
+        flowPaneTools.getChildren().add(new ToolButton(new ITool() {
+            @Override
+            public Collection<IToolProperty> getProperties() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
+                layer.setRotation(layer.getRotation() + v1.sub(v0).len() * Math.PI / 100);
+                layer.update();
+            }
+
+            @Override
+            public boolean isContinuous() {
+                return false;
+            }
+
+            @Override
+            public void setToDefault() {
+
+            }
+        }, "Rotation", this));
+
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
 
@@ -114,6 +165,31 @@ public class C7PaintView implements Initializable {
                 event.consume();
             }
         });
+
+        var obsevrer = new IObserver<Tuple2<Vector2D, Vector2D>>() {
+
+            private Vector2D oldV0;
+            private Vector2D oldV1;
+
+            @Override
+            public void notify(Tuple2<Vector2D, Vector2D> data) {
+                // Draw are of layer which has been modified
+                updateView((int)data.getVal1().getX(), (int)data.getVal1().getY(),
+                        (int)data.getVal2().getX() + 1, (int)data.getVal2().getY() + 1);
+
+                // Clean old debug. NOTE: also good for not debug since it cleans any leftovers
+                if(oldV1 != null && oldV0 != null)
+                    updateView((int)oldV0.getX(), (int)oldV0.getY(),
+                            (int)oldV1.getX() + 1, (int)oldV1.getY() + 1);
+
+                oldV0 = data.getVal1();
+                oldV1 = data.getVal2();
+
+                //updateView();
+                drawRect(data.getVal1(), data.getVal2()); // For debugging
+            }
+        };
+        layer.addObserver(obsevrer);
 
         canvasPane.setOnDragDropped(new EventHandler<DragEvent>() {
 
@@ -129,7 +205,9 @@ public class C7PaintView implements Initializable {
                     for (int i = 0; i < files.size(); i++) {
                         Layer importedLayer = LayerIO.layerFromFile(files.get(i).getPath());
                         if (importedLayer != null) {
+                            layer.removeObserver(obsevrer);
                             layer = importedLayer;
+                            layer.addObserver(obsevrer);
                             gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
                             updateView();
                         }
@@ -173,16 +251,7 @@ public class C7PaintView implements Initializable {
             }
         });
 
-        layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
-            @Override
-            public void notify(Tuple2<Vector2D, Vector2D> data) {
-                // Draw are of layer which has been modified
-                updateView((int)data.getVal1().getX(), (int)data.getVal1().getY(),
-                        (int)data.getVal2().getX() + 1, (int)data.getVal2().getY() + 1);
 
-                //drawRect(data.getVal1(), data.getVal2()); // For debugging
-            }
-        });
 
         layersArea.getChildren().add(new LayersView());
 
@@ -223,6 +292,6 @@ public class C7PaintView implements Initializable {
     }
 
     void updateView() {
-        updateView(0, 0, layer.getWidth(), layer.getHeight());
+        updateView(0,0, (int)canvas.getWidth(), (int)canvas.getHeight());
     }
 }
