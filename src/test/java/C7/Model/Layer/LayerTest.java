@@ -238,46 +238,50 @@ public class LayerTest {
         layer.update();
     }
 
+    @Test
+    public void getPixelFromScaledAndTranslatedLayerTest(){
+        int w = 12;
+        int h = 12;
+        ILayer layer = new Layer(w, h, new Color(1,1,1,1));
 
-    // TODO: scaling
-    /*@Test
+        Vector2D translation = new Vector2D(w/2d, h/2d);
+        Vector2D scale = new Vector2D(2, 2);
+
+        layer.setPosition(translation);
+        layer.setScale(scale);
+
+        // Check that center is still at the center
+        Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
+        Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.getPixelPositionAtPoint(center));
+
+        // Since we've scaled by 2 the top right corner should be a whole scale 1,1 square away from the center of the scaled square
+        Vector2D topRightCorner = center.add(new Vector2D(w, h));
+        Assertions.assertEquals(new Vector2D(w,h), layer.getPixelPositionAtPoint(topRightCorner));
+    }
+
+    @Test
     public void getPixelAtPointForScaledAndTranslatedAndRotatedLayerTest(){
-
         int w = 14;
-        int h = 14;
+        int h = w;
         ILayer layer = new Layer(w, h, new Color(1,1,1,1));
 
         Vector2D translation = new Vector2D(4, 7);
         double rotation = Math.PI / 4d;
-        Vector2D scale = new Vector2D(1, 2); // Stretched in the y direction by 2
+        Vector2D scale = new Vector2D(1.3, 2); // Stretched in the y direction by 2
 
         layer.setRotation(rotation);
         layer.setScale(scale);
         layer.setPosition(translation);
 
-
-        for (int i = 0; i < h * 2; i++) {
-            for (int j = 0; j < w * 2; j++) {
-                if(j == w/2d + translation.getX() && i == h/2d + translation.getY()){
-                    System.out.print("@");
-                }
-                else if(layer.isPointOnLayer(new Vector2D(j, i))){
-                    System.out.print("#");
-                }
-                else System.out.print("-");
-                System.out.print(" ");
-            }
-            System.out.println();
-        }
-
         // This should be the center point;
         Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
         Assertions.assertEquals(new Vector2D(w/2d, h/2d), layer.getPixelPositionAtPoint(center));
 
-        // This should be the right corner
-        Vector2D rightCorner = new Vector2D(w / 2d, h / 2d).add(new Vector2D((w / 2d) * Math.cos(rotation), (h / 2d) * Math.cos(rotation)));
+        // This should be the right corner. The layer (square) is rotated 4/pi rad and thus the right corner should be the furthest in x
+        // of any corner, which should be sqrt(2) * sideLen * scale in x
+        Vector2D rightCorner = center.add(new Vector2D(w/2d * Math.sqrt(2) * 1.3, 0));
         Assertions.assertEquals(new Vector2D(w, 0), layer.getPixelPositionAtPoint(rightCorner));
 
-    }*/
+    }
 
 }
