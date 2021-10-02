@@ -201,8 +201,12 @@ public class Layer implements ILayer {
     }
 
     private Vector2D toGlobal(Vector2D point){
-        //Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY()); // TODO: scaling
-        return point.rotatedAround(getLocalCenterPoint(), rotation).add(position);//.scale(inverseScale);
+        return point
+                .sub(getLocalCenterPoint())             // Translate so that the center of the layer is at (0,0)
+                .rotatedAround(Vector2D.ZERO, rotation) // Rotate the layer
+                .scale(scale)                           // Scale the layer
+                .add(getLocalCenterPoint())             // Translate the layer back to its original position
+                .add(position);                         // Translate it to its global position
     }
 
     private Vector2D toGlobalPixel(Vector2D point){
@@ -211,8 +215,13 @@ public class Layer implements ILayer {
     }
 
     private Vector2D toLocal(Vector2D point){
-        //Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY()); // TODO: scaling
-        return point.sub(position).rotatedAround(getLocalCenterPoint(), -rotation);//.scale(inverseScale);
+        Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY());
+        return point
+                .sub(position)                          // Translate to local
+                .sub(getLocalCenterPoint())             // Translate so that the center of the layer is at (0,0)
+                .scale(inverseScale)                    // Scale the plane
+                .rotatedAround(Vector2D.ZERO, -rotation)// Rotate it
+                .add(getLocalCenterPoint());            // Move it back to its local position
     }
 
     @Override
