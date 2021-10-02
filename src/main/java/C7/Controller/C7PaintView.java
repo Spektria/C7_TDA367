@@ -151,6 +151,29 @@ public class C7PaintView implements Initializable {
 
             }
         }, "Rotation", this));
+        flowPaneTools.getChildren().add(new ToolButton(new ITool() {
+            @Override
+            public Collection<IToolProperty> getProperties() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
+                var v3 = v1.sub(v0);
+                layer.setScale(layer.getScale().add(v3.mult(1/100d)));
+                layer.update();
+            }
+
+            @Override
+            public boolean isContinuous() {
+                return false;
+            }
+
+            @Override
+            public void setToDefault() {
+
+            }
+        }, "Scale", this));
 
 
         canvasPane.setOnDragOver(new EventHandler<DragEvent>() {
