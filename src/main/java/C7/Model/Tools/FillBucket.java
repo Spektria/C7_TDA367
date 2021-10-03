@@ -6,10 +6,7 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Model.Vector.Vector2D;
 
-import java.util.ArrayDeque;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Deque;
+import java.util.*;
 
 /**
  * Fills an area inside of a {@link ILayer layer} to a common color. The area is determined by
@@ -69,16 +66,16 @@ class FillBucket implements ITool{
             int x1 = x;
 
             // Do a scan on a horizontal line so that we find the first x which should not be filled.
-            while(x1 >= 0 && shouldFill(surface.getPixel(x1, y), selectedColor)) x1--;
+            while(x1 >= 0 && shouldFill(surface.getLocalPixel(x1, y), selectedColor)) x1--;
             x1++;
 
-            while(x1 < surface.getWidth() && shouldFill(surface.getPixel(x1,y), selectedColor)){
+            while(x1 < surface.getWidth() && shouldFill(surface.getLocalPixel(x1,y), selectedColor)){
 
                 // Fill pixel
-                surface.setPixel(x1, y, fill);
+                surface.setLocalPixel(x1, y, fill);
 
                 // Check if the y - 1 line should be filled, if it has not already been checked.
-                if(y > 0 && shouldFill(surface.getPixel(x1, y-1), selectedColor)){
+                if(y > 0 && shouldFill(surface.getLocalPixel(x1, y-1), selectedColor)){
 
                     // If it should be filled, push another coordinate in the stack
                     stack.push(x1);
@@ -86,7 +83,7 @@ class FillBucket implements ITool{
                 }
 
                 // Do the same for below as for above. Except with y + 1.
-                if(y < surface.getHeight() - 1 && shouldFill(surface.getPixel(x1, y+1), selectedColor)){
+                if(y < surface.getHeight() - 1 && shouldFill(surface.getLocalPixel(x1, y+1), selectedColor)){
                     stack.push(x1);
                     stack.push(y+1);
                 }
@@ -127,10 +124,15 @@ class FillBucket implements ITool{
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
-        int x = (int)v0.getX();
-        int y = (int)v0.getY();
-        if(layer.isPixelOnLayer(x,y))
-            floodFill(x, y, layer, layer.getPixel(x, y));
+
+        if(layer.isPointOnLayer(v0)){
+            Vector2D localVec = layer.getPixelPositionAtPoint(v0);
+            int x = (int)localVec.getX();
+            int y = (int)localVec.getY();
+            floodFill(x, y, layer, layer.getLocalPixel(x, y));
+            layer.update();
+        }
+
     }
 
     @Override
