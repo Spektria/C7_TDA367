@@ -10,6 +10,8 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
+import C7.View.IView;
+import C7.View.View;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -35,7 +37,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 
-public class C7PaintView implements Initializable {
+public class MainController implements Initializable {
     Canvas canvas;
     @FXML ScrollPane scrollPaneCanvas;
     GraphicsContext gc;
@@ -49,12 +51,22 @@ public class C7PaintView implements Initializable {
     @FXML FlowPane flowPaneProperties;
     @FXML AnchorPane layersArea;
 
+    IView view;
+
     ILayer layer; //Only one for now
+
+    ITool currentTool;
+
+    private Vector2D oldPos;
 
     public void setCurrentTool(ITool tool) {
         this.currentTool = tool;
 
         updatePropertiesView();
+    }
+
+    public void setView(IView view) {
+        this.view = view;
     }
 
     void updatePropertiesView() {
@@ -91,13 +103,11 @@ public class C7PaintView implements Initializable {
         flowPaneProperties.getChildren().add(reset);
     }
 
-    ITool currentTool;
-
-    private Vector2D oldPos;
-
     public void initialize(URL location, ResourceBundle resources) {
 
         layer = new Layer(600, 500, new C7.Model.Color(0, 0, 0, 0));
+
+        setView(new View());
 
         canvas = new Canvas();
 
@@ -206,22 +216,8 @@ public class C7PaintView implements Initializable {
         }
     }
 
-    void updateCanvas(int x, int y, int width, int height) {
-        PixelWriter pw = gc.getPixelWriter();
-        for (int i = y; i < height; i++) {
-            for (int j = x; j < width; j++) {
-                C7.Model.Color color = new C7.Model.Color(0, 0, 0, 0);
-                if(layer.isPointOnLayer(new Vector2D(j, i)))
-                    color = layer.getLocalPixel(j, i);
-
-                //Update to take into account canvas transform
-                pw.setColor(j, i, new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-            }
-        }
-    }
-
     void updateCanvas() {
-        updateCanvas(0,0,(int)canvas.getWidth(), (int)canvas.getHeight());
+        view.updateCanvas(gc, layer, 0, 0, (int)canvas.getWidth(), (int)canvas.getHeight());
     }
 
     @FXML
