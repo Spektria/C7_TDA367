@@ -327,23 +327,6 @@ public class Layer implements ILayer {
     public void update() {
         if(rectangleOfChangeMin.isPresent() && rectangleOfChangeMax.isPresent()){
 
-            /*// convert rectangle to global coordinates
-            Vector2D minAsGlobal = toGlobalPixel(rectangleOfChangeMin.get());
-            Vector2D maxAsGlobal = toGlobalPixel(rectangleOfChangeMax.get());
-
-            // We want the first vector to contain the global min and second to contain the global max
-            // Since these have been mapped to global coordinates they may not still be the min and max if
-            // as they were before (e.g. 180 degrees spin would flip them).
-            Vector2D min = new Vector2D(
-                    Math.min(minAsGlobal.getX(), maxAsGlobal.getX()),
-                    Math.min(minAsGlobal.getY(), maxAsGlobal.getY())
-            );
-
-            Vector2D max = new Vector2D(
-                    Math.max(minAsGlobal.getX(), maxAsGlobal.getX()),
-                    Math.max(minAsGlobal.getY(), maxAsGlobal.getY())
-            );*/
-
             // Notify each and every observer
             observers.forEach(ob -> ob.notify(new Tuple2<>(rectangleOfChangeMin.get(), rectangleOfChangeMax.get())));
 
