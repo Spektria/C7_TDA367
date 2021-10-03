@@ -1,19 +1,28 @@
 package C7.Controller;
 
 import C7.IO.ResourceIO;
+import com.sun.tools.javac.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class PaintApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(ResourceIO.getPackageResource(this, "/MainWindow.fxml"));
+        GridPane root = new GridPane();
+        MainController controller = new MainController();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
+        fxmlLoader.setRoot(root);
+        fxmlLoader.setController(controller);
+        fxmlLoader.load();
         primaryStage.setTitle("PaintQlone");
-        primaryStage.setScene(new Scene(root, 1280, 720+25));
+        Scene scene = new Scene(root, 1280, 720+25);
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
