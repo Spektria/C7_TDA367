@@ -83,7 +83,7 @@ public class FillBucketTest {
                 Color pixel = testSurface.getLocalPixel(x, y);
 
                 if(x < 6)
-                    Assertions.assertEquals(0, Float.compare(1f, pixel.getBlue()));
+                    Assertions.assertEquals(0, Float.compare(1f, pixel.getGreen()));
                 else
                     Assertions.assertEquals(0, Float.compare(x * 0.1f, pixel.getRed()));
             }
