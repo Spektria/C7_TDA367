@@ -1,11 +1,13 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
+import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
 import C7.Model.Tools.ToolProperties.IToolProperty;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import javafx.event.ActionEvent;
@@ -206,25 +208,20 @@ public class C7PaintView implements Initializable {
 
     void updateCanvas(int x, int y, int width, int height) {
         PixelWriter pw = gc.getPixelWriter();
-        for (int i = 0; i < height*2; i++) {
-            for (int j = 0; j < width*2; j++) {
-                C7.Model.Color color = layer.getPixel(x+j, y+i);
-                if (color == null) continue;
+        for (int i = y; i < height; i++) {
+            for (int j = x; j < width; j++) {
+                C7.Model.Color color = new C7.Model.Color(0, 0, 0, 0);
+                if(layer.isPointOnLayer(new Vector2D(j, i)))
+                    color = layer.getLocalPixel(j, i);
+
                 //Update to take into account canvas transform
-                pw.setColor((x+j-width), (y+i-height), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                pw.setColor(j, i, new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
             }
         }
     }
 
     void updateCanvas() {
-        PixelWriter pw = gc.getPixelWriter();
-        for (int i = 0; i < layer.getHeight(); i++) {
-            for (int j = 0; j < layer.getWidth(); j++) {
-                C7.Model.Color color = layer.getPixel(j, i);
-                //Update to take into account canvas transform
-                pw.setColor((j), (i), new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-            }
-        }
+        updateCanvas(0,0,(int)canvas.getWidth(), (int)canvas.getHeight());
     }
 
     @FXML

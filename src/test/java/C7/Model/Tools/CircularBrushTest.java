@@ -1,5 +1,6 @@
 package C7.Model.Tools;
 
+import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
