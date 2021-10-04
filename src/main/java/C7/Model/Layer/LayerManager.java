@@ -3,11 +3,13 @@ package C7.Model.Layer;
 import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * @author Love Gustafsson
- * @version 1.0
+ * @version 1.1
  */
 public class LayerManager implements ILayerManager {
 
@@ -96,5 +98,29 @@ public class LayerManager implements ILayerManager {
 		}
 
 		return ids;
+	}
+
+	@Override
+	public Color getPixel(int x, int y) {
+		Color color = new Color(0, 0, 0, 0); // Final color
+
+		// Find colors at center of current pixel
+		Vector2D point = new Vector2D(x + 0.5, y + 0.5);
+
+		for (Map.Entry<Integer, ILayer> entry : layers) {
+			ILayer layer = entry.getValue();
+
+			if (layer.isPointOnLayer(point)) {
+				Vector2D pixelPos = layer.getPixelPositionAtPoint(point);
+
+				// Layer color to blend with
+				Color blendColor = layer.getLocalPixel((int)pixelPos.getX(), (int)pixelPos.getY());
+
+				// Blend colors
+				color = Color.blend(color, blendColor);
+			}
+		}
+
+		return color;
 	}
 }

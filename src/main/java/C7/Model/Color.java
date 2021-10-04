@@ -10,7 +10,7 @@ import java.util.Objects;
  * maximum intensity. The color format supports channel intensities above 1 for
  * high dynamic range imaging.
  * @author Love Gustafsson
- * @version 1.1
+ * @version 1.2
  */
 public final class Color {
 
@@ -62,6 +62,25 @@ public final class Color {
 
         // Get linear distance between the colors.
         return (float)Math.sqrt(dr * dr + dg * dg + db * db + da * da);
+    }
+
+    /**
+     * Blends two colors using simple alpha blending.
+     * The resulting color is
+     * <code>result = dest * (1 - src.alpha) + src * src.alpha</code>
+     * @param dest
+     * @param src
+     * @return
+     */
+    public static Color blend(Color dest, Color src) {
+        float r, g, b, a;
+
+        r = dest.getRed() * (1 - src.getAlpha()) + src.getRed() * src.getAlpha();
+        g = dest.getGreen() * (1 - src.getAlpha()) + src.getGreen() * src.getAlpha();
+        b = dest.getBlue() * (1 - src.getAlpha()) + src.getBlue() * src.getAlpha();
+        a = dest.getAlpha() * (1 - src.getAlpha()) + src.getAlpha() * src.getAlpha();
+
+        return new Color(r, g, b, a);
     }
 
     /**

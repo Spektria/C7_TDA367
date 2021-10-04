@@ -1,5 +1,6 @@
 package C7.Model.Layer;
 
+import C7.Model.Color;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -7,7 +8,7 @@ import C7.Model.Vector.Vector2D;
  * Layer managers are responsible for creating, destroying, and providing access
  * to layers inside of an image project.
  * @author Love Gustafsson
- * @version 1.1
+ * @version 1.2
  */
 public interface ILayerManager {
 
@@ -63,4 +64,13 @@ public interface ILayerManager {
      * @return Array containing layer IDs.
      */
     int[] getAllLayerIds();
+
+    /**
+     * Gets the color of the pixel at the specified position by blending all of
+     * this layer manager's layers in order.
+     * @param x X position of pixel in project-space.
+     * @param y Y position of pixel in project-space.
+     * @return The color of the pixel at the specified position.
+     */
+    Color getPixel(int x, int y);
 }
