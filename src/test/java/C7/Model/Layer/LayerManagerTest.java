@@ -150,4 +150,32 @@ public class LayerManagerTest {
 
 		Assertions.assertEquals(id, layerManager.getActiveLayerId());
 	}
+
+	@Test
+	public void getPixelTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+		ILayer layer = layerManager.getLayer(id);
+		layer.setLocalPixel(0, 0, new Color(1, 0, 0, 1));
+
+		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0));
+	}
+
+	@Test
+	public void getPixelMultipleLayersTest() {
+		ILayerManager layerManager = new LayerManager();
+
+		// Layer 1
+		int id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+		ILayer layer = layerManager.getLayer(id);
+		layer.setLocalPixel(0, 0, new Color(0, 1, 0, 1));
+
+		// Layer 2
+		id = layerManager.createLayer(16, 16, new Vector2D(0, 0), 0, new Vector2D(1, 1));
+		layer = layerManager.getLayer(id);
+		layer.setLocalPixel(0, 0, new Color(1, 0, 0, 1));
+
+		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0));
+	}
 }
