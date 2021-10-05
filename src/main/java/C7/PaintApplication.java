@@ -22,7 +22,7 @@ public class PaintApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        GridPane root = new GridPane();
+        AnchorPane root = new AnchorPane();
 
         ILayer layer = new Layer(600, 600, new Color(0,0,0,0));
         IView view = ViewFactory.createView(layer);

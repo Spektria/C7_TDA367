@@ -55,7 +55,7 @@ public class MainController {
 
     private Vector2D oldPos;
 
-    public MainController(IView view, ILayer layer, GridPane root) throws Exception {
+    public MainController(IView view, ILayer layer, AnchorPane root) throws Exception {
         Objects.requireNonNull(view);
         Objects.requireNonNull(layer);
         Objects.requireNonNull(root);
