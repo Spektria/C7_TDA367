@@ -37,10 +37,11 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 
-public class MainController implements Initializable {
+public class MainController {
     @FXML Canvas canvas;
     @FXML ScrollPane scrollPaneCanvas;
     GraphicsContext gc;
@@ -54,30 +55,57 @@ public class MainController implements Initializable {
     @FXML FlowPane flowPaneProperties;
     @FXML AnchorPane layersArea;
 
-    IView view;
+    private IView view;
 
-    ILayer layer; //Only one for now
+    private ILayer layer; //Only one for now
 
-    ITool currentTool;
+    private ITool currentTool;
 
     private Vector2D oldPos;
 
-    public MainController(GridPane root) throws Exception {
+    public MainController(IView view, ILayer layer, GridPane root) throws Exception {
+        Objects.requireNonNull(view);
+        Objects.requireNonNull(layer);
+        Objects.requireNonNull(root);
+
+        this.view = view;
+        this.layer = layer;
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
         fxmlLoader.setRoot(root);
         fxmlLoader.setController(this);
         fxmlLoader.load();
+
+        canvas.setWidth(layer.getWidth());
+        canvas.setHeight(layer.getHeight());
+
+        view.setGraphicsContext(canvas.getGraphicsContext2D());
+        view.setCanvas(canvas);
+
+        scrollPaneCanvas.setContent(canvas);
+
+        view.render();
+
+        splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
+        scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
+        scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
+
+        layersArea.getChildren().add(new LayersView());
+
+        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
+
+        //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
+        flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
+
+
     }
 
     public void setCurrentTool(ITool tool) {
         this.currentTool = tool;
 
         updatePropertiesView();
-    }
-
-    public void setView(IView view) {
-        this.view = view;
     }
 
     void updatePropertiesView() {
@@ -100,50 +128,14 @@ public class MainController implements Initializable {
         flowPaneProperties.getChildren().add(reset);
     }
 
-    public void initialize(URL location, ResourceBundle resources) {
-
-        layer = new Layer(600, 500, new C7.Model.Color(0, 0, 0, 0));
-
-        setView(new View());
-
-        canvas.setWidth(layer.getWidth());
-        canvas.setHeight(layer.getHeight());
-
-        gc = canvas.getGraphicsContext2D();
-
-        scrollPaneCanvas.setContent(canvas);
-
-        updateCanvas();
-
-        splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
-        scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
-        scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
-
-        layersArea.getChildren().add(new LayersView());
-
-        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
-
-        //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
-        flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
-
-
-
-
-    }
 
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
             layer = importedLayer;
             gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
-            updateCanvas();
+            view.render();
         }
-    }
-
-    void updateCanvas() {
-        view.updateCanvas(gc, layer, 0, 0, (int)canvas.getWidth(), (int)canvas.getHeight());
     }
 
     @FXML
@@ -191,7 +183,7 @@ public class MainController implements Initializable {
                 Vector2D point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, oldPos, point);
                 oldPos = point;
-                updateCanvas();
+                view.render();
             }
         }
 
@@ -201,8 +193,7 @@ public class MainController implements Initializable {
                 var point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, point, point);
                 oldPos = point;
-
-                updateCanvas();
+                view.render();
             }
         }
 
