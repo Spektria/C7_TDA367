@@ -16,7 +16,7 @@ public class ToolButton extends AnchorPane {
 
     ITool tool;
 
-    public ToolButton(ITool tool, String text, MainController controller) {
+    public ToolButton(ITool tool, String text, ToolsController controller) {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ToolButton.fxml"));
         fxmlLoader.setRoot(this);
