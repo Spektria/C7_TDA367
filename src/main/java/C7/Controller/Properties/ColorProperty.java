@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
-public class ColorProperty extends AnchorPane {
+class ColorProperty extends AnchorPane {
     @FXML
     ColorPicker colorPicker;
     @FXML
