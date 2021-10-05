@@ -156,7 +156,6 @@ public class MainController {
                 Vector2D point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, oldPos, point);
                 oldPos = point;
-                view.render();
             }
         }
 
@@ -166,7 +165,6 @@ public class MainController {
                 var point = new Vector2D(event.getX(), event.getY());
                 currentTool.apply(layer, point, point);
                 oldPos = point;
-                view.render();
             }
         }
 

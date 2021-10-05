@@ -21,6 +21,8 @@ public class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     public View(ILayer layer){
         Objects.requireNonNull(layer);
         this.layer = layer;
+
+        layer.addObserver(this);
     }
 
     @Override
