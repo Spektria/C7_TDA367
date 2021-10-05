@@ -11,7 +11,11 @@ import javafx.scene.paint.Color;
 
 import java.util.Objects;
 
-public class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
+/**
+ * An {@link IView} implementation.
+ * @author Hugo Ekstrand
+ */
+class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     private ILayer layer;
     private GraphicsContext gc;
@@ -86,6 +90,8 @@ public class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
                 (int)data.getVal2().getY() + 1
         );
 
+        // We update the last rectangle too, so that no leftovers are visible on the view.
+        // That is, if we were not to do this ghost images may be left on the view.
         if(lastUpdateRect != null)
             render(
                     (int)lastUpdateRect.getVal1().getX(),
