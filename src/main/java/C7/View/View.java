@@ -33,6 +33,9 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     @Override
     public void render() {
+        Objects.requireNonNull(height);
+        Objects.requireNonNull(width);
+
         render(0, 0, (int)width.get(), (int)height.get());
     }
 

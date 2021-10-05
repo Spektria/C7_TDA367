@@ -28,6 +28,8 @@ import javafx.stage.FileChooser;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,16 +61,14 @@ public class MainController {
         Objects.requireNonNull(layer);
         Objects.requireNonNull(root);
 
-        this.view = view;
-        this.layer = layer;
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
         fxmlLoader.setRoot(root);
         fxmlLoader.setController(this);
         fxmlLoader.load();
 
-        canvas.setWidth(layer.getWidth());
-        canvas.setHeight(layer.getHeight());
+        this.view = view;
+        setLayer(layer);
+
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
         view.setBounds(canvas.widthProperty(), canvas.heightProperty());
@@ -91,7 +91,28 @@ public class MainController {
         flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(new ITool() {
+            @Override
+            public Collection<IToolProperty> getProperties() {
+                return new ArrayList<>();
+            }
 
+            @Override
+            public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
+                layer.setPosition(layer.getPosition().add(v1.sub(v0)));
+                layer.update();
+            }
+
+            @Override
+            public boolean isContinuous() {
+                return false;
+            }
+
+            @Override
+            public void setToDefault() {
+
+            }
+        }, "Move", this));
     }
 
     public void setCurrentTool(ITool tool) {
@@ -102,8 +123,8 @@ public class MainController {
 
     private void setLayer(ILayer layer){
         this.layer = layer;
-        canvas.setWidth(layer.getWidth());
-        canvas.setHeight(layer.getHeight());
+        canvas.setWidth(Math.max(layer.getWidth(), scrollPaneCanvas.getWidth()));
+        canvas.setHeight(Math.max(layer.getHeight(), scrollPaneCanvas.getHeight()));
         view.setLayer(layer);
     }
 
