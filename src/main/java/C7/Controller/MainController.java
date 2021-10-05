@@ -35,7 +35,6 @@ import java.util.Objects;
 public class MainController {
     @FXML Canvas canvas;
     @FXML ScrollPane scrollPaneCanvas;
-    GraphicsContext gc;
     @FXML SplitPane splitPaneToolsProps;
     @FXML AnchorPane contentPaneToolsProps;
     @FXML AnchorPane contentPaneTools;
@@ -105,8 +104,7 @@ public class MainController {
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
-            layer = importedLayer;
-            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
+            view.setLayer(importedLayer);
             view.render();
         }
     }

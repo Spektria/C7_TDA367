@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.canvas.Canvas?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<fx:root alignment="center" type="GridPane" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root alignment="center" type="GridPane" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <MenuBar prefWidth="1280.0" GridPane.valignment="TOP">
         <menus>
@@ -38,7 +30,7 @@
          <children>
             <ScrollPane fx:id="scrollPaneCanvas" prefHeight="720.0" prefWidth="920.0">
                <content>
-                  <Canvas fx:id="canvas" height="200.0" onDragOver="#onCanvasDragOver" onMouseDragged="#onCanvasMouseDragged" onMousePressed="#onCanvasMousePressed" onMouseReleased="#onCanvasMouseReleased" width="200.0" />
+                  <Canvas fx:id="canvas" height="200.0" onDragDropped="#onCanvasDragDropped" onDragOver="#onCanvasDragOver" onMouseDragged="#onCanvasMouseDragged" onMousePressed="#onCanvasMousePressed" onMouseReleased="#onCanvasMouseReleased" width="200.0" />
                </content></ScrollPane>
             <SplitPane dividerPositions="0.6666667" layoutX="920.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="360.0">
               <items>
