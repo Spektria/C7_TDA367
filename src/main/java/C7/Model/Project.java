@@ -2,10 +2,9 @@ package C7.Model;
 
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.ILayerManager;
-import C7.Model.Layer.Layer;
+import C7.Model.Layer.LayerManager;
 import C7.Model.Tools.ITool;
 import C7.Model.Vector.Vector2D;
-import javafx.scene.image.PixelWriter;
 
 /**
  * Project is a class representing a complete project.
@@ -13,8 +12,8 @@ import javafx.scene.image.PixelWriter;
  * */
 public class Project {
     ILayerManager layerManager;
-    ILayer activeLayer;
-    int width, height;
+    private ILayer activeLayer;
+    private int width, height;
 
     /**
      * Create a Project with the specified size drawing area.
@@ -29,9 +28,21 @@ public class Project {
             this.height = height;
         }
 
-        //UH OH NO LAYERMANAGER AROUND
-        layerManager = null;
+        //Specific LayerManager
+        layerManager = new LayerManager();
     }
+
+    /**
+     * Gets the projects' window's width
+     * @return The width of the window
+     */
+    public int getWidth(){ return  width; }
+
+    /**
+     * Gets the projects' window's height
+     * @return The height of the window
+     */
+    public int getHeight(){ return height; }
 
     //LAYERMANAGER
     /**
@@ -59,12 +70,58 @@ public class Project {
     }
 
     /**
-     * Renders specified layer in Project with provided {@link PixelWriter}.
-     * @param pWriter The PixelWriter to render the layer with
-     * @param layerID The layer to render
+     * Renders project starting in x,y with the specified width and height.
+     * @param x The upper left corner's x coordinate.
+     * @param y The upper left corner's y coordinate.
+     * @param width Width of the region.
+     * @param height Height of the region.
+     * @return Color matrix of the rendered region.
+     * If position is out of scope of the Project the returned pixels are black.
      */
-    public void renderLayer(PixelWriter pWriter, int layerID){
-        throw new UnsupportedOperationException();
+    public Color[][] renderProject(int x, int y, int width, int height){
+        //No negative width/height
+        if (width < 0 || height < 0)
+            throw new IllegalArgumentException("Unable to render Project with negative resolution");
+
+        Color[][] colorMatrix = new Color[width][height];
+
+        for (int xOffset = 0; xOffset < width; xOffset++) {
+            for (int yOffset = 0; yOffset < height; yOffset++) {
+                colorMatrix[xOffset][yOffset] = layerManager.getPixel(x + xOffset, y + yOffset);
+            }
+        }
+
+        return colorMatrix;
+    }
+
+    /**
+     * Renders only a specified layer
+     * @param layerID The layer to render
+     * @return Color matrix of the rendered region.
+     * If position is out of scope of the layer the returned pixels are black.
+     * If the provided layer does not exist returns null.
+     */
+    public Color[][] renderLayer(int layerID){
+        ILayer layer = layerManager.getLayer(layerID);
+        if (layer == null) return null;
+
+        Color[][] colorMatrix = new Color[width][height];
+
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                Vector2D pointToGet = new Vector2D(x,y);
+                //Check if out of bounds
+                if (layer.isPointOnLayer(pointToGet)) {
+                    colorMatrix[x][y] = layer.getLocalPixel(x,y);
+                }
+                //Inside of bounds
+                else{
+                    colorMatrix[x][y] = new Color(0,0,0,0);
+                }
+            }
+        }
+
+        return colorMatrix;
     }
 
     //LAYERMANAGER PASSTHROUGH
@@ -75,7 +132,7 @@ public class Project {
      * @param position  Picture-space position of the new layer.
      * @return The ID of the created layer.
      */
-    public int addLayer(int width, int height, Vector2D position){
+    public int createLayer(int width, int height, Vector2D position){
         return layerManager.createLayer(width, height, position, 0, new Vector2D(1,1));
     }
     /**
@@ -87,7 +144,7 @@ public class Project {
      * @param scale     Scale of the new layer.
      * @return The ID of the created layer.
      */
-    public int addLayer(int width, int height, Vector2D position, double rotation, Vector2D scale){
+    public int createLayer(int width, int height, Vector2D position, double rotation, Vector2D scale){
         return layerManager.createLayer(width, height, position, rotation, scale);
     }
     /**
@@ -95,9 +152,16 @@ public class Project {
      * @return The ID of the added layer.
      */
     public int addLayer(ILayer layer){
-        //layerManager.createLayer(layer);
-        throw new UnsupportedOperationException();
+        int newLayerID = layerManager.addLayer(layer);
+        return newLayerID;
     }
+
+    /**
+     * Gets the layer object for the specified ID.
+     * @param id The ID of the layer to get.
+     * @return The layer object associated with the specified ID.
+     */
+    public ILayer getLayer(int id){ return layerManager.getLayer(id); }
 
     /**
      * Removes the specified layer.
@@ -110,5 +174,12 @@ public class Project {
      * Get the active layerID of this Project.
      * @return The active layerID
      */
-    public int activeLayer() { return layerManager.getActiveLayerId(); }
+    public int getActiveLayer() { return layerManager.getActiveLayerId(); }
+
+    /**
+     * Sets which layer is currently active. The ID specified must be the ID of
+     * a layer that is managed by this LayerManager. If the ID is not a valid
+     * layer, the active layer will not change.
+     */
+    void setActiveLayer(int id){ layerManager.setActiveLayer(id); }
 }
