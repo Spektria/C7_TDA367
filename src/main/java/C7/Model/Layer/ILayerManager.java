@@ -1,6 +1,8 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObservable;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -10,7 +12,7 @@ import C7.Model.Vector.Vector2D;
  * @author Love Gustafsson
  * @version 1.2
  */
-public interface ILayerManager {
+public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Creates a new layer, stores it in this layer manager, and returns its ID.

@@ -1,6 +1,8 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
+import C7.Model.IObserver;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 import java.awt.*;
@@ -11,16 +13,28 @@ import java.util.List;
  * @author Love Gustafsson
  * @version 1.1
  */
-public class LayerManager implements ILayerManager {
+public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-	private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
-	private int nextId;									// ID number to assign to the next created layer.
-	private int activeLayerId;							// The ID number of the currently active layer.
+	final private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
+	private int nextId;										// ID number to assign to the next created layer.
+	private int activeLayerId;								// The ID number of the currently active layer.
+	final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
 
 	public LayerManager() {
 		layers			= new ArrayList<>();
 		nextId			= 1;
 		activeLayerId	= 0;
+		observers		= new ArrayList<>();
+	}
+
+	@Override
+	public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+		observers.add(observer);
+	}
+
+	@Override
+	public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+		observers.remove(observer);
 	}
 
 	@Override
@@ -48,6 +62,9 @@ public class LayerManager implements ILayerManager {
 
 		// Add layer to manager
 		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
+
+		// Observe layer
+		layer.addObserver(this);
 
 		return nextId++;
 	}
@@ -122,5 +139,12 @@ public class LayerManager implements ILayerManager {
 		}
 
 		return color;
+	}
+
+	@Override
+	public void notify(Tuple2<Vector2D, Vector2D> data) {
+		for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers) {
+			observer.notify(data);
+		}
 	}
 }
