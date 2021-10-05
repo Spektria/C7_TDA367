@@ -50,7 +50,18 @@ public class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     @Override
     public void setGraphicsContext(GraphicsContext gc) {
+        Objects.requireNonNull(gc);
+
         this.gc = gc;
+    }
+
+    @Override
+    public void setLayer(ILayer layer) {
+        Objects.requireNonNull(layer);
+
+        this.layer.removeObserver(this);
+        this.layer = layer;
+        layer.addObserver(this);
     }
 
     @Override

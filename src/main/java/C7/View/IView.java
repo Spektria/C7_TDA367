@@ -4,6 +4,11 @@ import C7.Model.Layer.ILayer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * Represents the view portion in the mvc pattern. This view can render an image, given
+ * a layer and graphics context.
+ * @author Hugo Ekstrand
+ */
 public interface IView {
 
     /**
@@ -22,5 +27,16 @@ public interface IView {
 
     void setGraphicsContext(GraphicsContext gc);
 
+    /**
+     * Sets this views layer.
+     * //NOTE: temporary until LayerManager is done.
+     * @param layer the layer to be set to.
+     */
+    void setLayer(ILayer layer);
+
+    /**
+     * Sets this view's canvas.
+     * @param canvas the canvas to be set to
+     */
     void setCanvas(Canvas canvas);
 }
