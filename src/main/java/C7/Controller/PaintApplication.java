@@ -15,11 +15,7 @@ public class PaintApplication extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         GridPane root = new GridPane();
-        MainController controller = new MainController();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
-        fxmlLoader.setRoot(root);
-        fxmlLoader.setController(controller);
-        fxmlLoader.load();
+        MainController controller = new MainController(root);
         primaryStage.setTitle("PaintQlone");
         Scene scene = new Scene(root, 1280, 720+25);
         primaryStage.setScene(scene);

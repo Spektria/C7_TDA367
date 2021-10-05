@@ -16,7 +16,9 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
@@ -27,6 +29,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.canvas.*;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
@@ -38,7 +41,7 @@ import java.util.ResourceBundle;
 
 
 public class MainController implements Initializable {
-    Canvas canvas;
+    @FXML Canvas canvas;
     @FXML ScrollPane scrollPaneCanvas;
     GraphicsContext gc;
     @FXML SplitPane splitPaneToolsProps;
@@ -59,6 +62,14 @@ public class MainController implements Initializable {
 
     private Vector2D oldPos;
 
+    public MainController(GridPane root) throws Exception {
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
+        fxmlLoader.setRoot(root);
+        fxmlLoader.setController(this);
+        fxmlLoader.load();
+    }
+
     public void setCurrentTool(ITool tool) {
         this.currentTool = tool;
 
@@ -73,22 +84,8 @@ public class MainController implements Initializable {
         flowPaneProperties.getChildren().clear();
         for (IToolProperty property:
                 currentTool.getProperties()) {
-            AnchorPane widget = null;
-            switch (property.getType())
-            {
-                case COLOR -> widget = new ColorProperty(property);
 
-                case DOUBLE -> widget = new SliderProperty(property);
-
-                case BOOLEAN -> widget = new CheckboxProperty(property);
-
-                case INTEGER -> widget = new IntProperty(property);
-
-                default -> { System.out.println("Unrecognized property type: " + property.getType());
-                    continue; }
-            }
-
-            flowPaneProperties.getChildren().add(widget);
+            flowPaneProperties.getChildren().add(ToolPropertyViewFactory.createFrom(property));
         }
 
         //This might be a crime against nature, I'm in new territory here
@@ -108,8 +105,6 @@ public class MainController implements Initializable {
         layer = new Layer(600, 500, new C7.Model.Color(0, 0, 0, 0));
 
         setView(new View());
-
-        canvas = new Canvas();
 
         canvas.setWidth(layer.getWidth());
         canvas.setHeight(layer.getHeight());
@@ -134,76 +129,7 @@ public class MainController implements Initializable {
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
 
 
-        canvas.setOnDragOver(new EventHandler<DragEvent>() {
 
-            @Override
-            public void handle(DragEvent event) {
-                if (event.getGestureSource() != canvas
-                        && event.getDragboard().hasFiles()) {
-                    /* allow for both copying and moving, whatever user chooses */
-                    event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                }
-                event.consume();
-            }
-        });
-
-        canvas.setOnDragDropped(new EventHandler<DragEvent>() {
-
-            @Override
-            public void handle(DragEvent event) {
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasFiles()) {
-                    success = true;
-
-                    List<File> files = db.getFiles();
-
-                    for (int i = 0; i < files.size(); i++) {
-                        importFileAsLayer(files.get(i));
-                    }
-                }
-
-                event.setDropCompleted(success);
-
-                event.consume();
-            }
-        });
-
-        canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) {
-                    //Move stuff like this to the controller later
-                    Vector2D point = new Vector2D(event.getX(), event.getY());
-                    currentTool.apply(layer, oldPos, point);
-                    oldPos = point;
-                    updateCanvas();
-                }
-            }
-        });
-
-        canvas.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) {
-                    var point = new Vector2D(event.getX(), event.getY());
-                    currentTool.apply(layer, point, point);
-                    oldPos = point;
-
-                    updateCanvas();
-                }
-            }
-        });
-
-        canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getButton() == MouseButton.PRIMARY) {
-                    var point = new Vector2D(event.getX(), event.getY());
-                    currentTool.apply(layer, point, point);
-                }
-            }
-        });
 
     }
 
@@ -230,4 +156,61 @@ public class MainController implements Initializable {
         File file = fileChooser.showOpenDialog(scrollPaneCanvas.getScene().getWindow());
         if (file != null) importFileAsLayer(file);
     }
+
+    @FXML void onCanvasDragOver (DragEvent event) {
+            if (event.getGestureSource() != canvas
+                    && event.getDragboard().hasFiles()) {
+                /* allow for both copying and moving, whatever user chooses */
+                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
+            }
+            event.consume();
+        }
+
+
+    @FXML void onCanvasDragDropped (DragEvent event) {
+            Dragboard db = event.getDragboard();
+            boolean success = false;
+            if (db.hasFiles()) {
+                success = true;
+
+                List<File> files = db.getFiles();
+
+                for (int i = 0; i < files.size(); i++) {
+                    importFileAsLayer(files.get(i));
+                }
+            }
+
+            event.setDropCompleted(success);
+
+            event.consume();
+        }
+
+
+    @FXML void onCanvasMouseDragged (MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                Vector2D point = new Vector2D(event.getX(), event.getY());
+                currentTool.apply(layer, oldPos, point);
+                oldPos = point;
+                updateCanvas();
+            }
+        }
+
+
+    @FXML void onCanvasMousePressed (MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                var point = new Vector2D(event.getX(), event.getY());
+                currentTool.apply(layer, point, point);
+                oldPos = point;
+
+                updateCanvas();
+            }
+        }
+
+
+@FXML void onCanvasMouseReleased (MouseEvent event) {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                var point = new Vector2D(event.getX(), event.getY());
+                currentTool.apply(layer, point, point);
+            }
+        }
 }
