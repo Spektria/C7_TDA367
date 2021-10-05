@@ -142,6 +142,35 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	}
 
 	@Override
+	public void setLayerIndex(int id, int index) {
+		// Find the index with the specified id
+		for (Map.Entry<Integer, ILayer> entry : layers) {
+			if (entry.getKey() == id) {
+				int currentIndex = layers.indexOf(entry);
+
+				// If we're already in the right index, do nothing
+				if (currentIndex == index)
+					return;
+
+				// Calculate new index
+				int newIndex = index;
+				if (newIndex < 0)
+					newIndex = 0;
+				if (newIndex >= layers.size())
+					newIndex = layers.size() - 1;
+
+				// Remove from layers
+				layers.remove(entry);
+
+				// Add at index
+				layers.add(newIndex, entry);
+
+				return;
+			}
+		}
+	}
+
+	@Override
 	public void notify(Tuple2<Vector2D, Vector2D> data) {
 		for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers) {
 			observer.notify(data);
