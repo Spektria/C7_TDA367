@@ -33,19 +33,18 @@ import java.util.Objects;
 
 
 public class MainController {
-    @FXML Canvas canvas;
-    @FXML ScrollPane scrollPaneCanvas;
-    GraphicsContext gc;
-    @FXML SplitPane splitPaneToolsProps;
-    @FXML AnchorPane contentPaneToolsProps;
-    @FXML AnchorPane contentPaneTools;
-    @FXML ScrollPane scrollPaneTools;
-    @FXML FlowPane flowPaneTools;
-    @FXML AnchorPane contentPaneProperties;
-    @FXML ScrollPane scrollPaneProperties;
-    @FXML AnchorPane layersArea;
+    private @FXML Canvas canvas;
+    private @FXML ScrollPane scrollPaneCanvas;
+    private @FXML SplitPane splitPaneToolsProps;
+    private @FXML AnchorPane contentPaneToolsProps;
+    private @FXML AnchorPane contentPaneTools;
+    private @FXML ScrollPane scrollPaneTools;
+    private @FXML FlowPane flowPaneTools;
+    private @FXML AnchorPane contentPaneProperties;
+    private @FXML ScrollPane scrollPaneProperties;
+    private @FXML AnchorPane layersArea;
 
-    PropertiesController propertiesController;
+    private PropertiesController propertiesController;
 
     private IView view;
 
@@ -101,18 +100,24 @@ public class MainController {
         propertiesController.update(tool);
     }
 
+    private void setLayer(ILayer layer){
+        this.layer = layer;
+        canvas.setWidth(layer.getWidth());
+        canvas.setHeight(layer.getHeight());
+        view.setLayer(layer);
+    }
+
 
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
-            layer = importedLayer;
-            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
+            setLayer(importedLayer);
             view.render();
         }
     }
 
     @FXML
-    void onImport (Event event) {
+    private void onImport (Event event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose image to import");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")));
@@ -122,59 +127,62 @@ public class MainController {
         if (file != null) importFileAsLayer(file);
     }
 
-    @FXML void onCanvasDragOver (DragEvent event) {
-            if (event.getGestureSource() != canvas
-                    && event.getDragboard().hasFiles()) {
-                /* allow for both copying and moving, whatever user chooses */
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
+    @FXML
+    private void onCanvasDragOver (DragEvent event) {
+        if (event.getGestureSource() != canvas
+                && event.getDragboard().hasFiles()) {
+            /* allow for both copying and moving, whatever user chooses */
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         }
+        event.consume();
+    }
 
 
-    @FXML void onCanvasDragDropped (DragEvent event) {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                success = true;
+    @FXML
+    private void onCanvasDragDropped (DragEvent event) {
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+            success = true;
 
-                List<File> files = db.getFiles();
+            List<File> files = db.getFiles();
 
-                for (int i = 0; i < files.size(); i++) {
-                    importFileAsLayer(files.get(i));
-                }
-            }
-
-            event.setDropCompleted(success);
-
-            event.consume();
-        }
-
-
-    @FXML void onCanvasMouseDragged (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                Vector2D point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, oldPos, point);
-                oldPos = point;
-                view.render();
+            for (int i = 0; i < files.size(); i++) {
+                importFileAsLayer(files.get(i));
             }
         }
 
+        event.setDropCompleted(success);
 
-    @FXML void onCanvasMousePressed (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                var point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, point, point);
-                oldPos = point;
-                view.render();
-            }
+        event.consume();
+    }
+
+
+    @FXML
+    private void onCanvasMouseDragged (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Vector2D point = new Vector2D(event.getX(), event.getY());
+            currentTool.apply(layer, oldPos, point);
+            oldPos = point;
         }
+    }
 
 
-@FXML void onCanvasMouseReleased (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                var point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, point, point);
-            }
+    @FXML
+    private void onCanvasMousePressed (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            var point = new Vector2D(event.getX(), event.getY());
+            currentTool.apply(layer, point, point);
+            oldPos = point;
         }
+    }
+
+
+    @FXML
+    private void onCanvasMouseReleased (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            var point = new Vector2D(event.getX(), event.getY());
+            currentTool.apply(layer, point, point);
+        }
+    }
 }
