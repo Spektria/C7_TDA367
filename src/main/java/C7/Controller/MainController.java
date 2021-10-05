@@ -71,7 +71,7 @@ public class MainController {
         canvas.setHeight(layer.getHeight());
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
-        view.setCanvas(canvas);
+        view.setBounds(canvas.widthProperty(), canvas.heightProperty());
 
         scrollPaneCanvas.setContent(canvas);
 

@@ -4,6 +4,7 @@ import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -20,7 +21,8 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     private ILayer layer;
     private GraphicsContext gc;
     private Tuple2<Vector2D, Vector2D> lastUpdateRect;
-    private Canvas canvas;
+    private DoubleProperty width;
+    private DoubleProperty height;
 
     public View(ILayer layer){
         Objects.requireNonNull(layer);
@@ -31,7 +33,7 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     @Override
     public void render() {
-        render(0, 0, (int)canvas.getWidth(), (int)canvas.getHeight());
+        render(0, 0, (int)width.get(), (int)height.get());
     }
 
     private Color toJFXColor(C7.Model.Color color){
@@ -75,10 +77,11 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     }
 
     @Override
-    public void setCanvas(Canvas canvas) {
-        Objects.requireNonNull(canvas);
-
-        this.canvas = canvas;
+    public void setBounds(DoubleProperty width, DoubleProperty height){
+        Objects.requireNonNull(width);
+        Objects.requireNonNull(height);
+        this.width = width;
+        this.height = height;
     }
 
     @Override

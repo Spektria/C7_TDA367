@@ -1,6 +1,7 @@
 package C7.View;
 
 import C7.Model.Layer.ILayer;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -35,8 +36,9 @@ public interface IView {
     void setLayer(ILayer layer);
 
     /**
-     * Sets this view's canvas.
-     * @param canvas the canvas to be set to
+     * Sets the bounds of this view. That is, how wide and tall the image drawn by this view should be.
+     * @param height the height property of this view.
+     * @param width the width property of this view.
      */
-    void setCanvas(Canvas canvas);
+    void setBounds(DoubleProperty width, DoubleProperty height);
 }
