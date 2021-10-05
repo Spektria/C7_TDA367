@@ -100,11 +100,18 @@ public class MainController {
         propertiesController.update(tool);
     }
 
+    private void setLayer(ILayer layer){
+        this.layer = layer;
+        canvas.setWidth(layer.getWidth());
+        canvas.setHeight(layer.getHeight());
+        view.setLayer(layer);
+    }
+
 
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
-            view.setLayer(importedLayer);
+            setLayer(importedLayer);
             view.render();
         }
     }
