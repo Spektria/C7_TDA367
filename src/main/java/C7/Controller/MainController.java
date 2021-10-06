@@ -3,6 +3,7 @@ package C7.Controller;
 import C7.IO.LayerIO;
 import C7.Model.Color;
 import C7.Model.Layer.ILayer;
+import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
@@ -10,9 +11,9 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
@@ -23,8 +24,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.canvas.*;
-import javafx.scene.layout.GridPane;
 import javafx.stage.FileChooser;
 
 
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class MainController {
+class MainController implements IMainController {
     private @FXML Canvas canvas;
     private @FXML ScrollPane scrollPaneCanvas;
     private @FXML SplitPane splitPaneToolsProps;
@@ -52,15 +51,15 @@ public class MainController {
 
     private IView view;
 
-    private ILayer layer; //Only one for now
+    private ILayerManager manager; //Only one for now
 
     private ITool currentTool;
 
     private Vector2D oldPos;
 
-    public MainController(IView view, ILayer layer, AnchorPane root) throws Exception {
+    public MainController(IView view, ILayerManager manager, AnchorPane root) throws Exception {
         Objects.requireNonNull(view);
-        Objects.requireNonNull(layer);
+        Objects.requireNonNull(manager);
         Objects.requireNonNull(root);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
@@ -68,8 +67,11 @@ public class MainController {
         fxmlLoader.setController(this);
         fxmlLoader.load();
 
+        this.manager = manager;
         this.view = view;
-        setLayer(layer);
+
+        scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
+        scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
         view.setBounds(canvas.widthProperty(), canvas.heightProperty());
@@ -96,18 +98,11 @@ public class MainController {
         propertiesController.update(tool);
     }
 
-    private void setLayer(ILayer layer){
-        this.layer = layer;
-        canvas.setWidth(Math.max(layer.getWidth(), scrollPaneCanvas.getWidth()));
-        canvas.setHeight(Math.max(layer.getHeight(), scrollPaneCanvas.getHeight()));
-        view.setLayer(layer);
-    }
-
 
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
-            setLayer(importedLayer);
+            manager.setActiveLayer(manager.addLayer(importedLayer));
             view.render();
         }
     }
@@ -158,7 +153,7 @@ public class MainController {
     private void onCanvasMouseDragged (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
-            currentTool.apply(layer, oldPos, point);
+            currentTool.apply(manager.getLayer(manager.getActiveLayerId()), oldPos, point);
             oldPos = point;
         }
     }
@@ -168,7 +163,7 @@ public class MainController {
     private void onCanvasMousePressed (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             var point = new Vector2D(event.getX(), event.getY());
-            currentTool.apply(layer, point, point);
+            currentTool.apply(manager.getLayer(manager.getActiveLayerId()), point, point);
             oldPos = point;
         }
     }
@@ -178,7 +173,7 @@ public class MainController {
     private void onCanvasMouseReleased (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             var point = new Vector2D(event.getX(), event.getY());
-            currentTool.apply(layer, point, point);
+            currentTool.apply(manager.getLayer(manager.getActiveLayerId()), point, point);
         }
     }
 }
