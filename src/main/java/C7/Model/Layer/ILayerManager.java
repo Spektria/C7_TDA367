@@ -1,5 +1,8 @@
 package C7.Model.Layer;
 
+import C7.Model.Color;
+import C7.Model.IObservable;
+import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 
 /**
@@ -7,9 +10,9 @@ import C7.Model.Vector.Vector2D;
  * Layer managers are responsible for creating, destroying, and providing access
  * to layers inside of an image project.
  * @author Love Gustafsson
- * @version 1.1
+ * @version 1.2
  */
-public interface ILayerManager {
+public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Creates a new layer, stores it in this layer manager, and returns its ID.
@@ -63,4 +66,24 @@ public interface ILayerManager {
      * @return Array containing layer IDs.
      */
     int[] getAllLayerIds();
+
+    /**
+     * Gets the color of the pixel at the specified position by blending all of
+     * this layer manager's layers in order.
+     * @param x X position of pixel in project-space.
+     * @param y Y position of pixel in project-space.
+     * @return The color of the pixel at the specified position.
+     */
+    Color getPixel(int x, int y);
+
+    /**
+     * Sets the index position of the specified layer. If the index is greater
+     * or equal to the total number of layers, the layer is placed in the last
+     * position. If the index is less than or equal to 0, the layer is placed
+     * in the first position. The layer that was on the index originally will
+     * be moved to the next index.
+     * @param id The id of the layer to set the position of.
+     * @param index The new index of the layer.
+     */
+    void setLayerIndex(int id, int index);
 }
