@@ -2,9 +2,11 @@ package C7.View;
 
 import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
+import C7.Model.Layer.ILayerManager;
 import C7.Model.Util.Tuple2;
 import C7.Model.Vector.Vector2D;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -13,22 +15,35 @@ import javafx.scene.paint.Color;
 import java.util.Objects;
 
 /**
- * An {@link IView} implementation.
+ * An {@link IView} implementation. This view renders data from a LayerManager model object onto a graphics context.
+ * The graphics context is to be set before usage of this class via the {@link #setGraphicsContext(GraphicsContext)}
+ * otherwise this object will throw an exception. A width and heigth property needs to be set too before usage via
+ * the {@link #setBounds(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)} method.
  * @author Hugo Ekstrand
  */
 class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-    private ILayer layer;
-    private GraphicsContext gc;
-    private Tuple2<Vector2D, Vector2D> lastUpdateRect;
-    private DoubleProperty width;
-    private DoubleProperty height;
+    private final ILayerManager manager;    // The model this view reads from
+    private GraphicsContext gc;             // The graphics context this view draws onto
 
-    public View(ILayer layer){
-        Objects.requireNonNull(layer);
-        this.layer = layer;
+    private ReadOnlyDoubleProperty width;   // The width and height property of this view.
+    private ReadOnlyDoubleProperty height;  // How large of a rectangle should this view draw?
+                                            // This is given by these two properties.
 
-        layer.addObserver(this);
+    private Tuple2<Vector2D, Vector2D> lastUpdateRect;  // The last updated rectangle this view did.
+                                                        // This is used so that the view can clean
+                                                        // the last drawn spot so that there is no leftover pixels
+                                                        // in the form of "ghosts".
+
+    /**
+     * Creates an instance of this type.
+     * @param manager the LayerManager this object will read from.
+     */
+    View(ILayerManager manager){
+        Objects.requireNonNull(manager);
+        this.manager = manager;
+
+        manager.addObserver(this);
     }
 
     @Override
@@ -47,18 +62,13 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     public void render(int x0, int y0, int width, int height) {
         Objects.requireNonNull(gc);
 
+        // Simply goes inside the given bounds and
+        // draws onto the graphics context pixel by pixel.
         PixelWriter pw = gc.getPixelWriter();
         for (int y = y0; y < height; y++) {
             for (int x = x0; x < width; x++) {
-                Color color = Color.TRANSPARENT;
-
-                // If the point is on the layer, take the layers color, else put transparent.
-                if(layer.isPointOnLayer(new Vector2D(x, y))){
-                    color = toJFXColor(layer.getGlobalPixel(x, y));
-                }
-
-                //Update to take into account canvas transform
-                pw.setColor(x, y, color);
+                // Note, we need to change the color type from C7 color to JavaFX color.
+                pw.setColor(x, y, toJFXColor(manager.getPixel(x, y)));
             }
         }
     }
@@ -66,21 +76,11 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     @Override
     public void setGraphicsContext(GraphicsContext gc) {
         Objects.requireNonNull(gc);
-
         this.gc = gc;
     }
 
     @Override
-    public void setLayer(ILayer layer) {
-        Objects.requireNonNull(layer);
-
-        this.layer.removeObserver(this);
-        this.layer = layer;
-        layer.addObserver(this);
-    }
-
-    @Override
-    public void setBounds(DoubleProperty width, DoubleProperty height){
+    public void setBounds(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height){
         Objects.requireNonNull(width);
         Objects.requireNonNull(height);
         this.width = width;

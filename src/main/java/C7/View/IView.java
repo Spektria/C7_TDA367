@@ -1,7 +1,9 @@
 package C7.View;
 
 import C7.Model.Layer.ILayer;
+import C7.Model.Layer.ILayerManager;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -26,19 +28,17 @@ public interface IView {
      */
     void render(int x, int y, int width, int height);
 
-    void setGraphicsContext(GraphicsContext gc);
-
     /**
-     * Sets this views layer.
-     * //NOTE: temporary until LayerManager is done.
-     * @param layer the layer to be set to.
+     * Sets this views to a given graphics context.
+     * This is the context which this view will draw upon.
+     * @param gc the given graphics context.
      */
-    void setLayer(ILayer layer);
+    void setGraphicsContext(GraphicsContext gc);
 
     /**
      * Sets the bounds of this view. That is, how wide and tall the image drawn by this view should be.
      * @param height the height property of this view.
      * @param width the width property of this view.
      */
-    void setBounds(DoubleProperty width, DoubleProperty height);
+    void setBounds(ReadOnlyDoubleProperty width, ReadOnlyDoubleProperty height);
 }
