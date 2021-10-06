@@ -3,6 +3,10 @@ package C7.Model.Tools.ToolProperties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A property representing an integer.
+ * @author Hugo Ekstrand
+ */
 class IntegerToolProperty extends NumericalToolProperty<Integer> {
 
 

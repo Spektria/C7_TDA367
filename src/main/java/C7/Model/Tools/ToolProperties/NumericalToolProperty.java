@@ -3,6 +3,11 @@ package C7.Model.Tools.ToolProperties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A numerical property. This property has bounds, i.e. a max and min value.
+ * @param <T> the number type this property represents
+ * @author Hugo Ekstrand
+ */
 abstract class NumericalToolProperty<T extends Number & Comparable<T>> extends BaseToolProperty<T> {
 
     private final T min;

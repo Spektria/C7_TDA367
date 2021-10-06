@@ -5,6 +5,10 @@ import C7.Model.Color;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A property representing a {@link Color}.
+ * @author Hugo Ekstrand
+ */
 class ColorToolProperty extends BaseToolProperty<Color> {
     ColorToolProperty(String name, String description, Consumer<Color> setter, Supplier<Color> getter) {
         super(name, description, setter, getter);
