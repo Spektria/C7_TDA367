@@ -1,6 +1,5 @@
 package C7.Model.Tools.Pattern;
 
-import C7.Model.Tools.Util.PixelGraphics;
 import C7.Model.Vector.Vector2D;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ class LinePattern implements IPattern {
         final double dy = Math.sin(rotation) * yRadius;
 
         ArrayList<Vector2D> pixels = new ArrayList<>();
-        PixelGraphics.pixelLine((int)Math.floor(dx), (int)Math.floor(dy), (int)-Math.ceil(dx), (int)-Math.ceil(dy), (ix, iy)
+        PixelShapeUtil.pixelLine((int)Math.floor(dx), (int)Math.floor(dy), (int)-Math.ceil(dx), (int)-Math.ceil(dy), (ix, iy)
                 -> pixels.add(new Vector2D(ix, iy)));
 
         return pixels;
