@@ -1,7 +1,9 @@
 package C7.View;
 
+import C7.C7Paint;
 import C7.Model.IObserver;
 import C7.Model.Layer.ILayerManager;
+import C7.Model.Project;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -20,7 +22,7 @@ import java.util.Objects;
  */
 class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-    private final ILayerManager manager;    // The model this view reads from
+    private final Project project;          // The model this view reads from
     private GraphicsContext gc;             // The graphics context this view draws onto
 
     private ReadOnlyDoubleProperty width;   // The width and height property of this view.
@@ -34,13 +36,13 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Creates an instance of this type.
-     * @param manager the LayerManager this object will read from.
+     * @param project the Project this object will read from.
      */
-    View(ILayerManager manager){
-        Objects.requireNonNull(manager);
-        this.manager = manager;
+    View(Project project){
+        Objects.requireNonNull(project);
+        this.project = project;
 
-        manager.addObserver(this);
+        project.addObserver(this);
     }
 
     @Override
@@ -59,13 +61,16 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     public void render(int x0, int y0, int width, int height) {
         Objects.requireNonNull(gc);
 
+        //Get color data from Project
+        C7.Model.Color[][] colorMatrix = project.renderProject(x0,y0,width,height);
+
         // Simply goes inside the given bounds and
         // draws onto the graphics context pixel by pixel.
         PixelWriter pw = gc.getPixelWriter();
         for (int y = y0; y < height; y++) {
             for (int x = x0; x < width; x++) {
                 // Note, we need to change the color type from C7 color to JavaFX color.
-                pw.setColor(x, y, toJFXColor(manager.getPixel(x, y)));
+                pw.setColor(x, y, toJFXColor(colorMatrix[x - x0][y - y0]));
             }
         }
     }

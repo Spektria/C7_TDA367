@@ -2,8 +2,7 @@ package C7;
 
 import C7.Controller.ControllerFactory;
 import C7.Controller.IMainController;
-import C7.Model.Layer.ILayerManager;
-import C7.Model.Layer.LayerManager;
+import C7.Model.Project;
 import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
@@ -18,18 +17,14 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Create model
-        ILayerManager manager = new LayerManager();
-        manager.setActiveLayer(manager.createLayer(
-                600, 600,
-                new Vector2D(1,1),
-                0,
-                new Vector2D(1,1))
-        );
+        Project project = new Project(600, 600);
+        int firstLayerID = project.createLayer(600, 600, new Vector2D(1,1), 0, new Vector2D(1,1));
+        project.setActiveLayer(firstLayerID);
 
         // Create view and controller
-        IView view = ViewFactory.createView(manager);
+        IView view = ViewFactory.createView(project);
         AnchorPane root = new AnchorPane();
-        IMainController controller = ControllerFactory.createController(view, manager, root);
+        IMainController controller = ControllerFactory.createController(view, project, root);
 
         // Setup window
         primaryStage.setTitle("PaintQlone");

@@ -1,6 +1,6 @@
 package C7.Controller;
 
-import C7.Model.Layer.ILayerManager;
+import C7.Model.Project;
 import C7.View.IView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class ControllerFactory {
 
-    public static IMainController createController(IView view, ILayerManager manager, AnchorPane root) throws Exception {
-        return new MainController(view, manager, root);
+    public static IMainController createController(IView view, Project project, AnchorPane root) throws Exception {
+        return new MainController(view, project, root);
     }
 }

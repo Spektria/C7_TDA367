@@ -1,6 +1,7 @@
 package C7.View;
 
 import C7.Model.Layer.ILayerManager;
+import C7.Model.Project;
 
 /**
  * Factory for the creation of instances of {@link IView}.
@@ -13,7 +14,7 @@ public final class ViewFactory {
      *                It is this object which will be rendered by the view.
      * @return the view instance
      */
-    public static IView createView(ILayerManager manager){
-        return new View(manager);
+    public static IView createView(Project project){
+        return new View(project);
     }
 }
