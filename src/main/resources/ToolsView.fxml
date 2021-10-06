@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<fx:root fx:id="scrollPaneTools" fitToWidth="true" hbarPolicy="NEVER" hmax="0.0" prefHeight="320.0" prefWidth="360.0" type="ScrollPane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+     <content>
+        <FlowPane fx:id="flowPaneTools" prefHeight="53.0" prefWidth="360.0" />
+     </content>
+</fx:root>

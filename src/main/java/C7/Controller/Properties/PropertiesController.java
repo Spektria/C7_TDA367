@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
-public class PropertiesController extends AnchorPane {
+public class PropertiesController extends ScrollPane {
     @FXML
     FlowPane flowPaneProperties;
 
@@ -32,6 +32,10 @@ public class PropertiesController extends AnchorPane {
         }
 
         parent.getChildren().add(this);
+
+
+        AnchorPane.setTopAnchor(this, 0d);
+        AnchorPane.setBottomAnchor(this, 0d);
     }
 
     public void update(ITool tool) {

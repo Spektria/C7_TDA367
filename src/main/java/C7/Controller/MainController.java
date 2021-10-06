@@ -1,6 +1,7 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
+import C7.Model.Color;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
@@ -41,10 +42,11 @@ public class MainController {
     private @FXML AnchorPane contentPaneToolsProps;
     private @FXML AnchorPane contentPaneTools;
     private @FXML ScrollPane scrollPaneTools;
-    private @FXML FlowPane flowPaneTools;
     private @FXML AnchorPane contentPaneProperties;
     private @FXML ScrollPane scrollPaneProperties;
     private @FXML AnchorPane layersArea;
+
+    private ToolsController toolsController;
 
     private PropertiesController propertiesController;
 
@@ -69,7 +71,6 @@ public class MainController {
         this.view = view;
         setLayer(layer);
 
-
         view.setGraphicsContext(canvas.getGraphicsContext2D());
         view.setBounds(canvas.widthProperty(), canvas.heightProperty());
 
@@ -77,42 +78,16 @@ public class MainController {
 
         view.render();
 
+        propertiesController = new PropertiesController(contentPaneProperties);
+
+        toolsController = new ToolsController(contentPaneTools, this);
+
         splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
-        scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
-        scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
+        //scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
+        //scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
 
         layersArea.getChildren().add(new LayersController());
 
-        propertiesController = new PropertiesController(contentPaneProperties);
-
-        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
-
-        //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
-        flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
-        flowPaneTools.getChildren().add(new ToolButton(new ITool() {
-            @Override
-            public Collection<IToolProperty> getProperties() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
-                layer.setPosition(layer.getPosition().add(v1.sub(v0)));
-                layer.update();
-            }
-
-            @Override
-            public boolean isContinuous() {
-                return false;
-            }
-
-            @Override
-            public void setToDefault() {
-
-            }
-        }, "Move", this));
     }
 
     public void setCurrentTool(ITool tool) {
