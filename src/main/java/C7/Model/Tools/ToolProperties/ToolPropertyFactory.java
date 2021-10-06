@@ -13,6 +13,7 @@ public class ToolPropertyFactory {
 
     /**
      * Creates a property for a Double.
+     * Note that the getter must lead to a not null object.
      * @param name the name of the property
      * @param description the description of what the property does
      * @param setter the setter method for the property
@@ -27,6 +28,7 @@ public class ToolPropertyFactory {
 
     /**
      * Creates a property for an Integer.
+     * Note that the getter must lead to a not null object.
      * @param name the name of the property
      * @param description the description of what the property does
      * @param setter the setter method for the property
@@ -41,6 +43,7 @@ public class ToolPropertyFactory {
 
     /**
      * Creates a property for a Boolean.
+     * Note that the getter must lead to a not null object.
      * @param name the name of the property
      * @param description the description of what the property does
      * @param setter the setter method for the property
@@ -53,6 +56,7 @@ public class ToolPropertyFactory {
 
     /**
      * Creates a property for a Color.
+     * Note that the getter must lead to a not null object.
      * @param name the name of the property
      * @param description the description of what the property does
      * @param setter the setter method for the property
