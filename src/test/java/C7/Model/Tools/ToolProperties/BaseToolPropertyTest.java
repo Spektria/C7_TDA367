@@ -74,14 +74,14 @@ public class BaseToolPropertyTest {
     public void getNameTest(){
         var prop = ToolPropertyFactory.createBooleanProperty("bool","bool",(b) -> bool = b, () -> bool);
 
-        Assertions.assertEquals("bool", prop.name());
+        Assertions.assertEquals("bool", prop.getName());
     }
 
     @Test
     public void getDescriptionTest(){
         var prop = ToolPropertyFactory.createBooleanProperty("bool","bool Desc",(b) -> bool = b, () -> bool);
 
-        Assertions.assertEquals("bool Desc", prop.description());
+        Assertions.assertEquals("bool Desc", prop.getDescription());
     }
 
     @Test

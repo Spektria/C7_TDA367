@@ -27,7 +27,7 @@ class IntProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.name());
+        label.setText(prop.getName());
 
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(prop.lowerBound().intValue(), prop.upperBound().intValue(), prop.getInteger()));
 

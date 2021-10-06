@@ -25,7 +25,7 @@ class CheckboxProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        checkBox.setText(prop.name());
+        checkBox.setText(prop.getName());
 
         checkBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override

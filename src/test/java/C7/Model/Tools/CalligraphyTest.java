@@ -44,7 +44,7 @@ public class CalligraphyTest {
     public void Sloped45degCalligraphyStrokeTest(){
         TestISurfaceImpl testISurface = new TestISurfaceImpl(8,8, new Vector2D(1,1));
         ITool calligraphy = ToolFactory.CreateCalligraphyBrush(8, new Color(1,1,1,1));
-        calligraphy.getProperties().stream().filter(prop -> prop.name().equals("Rotation")).findFirst().get().setDouble(Math.toDegrees(Math.PI/4d));
+        calligraphy.getProperties().stream().filter(prop -> prop.getName().equals("Rotation")).findFirst().get().setDouble(Math.toDegrees(Math.PI/4d));
         calligraphy.apply(testISurface, new Vector2D(4,4), new Vector2D(4,4));
 
         System.out.println("Surface: \n" + testISurface.getContentAs2DString());

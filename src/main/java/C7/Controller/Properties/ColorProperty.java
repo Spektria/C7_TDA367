@@ -29,7 +29,7 @@ class ColorProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.name());
+        label.setText(prop.getName());
 
         C7.Model.Color color = prop.getColor();
         colorPicker.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));

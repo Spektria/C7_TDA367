@@ -27,7 +27,7 @@ class SliderProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.name());
+        label.setText(prop.getName());
 
         double value = prop.getDouble();
         slider.setValue(value);

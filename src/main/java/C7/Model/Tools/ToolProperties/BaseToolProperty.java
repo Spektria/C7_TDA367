@@ -6,10 +6,18 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A base abstract implementation a {@link IToolProperty}.
+ * @param <T> the type of the property
+ * @author Hugo Ekstrand
+ */
 abstract class BaseToolProperty<T> implements IToolProperty {
 
-    private final String name;
-    private final String description;
+    private final String name;          // This property's name
+    private final String description;   // Description of what this property is
+
+    // The getter and setter used for the property on its owner.
+    // e.g. it may be a direct reference to a field or set method.
     protected final Consumer<T> setter;
     protected final Supplier<T> getter;
 
@@ -27,7 +35,9 @@ abstract class BaseToolProperty<T> implements IToolProperty {
         this.description = description;
         this.setter = setter;
         this.getter = getter;
-        this.defaultValue = getter.get();
+
+        this.defaultValue = getter.get();   // The default value is the value found when this object is created.
+        Objects.requireNonNull(this.defaultValue);
     }
 
     @Override
@@ -36,12 +46,12 @@ abstract class BaseToolProperty<T> implements IToolProperty {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return this.name;
     }
 
     @Override
-    public String description() {
+    public String getDescription() {
         return this.description;
     }
 
