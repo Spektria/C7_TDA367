@@ -16,13 +16,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ToolsController extends ScrollPane {
+class ToolsController extends ScrollPane {
 
     private @FXML FlowPane flowPaneTools;
 
-    private MainController controller;
+    private IMainController controller;
 
-    public ToolsController(AnchorPane parent, MainController controller) {
+    public ToolsController(AnchorPane parent, IMainController controller) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/ToolsView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
