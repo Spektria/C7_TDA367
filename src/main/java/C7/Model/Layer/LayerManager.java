@@ -48,6 +48,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		// Add layer to manager
 		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
 
+		layer.addObserver(this);
+
 		return nextId++;
 	}
 

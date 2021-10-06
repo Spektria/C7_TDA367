@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class IntProperty extends AnchorPane {
+class IntProperty extends AnchorPane {
     @FXML
     Spinner spinner;
     @FXML

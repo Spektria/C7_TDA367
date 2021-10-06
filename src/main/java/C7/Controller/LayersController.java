@@ -16,13 +16,13 @@ import javafx.util.Callback;
 
 import java.io.IOException;
 
-public class LayersView extends AnchorPane {
+public class LayersController extends AnchorPane {
     @FXML
     TableView<ILayer> tableView;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
-    public LayersView() {
+    public LayersController() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/LayersView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
