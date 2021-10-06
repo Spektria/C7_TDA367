@@ -2,8 +2,8 @@ package C7.Model.Layer;
 
 import C7.Model.Color;
 import C7.Model.IObservable;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 
 /**
  * ILayer is an interface for layers that are part of a picture. Layers hold

@@ -1,6 +1,7 @@
 package C7.Model.Vector;
 
 
+import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

@@ -4,7 +4,7 @@ import C7.Controller.ControllerFactory;
 import C7.Controller.IMainController;
 import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.LayerManager;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
 import javafx.application.Application;

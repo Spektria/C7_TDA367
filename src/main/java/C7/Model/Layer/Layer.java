@@ -2,11 +2,10 @@ package C7.Model.Layer;
 
 import C7.Model.Color;
 import C7.Model.IObserver;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 /**
  * Represents a basic image layer.

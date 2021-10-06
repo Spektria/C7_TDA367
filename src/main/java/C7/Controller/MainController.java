@@ -4,7 +4,7 @@ import C7.IO.LayerIO;
 import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
 import javafx.event.Event;

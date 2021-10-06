@@ -1,6 +1,6 @@
 package C7.Model.Tools.Pattern;
 
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.ArrayList;
 import java.util.Collection;

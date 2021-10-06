@@ -4,7 +4,7 @@ import C7.Model.Color;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.*;
 

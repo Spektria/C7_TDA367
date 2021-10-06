@@ -6,7 +6,7 @@ import C7.Model.Tools.Pattern.IPattern;
 import C7.Model.Tools.StrokeInterpolation.IStrokeInterpolator;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -82,8 +82,9 @@ class Brush implements ITool {
                         points.stream()
                                 .parallel()
                                 .map(v -> v.add(point))
-                                // Then draw the translated points onto the layer
+                                // Get the points that are on the layer.
                                 .filter(layer::isPointOnLayer)
+                                // Draw the points which are on the layer.
                                 .forEach(v -> layer.setGlobalPixel((int)v.getX(), (int)v.getY(), color)));
         layer.update();
     }

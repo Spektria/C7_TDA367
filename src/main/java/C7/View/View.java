@@ -1,13 +1,10 @@
 package C7.View;
 
 import C7.Model.IObserver;
-import C7.Model.Layer.ILayer;
 import C7.Model.Layer.ILayerManager;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
-import javafx.beans.property.DoubleProperty;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.paint.Color;

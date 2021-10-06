@@ -1,6 +1,6 @@
 package C7.Model.Tools.StrokeInterpolation;
 
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.List;
 
