@@ -1,18 +1,12 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
-import C7.Model.Color;
-import C7.Model.Layer.ILayer;
 import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
-import C7.Model.Tools.ToolFactory;
-import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Vector.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,13 +17,10 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -85,8 +76,6 @@ class MainController implements IMainController {
         toolsController = new ToolsController(contentPaneTools, this);
 
         splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
-        //scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
-        //scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
 
         layersArea.getChildren().add(new LayersController());
 
