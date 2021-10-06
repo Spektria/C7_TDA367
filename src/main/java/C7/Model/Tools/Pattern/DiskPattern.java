@@ -5,6 +5,10 @@ import C7.Model.Vector.Vector2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Pattern which represents a disk, or alternatively a filled ellipse.
+ * @author Hugo Ekstrand
+ */
 class DiskPattern implements IPattern {
 
     @Override

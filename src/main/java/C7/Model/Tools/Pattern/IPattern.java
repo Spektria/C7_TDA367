@@ -20,7 +20,7 @@ public interface IPattern {
      *             the largest distance between two points in the shape.
      * @param scale the patterns scale.
      * @param rotation the rotation of the pattern in radians
-     * @return the list of points for this pattern
+     * @return the list of points for this pattern centered at origo (0,0).
      */
     Collection<Vector2D> getPoints(int size, Vector2D scale, double rotation);
 

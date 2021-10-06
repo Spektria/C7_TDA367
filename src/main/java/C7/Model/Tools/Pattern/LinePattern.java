@@ -5,6 +5,10 @@ import C7.Model.Vector.Vector2D;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * A Pattern which represents a straight line.
+ * @author Hugo Ekstrand
+ */
 class LinePattern implements IPattern {
 
     @Override
