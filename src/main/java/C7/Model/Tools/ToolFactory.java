@@ -43,4 +43,16 @@ public class ToolFactory {
     public static ITool CreateFillBucket(float threshold, Color fill){
         return new FillBucket(threshold, fill);
     }
+
+    public static ITool createTranslationTool(){
+        return new TranslationTool();
+    }
+
+    public static ITool createRotationTool(){
+        return new RotationTool();
+    }
+
+    public static ITool createScalingTool(){
+        return new ScalingTool();
+    }
 }
