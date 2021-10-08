@@ -85,6 +85,29 @@ public final class Vector2D {
     }
 
     /**
+     * Performs the dot product of this and a given vector.
+     * @param other the other, given vector
+     * @return the dot product of the two vectors
+     */
+    public double dot(Vector2D other){
+        return this.x * other.x + this.y * other.y;
+    }
+
+    /**
+     * Calculates the angle between this vector and another given vector.
+     * Note that the angle is in radians in the interval [0, pi]
+     * and neither this or the other vector may be 0.
+     * @param other the other, given vector
+     * @throws IllegalArgumentException if this.len() or other.len() == 0.
+     * @return the angle between the two given vectors in radians.
+     */
+    public double angleBetween(Vector2D other){
+        if(this.len() == 0 || other.len() == 0)
+            throw new IllegalArgumentException();
+        return Math.acos(this.dot(other) / (this.len() * other.len()));
+    }
+
+    /**
      * Calculates the length of this vector.
      * @return the length of this vector.
      */
