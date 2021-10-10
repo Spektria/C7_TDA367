@@ -115,11 +115,6 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public Vector2D toGlobalPoint(int x, int y) {
-        return null;
-    }
-
-    @Override
     public Vector2D getLocalCenterPoint() {
         return null;
     }
