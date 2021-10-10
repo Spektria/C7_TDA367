@@ -147,4 +147,34 @@ public class Vector2DTest {
         Vector2D v3 = new Vector2D(0,0);
         Assertions.assertThrows(IllegalArgumentException.class, () -> v0.angleBetween(v3));
     }
+
+    @Test
+    public void angleBetweenWithSignTest(){
+        Vector2D v0 = new Vector2D(1, 0);
+        Vector2D v1 = new Vector2D(0, 1);
+
+        // Same tests as with angleBetween without sign
+        Assertions.assertEquals(0, Double.compare(Math.PI / 2d, v0.angleBetweenWithSign(v1)));
+
+        v1 = v1.mult(5);
+        Assertions.assertEquals(0, Double.compare(Math.PI / 2d, v0.angleBetweenWithSign(v1)));
+
+        v1 = new Vector2D(0, -1);
+        Assertions.assertEquals(0, Double.compare(Math.PI / 2d, v1.angleBetweenWithSign(v0)));
+
+        v1 = new Vector2D(2, 0);
+        Assertions.assertEquals(0, Double.compare(0, v0.angleBetweenWithSign(v1)));
+
+        Assertions.assertEquals(v1.angleBetweenWithSign(v0), v0.angleBetweenWithSign(v1));
+
+        Vector2D v3 = new Vector2D(0,0);
+        Assertions.assertThrows(IllegalArgumentException.class, () -> v0.angleBetweenWithSign(v3));
+
+        // bew specified tests for signed angle
+        Vector2D v4 = new Vector2D(1, 0);
+        Vector2D v5 = new Vector2D(0, -1);
+        Assertions.assertEquals(0, Double.compare(v4.angleBetweenWithSign(v5), -Math.PI/2d));
+        Assertions.assertEquals(0, Double.compare(v4.angleBetweenWithSign(v5.mult(-1)), Math.PI/2d));
+
+    }
 }
