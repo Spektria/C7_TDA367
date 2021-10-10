@@ -120,7 +120,7 @@ public class Project implements IObserver<Tuple2<Vector2D, Vector2D>>{
             for (int y = 0; y < height; y++) {
                 Vector2D pointToGet = new Vector2D(x,y);
                 //Check if out of bounds
-                if (layer.isPointOnLayer(pointToGet)) {
+                if (layer.isGlobalPointOnLayer(pointToGet)) {
                     colorMatrix[x][y] = layer.getLocalPixel(x,y);
                 }
                 //Inside of bounds

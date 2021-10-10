@@ -75,17 +75,15 @@ class Brush implements ITool {
         // Interpolate the given points so that any "holes" of empty points are filled.
         strokeInterpolator.interpolate(pointFrequency, v0, v1)
                 .parallelStream()
-
-                // For each point, translate it to the current
-                // interpolated point's position.
                 .forEach(point ->
                         points.stream()
-                                .parallel()
+                                // Translate to click position
                                 .map(v -> v.add(point))
-                                // Get the points that are on the layer.
-                                .filter(layer::isPointOnLayer)
-                                // Draw the points which are on the layer.
-                                .forEach(v -> layer.setGlobalPixel((int)v.getX(), (int)v.getY(), color)));
+                                // Check so that the points is on the layer
+                                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
+                                // If it is, draw the points which are on the layer.
+                                .forEach(v -> layer.setLocalPixel((int)v.getX(), (int)v.getY(), color)));
+
         layer.update();
     }
 

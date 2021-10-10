@@ -85,7 +85,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @return True if the pixel is within this layer, false if the pixel is
      * outside this layer.
      */
-    boolean isPixelOnLayer(int x, int y);
+    boolean isPixelOnLocalLayer(int x, int y);
 
     /**
      * Sets the rotation angle of this layer.
@@ -124,12 +124,12 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
     Vector2D getScale();
 
     /**
-     * Checks whether the given point is within the boundaries of this layer.
+     * Checks whether the given point is within the boundaries of this layer in picture-space.
      * @param point The point to check.
      * @return true if the point is within the boundaries of this layer, false
      * if the point is outside.
      */
-    boolean isPointOnLayer(Vector2D point);
+    boolean isGlobalPointOnLayer(Vector2D point);
 
     /**
      * Finds the layer-space integer position of a pixel at the specified
@@ -139,7 +139,13 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @return Integer layer-space co-ordinates for the pixel at the specified
      * point.
      */
-    Vector2D getPixelPositionAtPoint(Vector2D point);
+    Vector2D toLocalPixel(Vector2D point);
+
+    /**
+     * Returns the center point coordinate of this layer in layer-space.
+     * @return the center point of this layer in layer-space.
+     */
+    Vector2D getLocalCenterPoint();
 
     /**
      * Forces this ILayer to notify its observers of any currently buffered change.

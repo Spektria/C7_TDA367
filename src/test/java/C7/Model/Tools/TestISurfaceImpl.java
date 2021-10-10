@@ -45,7 +45,7 @@ public class TestISurfaceImpl implements ILayer {
 
     @Override
     public void setLocalPixel(int x, int y, Color color) {
-        if(isPixelOnLayer(x, y))
+        if(isPixelOnLocalLayer(x, y))
             ar[x][y] = color;
     }
 
@@ -65,7 +65,7 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLocalLayer(int x, int y) {
         return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
     }
 
@@ -105,13 +105,18 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public boolean isPointOnLayer(Vector2D point) {
+    public boolean isGlobalPointOnLayer(Vector2D point) {
         return true;
     }
 
     @Override
-    public Vector2D getPixelPositionAtPoint(Vector2D point) {
+    public Vector2D toLocalPixel(Vector2D point) {
         return point;
+    }
+
+    @Override
+    public Vector2D getLocalCenterPoint() {
+        return null;
     }
 
     @Override

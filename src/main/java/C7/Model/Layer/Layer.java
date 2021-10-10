@@ -25,6 +25,7 @@ public class Layer implements ILayer {
     private double rotation = 0;    // Rotation in radians
     private Vector2D position = Vector2D.ZERO;
     private Vector2D scale = new Vector2D(1,1);
+    private Vector2D inverseScale = new Vector2D(1, 1);
 
     // represents the rectangle in which any pixel has been modified. E.g.
     // if one were to modify pixel (20, 20), (25, 20), and (30, 30) the rectangle of change would be ((20,20), (30,30)).
@@ -84,7 +85,7 @@ public class Layer implements ILayer {
     @Override
     public Color getGlobalPixel(int x, int y) {
 
-        Vector2D localPos = getPixelPositionAtPoint(new Vector2D(x, y));
+        Vector2D localPos = toLocalPixel(new Vector2D(x, y));
         int localX = (int)localPos.getX();
         int localY = (int)localPos.getY();
 
@@ -93,14 +94,14 @@ public class Layer implements ILayer {
 
     @Override
     public Color getLocalPixel(int x, int y) {
-        if(!isPixelOnLayer(x, y))
+        if(!isPixelOnLocalLayer(x, y))
            throw new IllegalArgumentException();
         return pixels[x][y];
     }
 
     @Override
     public void setGlobalPixel(int x, int y, Color color) {
-        Vector2D localPos = getPixelPositionAtPoint(new Vector2D(x, y));
+        Vector2D localPos = toLocalPixel(new Vector2D(x, y));
         int localX = (int)localPos.getX();
         int localY = (int)localPos.getY();
 
@@ -109,7 +110,7 @@ public class Layer implements ILayer {
 
     @Override
     public void setLocalPixel(int x, int y, Color color) {
-        if(!isPixelOnLayer(x, y))
+        if(!isPixelOnLocalLayer(x, y))
             throw new IllegalArgumentException();
 
         Vector2D global = toGlobal(new Vector2D(x, y));
@@ -158,8 +159,8 @@ public class Layer implements ILayer {
         Vector2D v2 = toGlobalPixel(new Vector2D(height, 0));
         Vector2D v3 = toGlobalPixel(new Vector2D(width, height));
 
-        var xVals = List.of(v0.getX(), v1.getX(), v2.getX(), v3.getX());
-        var yVals = List.of(v0.getY(), v1.getY(), v2.getY(), v3.getY());
+        List<Double> xVals = List.of(v0.getX(), v1.getX(), v2.getX(), v3.getX());
+        List<Double> yVals = List.of(v0.getY(), v1.getY(), v2.getY(), v3.getY());
 
         int xMin = xVals.stream().min(Double::compareTo).get().intValue();
         int xMax = xVals.stream().max(Double::compareTo).get().intValue();
@@ -191,11 +192,11 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLocalLayer(int x, int y) {
         return x >= 0 && x < width && y >= 0 && y < height;
     }
 
-    private Vector2D getLocalCenterPoint(){
+    public Vector2D getLocalCenterPoint(){
         return new Vector2D(width / 2d, height / 2d);
     }
 
@@ -214,7 +215,6 @@ public class Layer implements ILayer {
     }
 
     private Vector2D toLocal(Vector2D point){
-        Vector2D inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY());
         return point
                 .sub(position)                          // Translate to local
                 .sub(getLocalCenterPoint())             // Translate so that the center of the layer is at (0,0)
@@ -250,6 +250,7 @@ public class Layer implements ILayer {
     public void setScale(Vector2D scale) {
         Objects.requireNonNull(scale);
         this.scale = scale;
+        this.inverseScale = new Vector2D(1d / scale.getX(), 1d / scale.getY());
         maxRectangleOfChange();
     }
 
@@ -274,14 +275,14 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public boolean isPointOnLayer(Vector2D point) {
+    public boolean isGlobalPointOnLayer(Vector2D point) {
         Vector2D localPosition = toLocal(point);
         return localPosition.getX() >= 0 && localPosition.getX() < width
                 && localPosition.getY() >= 0 && localPosition.getY() < height;
     }
 
     @Override
-    public Vector2D getPixelPositionAtPoint(Vector2D point) {
+    public Vector2D toLocalPixel(Vector2D point) {
         Vector2D localPoint = toLocal(point);
         return new Vector2D((int)localPoint.getX(), (int)localPoint.getY());
     }

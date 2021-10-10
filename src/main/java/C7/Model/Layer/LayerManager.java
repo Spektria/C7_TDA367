@@ -128,8 +128,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		for (Map.Entry<Integer, ILayer> entry : layers) {
 			ILayer layer = entry.getValue();
 
-			if (layer.isPointOnLayer(point)) {
-				Vector2D pixelPos = layer.getPixelPositionAtPoint(point);
+			if (layer.isGlobalPointOnLayer(point)) {
+				Vector2D pixelPos = layer.toLocalPixel(point);
 
 				// Layer color to blend with
 				Color blendColor = layer.getLocalPixel((int)pixelPos.getX(), (int)pixelPos.getY());

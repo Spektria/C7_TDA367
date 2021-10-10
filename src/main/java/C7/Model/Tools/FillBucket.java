@@ -122,10 +122,10 @@ class FillBucket implements ITool{
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
         // Make sure the points is on the given layer.
-        if(layer.isPointOnLayer(v0)){
+        if(layer.isGlobalPointOnLayer(v0)){
 
             // If it is convert to local layer space.
-            Vector2D localVec = layer.getPixelPositionAtPoint(v0);
+            Vector2D localVec = layer.toLocalPixel(v0);
             int x = (int)localVec.getX();
             int y = (int)localVec.getY();
 
