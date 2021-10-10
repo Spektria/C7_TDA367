@@ -1,8 +1,6 @@
 package C7.View;
 
-import C7.C7Paint;
 import C7.Model.IObserver;
-import C7.Model.Layer.ILayerManager;
 import C7.Model.Project;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
@@ -91,21 +89,22 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     @Override
     public void notify(Tuple2<Vector2D, Vector2D> data) {
+
         render(
-                (int)data.getVal1().getX(),
-                (int)data.getVal1().getY(),
-                (int)data.getVal2().getX() + 1,
-                (int)data.getVal2().getY() + 1
+                (int)Math.max(data.getVal1().getX(), 0),
+                (int)Math.max(data.getVal1().getY(), 0),
+                (int)Math.min(Math.max(data.getVal2().getX() + 1, 0), project.getWidth()),
+                (int)Math.min(Math.max(data.getVal2().getY() + 1, 0), project.getHeight())
         );
 
         // We update the last rectangle too, so that no leftovers are visible on the view.
         // That is, if we were not to do this ghost images may be left on the view.
         if(lastUpdateRect != null)
             render(
-                    (int)lastUpdateRect.getVal1().getX(),
-                    (int)lastUpdateRect.getVal1().getY(),
-                    (int)lastUpdateRect.getVal2().getX() + 1,
-                    (int)lastUpdateRect.getVal2().getY() + 1
+                    (int)Math.max(lastUpdateRect.getVal1().getX(), 0),
+                    (int)Math.max(lastUpdateRect.getVal1().getY(), 0),
+                    (int)Math.min(Math.max(lastUpdateRect.getVal2().getX() + 1, 0), project.getWidth()),
+                    (int)Math.min(Math.max(lastUpdateRect.getVal2().getY() + 1, 0), project.getHeight())
             );
 
         this.lastUpdateRect = data;
