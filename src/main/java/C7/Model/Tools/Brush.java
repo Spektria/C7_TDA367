@@ -70,15 +70,19 @@ class Brush implements ITool {
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
         // Fetch pattern pixels
-        final Collection<Vector2D> points = strokePattern.getPoints(size, scale, rotation);
+        final Collection<Vector2D> patternPoints = strokePattern.getPoints(size, scale.scale(layer.getScale()), rotation + layer.getRotation());
+
+        final Vector2D localV0 = layer.toLocalPixel(v0);
+        final Vector2D localV1 = layer.toLocalPixel(v1);
 
         // Interpolate the given points so that any "holes" of empty points are filled.
-        strokeInterpolator.interpolate(pointFrequency, v0, v1)
+        double scaledPointFrequency = pointFrequency * layer.getScale().len();
+        strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
                 .parallelStream()
-                .forEach(point ->
-                        points.stream()
+                .forEach(interpolatedClickPoint ->
+                        patternPoints.stream()
                                 // Translate to click position
-                                .map(v -> v.add(point))
+                                .map(v -> v.add(interpolatedClickPoint))
                                 // Check so that the points is on the layer
                                 .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
                                 // If it is, draw the points which are on the layer.
