@@ -49,6 +49,7 @@ class MainController implements IMainController {
     private ITool currentTool;
 
     private Vector2D oldPos;
+    private Vector2D pressedPos;
 
     public MainController(IView view, Project project, AnchorPane root) throws Exception {
         Objects.requireNonNull(view);
@@ -144,7 +145,8 @@ class MainController implements IMainController {
     private void onCanvasMouseDragged (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
-            project.applyTool(currentTool, oldPos, point);
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, oldPos, point);
             oldPos = point;
         }
     }
@@ -154,8 +156,10 @@ class MainController implements IMainController {
     private void onCanvasMousePressed (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             var point = new Vector2D(event.getX(), event.getY());
-            project.applyTool(currentTool, point, point);
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, point, point);
             oldPos = point;
+            pressedPos = point;
         }
     }
 
@@ -164,7 +168,10 @@ class MainController implements IMainController {
     private void onCanvasMouseReleased (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             var point = new Vector2D(event.getX(), event.getY());
-            project.applyTool(currentTool, point, point);
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, point, point);
+            else
+                project.applyTool(currentTool, pressedPos, point);
         }
     }
 }
