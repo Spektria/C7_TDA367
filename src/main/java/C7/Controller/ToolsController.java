@@ -48,6 +48,10 @@ class ToolsController extends ScrollPane {
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
 
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createTranslationTool(), "Move", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createScalingTool(), "Scale", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createRotationTool(), "Rotate", this));
+
     }
 
     public void setCurrentTool(ITool tool){
