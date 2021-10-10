@@ -13,24 +13,17 @@ import java.util.Collection;
  * A transform tool used for scaling a layer in its x- and y-axis.
  * @author Hugo Ekstrand
  */
-class ScalingTool implements ITool {
-    private final Collection<IToolProperty> properties = new ArrayList<>();
+class ScalingTool extends BaseTool {
     private boolean isContinuous = true;
     private boolean relative = true;
 
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
-    }
-
     ScalingTool(){
-
-        properties.addAll(Arrays.asList(
-                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the rotation action.",
+        addProperties(
+                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the scaling action.",
                         (b) -> isContinuous = b, () -> isContinuous),
                 ToolPropertyFactory.createBooleanProperty("Relative to quadrant", "Is the scaling supposed to be relative to the layers quadrants or absolute?",
                         (b) -> relative = b, () -> relative)
-                ));
+        );
     }
 
     @Override
@@ -60,8 +53,4 @@ class ScalingTool implements ITool {
         return isContinuous;
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

@@ -20,10 +20,7 @@ import java.util.Objects;
  *
  * @author Hugo Ekstrand
  */
-class Brush implements ITool {
-
-    private final Collection<IToolProperty> properties;
-
+class Brush extends BaseTool {
     // Common properties for all brushes.
     private int size;
     private double rotation = 0; // Radians
@@ -45,7 +42,7 @@ class Brush implements ITool {
         this.color = color;
         this.size = size;
 
-        this.properties = Arrays.asList(
+        addProperties(
                 ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
                         (i) -> this.size = i, () -> this.size, 0, 50),
                 ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
@@ -59,11 +56,6 @@ class Brush implements ITool {
                 ToolPropertyFactory.createDoubleProperty("Point frequency", "How many times the brush should draw per pixel",
                         (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
         );
-    }
-
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
     }
 
     private Collection<Vector2D> fetchPoints(ILayer layer){
@@ -117,8 +109,4 @@ class Brush implements ITool {
         return true;
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

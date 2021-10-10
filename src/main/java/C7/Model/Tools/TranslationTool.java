@@ -13,20 +13,14 @@ import java.util.Collection;
  * Transformation Tool for translating layers.
  * @author Hugo Ekstrand
  */
-class TranslationTool implements ITool {
-    private final Collection<IToolProperty> properties = new ArrayList<>();
+class TranslationTool extends BaseTool {
     private boolean isContinuous = true;
 
     TranslationTool(){
-        properties.addAll(Arrays.asList(
-                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the rotation action.",
+        addProperties(
+                ToolPropertyFactory.createBooleanProperty("Continuous translation", "The translation is continuously updated on the screen during the translation action.",
                         (b) -> isContinuous = b, () -> isContinuous)
-        ));
-    }
-
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
+        );
     }
 
     @Override
@@ -41,8 +35,4 @@ class TranslationTool implements ITool {
         return isContinuous;
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

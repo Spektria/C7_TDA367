@@ -13,20 +13,14 @@ import java.util.Collection;
  * A transformation tool used for rotating a layer.
  * @author Hugo Ekstrand
  */
-class RotationTool implements ITool {
-    private final Collection<IToolProperty> properties = new ArrayList<>();
+class RotationTool extends BaseTool {
     private boolean isContinuous = true;
 
     RotationTool(){
-        properties.addAll(Arrays.asList(
-                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the rotation action.",
+        addProperties(
+                ToolPropertyFactory.createBooleanProperty("Continuous rotation", "The rotation is continuously updated on the screen during the rotation action.",
                         (b) -> isContinuous = b, () -> isContinuous)
-        ));
-    }
-
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
+        );
     }
 
     @Override
@@ -48,8 +42,4 @@ class RotationTool implements ITool {
         return isContinuous;
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

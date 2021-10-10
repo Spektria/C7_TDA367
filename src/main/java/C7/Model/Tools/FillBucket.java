@@ -14,12 +14,10 @@ import java.util.*;
  * while the rest are not.
  * @author Hugo Ekstrand
  */
-class FillBucket implements ITool{
+class FillBucket extends BaseTool{
 
     private float threshold;        // The threshold decided if an adjacent pixel should be "filled".
     private Color fill;
-
-    private final Collection<IToolProperty> properties;
 
     /**
      * Creates a new instance of this class
@@ -32,7 +30,7 @@ class FillBucket implements ITool{
         this.threshold = threshold;
         this.fill = fill;
 
-        properties = Arrays.asList(
+        addProperties(
                 ToolPropertyFactory.createDoubleProperty("Threshold",
                         "If the color distance of a color c from" +
                                 " the fill of bucket is less than this threshold" +
@@ -114,11 +112,6 @@ class FillBucket implements ITool{
     }
 
     @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
-    }
-
-    @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
         // Make sure the points is on the given layer.
@@ -142,8 +135,4 @@ class FillBucket implements ITool{
         return false; // This tool only requires one click.
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }
