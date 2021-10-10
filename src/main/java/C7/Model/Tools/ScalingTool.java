@@ -2,17 +2,35 @@ package C7.Model.Tools;
 
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ToolProperties.IToolProperty;
+import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Util.Vector2D;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 
-public class ScalingTool implements ITool {
+/**
+ * A transform tool used for scaling a layer in its x- and y-axis.
+ * @author Hugo Ekstrand
+ */
+class ScalingTool implements ITool {
     private final Collection<IToolProperty> properties = new ArrayList<>();
+    private boolean isContinuous = true;
+    private boolean relative = true;
 
     @Override
     public Collection<IToolProperty> getProperties() {
         return properties;
+    }
+
+    ScalingTool(){
+
+        properties.addAll(Arrays.asList(
+                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the rotation action.",
+                        (b) -> isContinuous = b, () -> isContinuous),
+                ToolPropertyFactory.createBooleanProperty("Relative to quadrant", "Is the scaling supposed to be relative to the layers quadrants or absolute?",
+                        (b) -> relative = b, () -> relative)
+                ));
     }
 
     @Override
@@ -25,7 +43,13 @@ public class ScalingTool implements ITool {
         // For the x-axis the change is scaleToAdd = dx / width.
         Vector2D scaleToAdd = delta.scale(new Vector2D(1d/layer.getWidth(), 1d/layer.getHeight()));
 
-        scaleToAdd = scaleToAdd.scale(LayerQuadrantUtil.getQuadrantAsVector(layer, v0));
+        if(relative)
+            // If the scaling is supposed to be relative to the quadrants we need to compensate for
+            // whichever quadrant the given points are in. That is, the scaling in quadrant 1 should be reverse
+            // to that of scaling in quadrant 4. To do this we multiply by 1 or -1 depending on if the quadrant axis
+            // are negative or positive. E.g. if we are in quadrant 2 we multiply the vectors x value with -1 and
+            // the y value with 1.
+            scaleToAdd = scaleToAdd.scale(LayerQuadrantUtil.getGlobalQuadrantPosition(layer, v0));
 
         layer.setScale(layer.getScale().add(scaleToAdd));
         layer.update();
@@ -33,7 +57,7 @@ public class ScalingTool implements ITool {
 
     @Override
     public boolean isContinuous() {
-        return false;
+        return isContinuous;
     }
 
     @Override
