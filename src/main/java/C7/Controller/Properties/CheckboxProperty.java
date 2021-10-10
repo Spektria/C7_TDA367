@@ -26,6 +26,7 @@ class CheckboxProperty extends AnchorPane {
         }
 
         checkBox.setText(prop.getName());
+        checkBox.selectedProperty().setValue(prop.getBoolean());
 
         checkBox.setOnAction(new EventHandler<ActionEvent>() {
             @Override
