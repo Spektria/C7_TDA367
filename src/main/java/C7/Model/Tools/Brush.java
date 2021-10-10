@@ -66,26 +66,47 @@ class Brush implements ITool {
         return properties;
     }
 
+    private Collection<Vector2D> fetchPoints(ILayer layer){
+        Vector2D inverseScale = new Vector2D(1d/layer.getScale().getY(), 1d/layer.getScale().getY());
+
+        // Fetch pattern pixels
+        return strokePattern.getPoints(size,
+
+                // The scale of the pattern will be inverse of the layers scale if we are to perseve a consistent pattern size
+                // regardless of the layer scale. I.e. if the layer is at 1/2x scale the pattern should be at 2x scale
+                scale.scale(inverseScale),
+
+                // Rotation should also not be affected by the layers current rotation,
+                // so we need to compensate by rotating in the reverse direction
+                rotation - layer.getRotation());
+    }
+
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
-        // Fetch pattern pixels
-        final Collection<Vector2D> patternPoints = strokePattern.getPoints(size, scale.scale(layer.getScale()), rotation + layer.getRotation());
+        final Collection<Vector2D> patternPoints = fetchPoints(layer);
 
+        // Convert to local space of the layer
         final Vector2D localV0 = layer.toLocalPixel(v0);
         final Vector2D localV1 = layer.toLocalPixel(v1);
 
-        // Interpolate the given points so that any "holes" of empty points are filled.
+        // the amount of points per pixel also needs to be compensated so that it is consistent with
+        // regardless of the layers scale.
         double scaledPointFrequency = pointFrequency * layer.getScale().len();
+
+        // Interpolate the given points so that any "holes" of empty points are filled.
         strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
                 .parallelStream()
+
+                // For each interpolated point...
                 .forEach(interpolatedClickPoint ->
+                        // For each point in the pattern
                         patternPoints.stream()
-                                // Translate to click position
+                                // Translate the pattern point to interpolated point position (i.e. mouse click)
                                 .map(v -> v.add(interpolatedClickPoint))
-                                // Check so that the points is on the layer
+                                // Check so that the new, translated pattern point is on the layer
                                 .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
-                                // If it is, draw the points which are on the layer.
+                                // If it is on the layer, draw the points which are on the layer.
                                 .forEach(v -> layer.setLocalPixel((int)v.getX(), (int)v.getY(), color)));
 
         layer.update();
