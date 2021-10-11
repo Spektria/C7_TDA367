@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -25,7 +26,8 @@ class CheckboxProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        checkBox.setText(prop.getName());
+        Tooltip.install(checkBox, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
+        checkBox.setText(PropertyDescription.getInstance().getName(prop));
         checkBox.selectedProperty().setValue(prop.getBoolean());
 
         checkBox.setOnAction(new EventHandler<ActionEvent>() {

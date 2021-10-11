@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 
@@ -29,7 +30,8 @@ class ColorProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.getName());
+        label.setText(PropertyDescription.getInstance().getName(prop));
+        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
 
         C7.Model.Color color = prop.getColor();
         colorPicker.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));

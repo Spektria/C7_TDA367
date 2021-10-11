@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
@@ -27,7 +28,8 @@ class IntProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.getName());
+        label.setText(PropertyDescription.getInstance().getName(prop));
+        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
 
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(prop.lowerBound().intValue(), prop.upperBound().intValue(), prop.getInteger()));
 
