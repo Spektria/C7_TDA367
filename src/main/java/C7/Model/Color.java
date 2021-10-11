@@ -9,8 +9,8 @@ import java.util.Objects;
  * point value, usually between 0 and 1, where 0 is no intensity and 1 is
  * maximum intensity. The color format supports channel intensities above 1 for
  * high dynamic range imaging.
- * @author Love Gustafsson
- * @version 1.2
+ * @author Love Svalby
+ * @version 1.3
  */
 public final class Color {
 
@@ -101,7 +101,7 @@ public final class Color {
      * 0.
      * @param r Red value to set
      */
-    public void setRed(float r) {
+    private void setRed(float r) {
         if (r < 0) {
             this.r = 0;
             return;
@@ -128,7 +128,7 @@ public final class Color {
      * 0.
      * @param g Green value to set
      */
-    public void setGreen(float g) {
+    private void setGreen(float g) {
         if (g < 0) {
             this.g = 0;
             return;
@@ -155,7 +155,7 @@ public final class Color {
      * 0.
      * @param b Blue value to set
      */
-    public void setBlue(float b) {
+    private void setBlue(float b) {
         if (b < 0) {
             this.b = 0;
             return;
@@ -182,7 +182,7 @@ public final class Color {
      * 0.
      * @param a Alpha value to set
      */
-    public void setAlpha(float a) {
+    private void setAlpha(float a) {
         if (a < 0) {
             this.a = 0;
             return;
