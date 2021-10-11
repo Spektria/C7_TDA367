@@ -1,7 +1,7 @@
 package C7.Model.Layer;
 
 import C7.Model.Color;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

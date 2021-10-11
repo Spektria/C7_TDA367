@@ -5,7 +5,7 @@ package C7.Model.Tools.Pattern;
  *
  * @author Hugo Ekstrand
  */
-public class PatternFactory {
+public final class PatternFactory {
 
     /**
      * Creates a filled disk shaped pattern.

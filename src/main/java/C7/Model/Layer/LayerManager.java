@@ -2,10 +2,9 @@ package C7.Model.Layer;
 
 import C7.Model.Color;
 import C7.Model.IObserver;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -47,6 +46,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 
 		// Add layer to manager
 		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
+
+		layer.addObserver(this);
 
 		return nextId++;
 	}
@@ -127,8 +128,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		for (Map.Entry<Integer, ILayer> entry : layers) {
 			ILayer layer = entry.getValue();
 
-			if (layer.isPointOnLayer(point)) {
-				Vector2D pixelPos = layer.getPixelPositionAtPoint(point);
+			if (layer.isGlobalPointOnLayer(point)) {
+				Vector2D pixelPos = layer.toLocalPixel(point);
 
 				// Layer color to blend with
 				Color blendColor = layer.getLocalPixel((int)pixelPos.getX(), (int)pixelPos.getY());

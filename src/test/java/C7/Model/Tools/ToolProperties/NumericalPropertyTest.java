@@ -9,7 +9,7 @@ public class NumericalPropertyTest {
 
     @Test
     public void outOfUpperBoundsTest(){
-        var prop = ToolPropertyFactory.createDoubleProperty("d", "d", (v) -> d = v, () -> d, 0, 1);
+        var prop = ToolPropertyFactory.createDoubleProperty("d", (v) -> d = v, () -> d, 0, 1);
 
         Assertions.assertDoesNotThrow(() -> prop.setDouble(0.9));
         Assertions.assertDoesNotThrow(() -> prop.setDouble(1));
@@ -18,7 +18,7 @@ public class NumericalPropertyTest {
 
     @Test
     public void outOfLowerBoundsTest(){
-        var prop = ToolPropertyFactory.createDoubleProperty("d", "d", (v) -> d = v, () -> d, -24, -4);
+        var prop = ToolPropertyFactory.createDoubleProperty("d", (v) -> d = v, () -> d, -24, -4);
 
         Assertions.assertDoesNotThrow(() -> prop.setDouble(-20));
         Assertions.assertDoesNotThrow(() -> prop.setDouble(-24));

@@ -2,8 +2,8 @@ package C7.Model.Layer;
 
 import C7.Model.Color;
 import C7.Model.IObserver;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -104,9 +104,9 @@ public class LayerTest {
         layer.setPosition(new Vector2D(100,100));
         layer.setRotation(Math.PI/4); // Rotated 45 degrees
 
-        Assertions.assertTrue(layer.isPointOnLayer(new Vector2D(150, 150))); // Center of layer
-        Assertions.assertFalse(layer.isPointOnLayer(new Vector2D(101, 101))); // Edge of layer corner, if it were not rotated.
-        Assertions.assertTrue(layer.isPointOnLayer(new Vector2D(110, 150))); // Edge of layer corner when rotated
+        Assertions.assertTrue(layer.isGlobalPointOnLayer(new Vector2D(150, 150))); // Center of layer
+        Assertions.assertFalse(layer.isGlobalPointOnLayer(new Vector2D(101, 101))); // Edge of layer corner, if it were not rotated.
+        Assertions.assertTrue(layer.isGlobalPointOnLayer(new Vector2D(110, 150))); // Edge of layer corner when rotated
     }
 
     @Test
@@ -122,11 +122,11 @@ public class LayerTest {
 
         // This should be the center
         var center = new Vector2D(w / 2d, h / 2d).add(translation);
-        Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.getPixelPositionAtPoint(center));
+        Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.toLocalPixel(center));
 
         // This should be the rightmost edge. Which, if rotated 45 degrees, will be, if rotated back, the bottom right corner.
         var rightCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(w / 2d, 0).mult(Math.sqrt(2)));
-        Assertions.assertEquals(new Vector2D(w, 0), layer.getPixelPositionAtPoint(rightCorner));
+        Assertions.assertEquals(new Vector2D(w, 0), layer.toLocalPixel(rightCorner));
     }
 
     @Test
@@ -252,11 +252,11 @@ public class LayerTest {
 
         // Check that center is still at the center
         Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
-        Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.getPixelPositionAtPoint(center));
+        Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.toLocalPixel(center));
 
         // Since we've scaled by 2 the top right corner should be a whole scale 1,1 square away from the center of the scaled square
         Vector2D topRightCorner = center.add(new Vector2D(w, h));
-        Assertions.assertEquals(new Vector2D(w,h), layer.getPixelPositionAtPoint(topRightCorner));
+        Assertions.assertEquals(new Vector2D(w,h), layer.toLocalPixel(topRightCorner));
     }
 
     @Test
@@ -275,12 +275,12 @@ public class LayerTest {
 
         // This should be the center point;
         Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
-        Assertions.assertEquals(new Vector2D(w/2d, h/2d), layer.getPixelPositionAtPoint(center));
+        Assertions.assertEquals(new Vector2D(w/2d, h/2d), layer.toLocalPixel(center));
 
         // This should be the right corner. The layer (square) is rotated 4/pi rad and thus the right corner should be the furthest in x
         // of any corner, which should be sqrt(2) * sideLen * scale in x
         Vector2D rightCorner = center.add(new Vector2D(w/2d * Math.sqrt(2) * 1.3, 0));
-        Assertions.assertEquals(new Vector2D(w, 0), layer.getPixelPositionAtPoint(rightCorner));
+        Assertions.assertEquals(new Vector2D(w, 0), layer.toLocalPixel(rightCorner));
 
     }
 

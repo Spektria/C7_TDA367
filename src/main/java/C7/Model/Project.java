@@ -4,14 +4,19 @@ import C7.Model.Layer.ILayer;
 import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.LayerManager;
 import C7.Model.Tools.ITool;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Project is a class representing a complete project.
  * Included is all image data required to reconstruct previous work as well as any saved metadata.
  * */
-public class Project {
-    ILayerManager layerManager;
+public class Project implements IObserver<Tuple2<Vector2D, Vector2D>>{
+    final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
+    private ILayerManager layerManager;
     private ILayer activeLayer;
     private int width, height;
 
@@ -30,6 +35,10 @@ public class Project {
 
         //Specific LayerManager
         layerManager = new LayerManager();
+
+        //Observe
+        observers = new ArrayList<>();
+        layerManager.addObserver(this);
     }
 
     /**
@@ -111,7 +120,7 @@ public class Project {
             for (int y = 0; y < height; y++) {
                 Vector2D pointToGet = new Vector2D(x,y);
                 //Check if out of bounds
-                if (layer.isPointOnLayer(pointToGet)) {
+                if (layer.isGlobalPointOnLayer(pointToGet)) {
                     colorMatrix[x][y] = layer.getLocalPixel(x,y);
                 }
                 //Inside of bounds
@@ -174,12 +183,35 @@ public class Project {
      * Get the active layerID of this Project.
      * @return The active layerID
      */
-    public int getActiveLayer() { return layerManager.getActiveLayerId(); }
+    public int getActiveLayerID() { return layerManager.getActiveLayerId(); }
+
+    /**
+     * Get the active {@link ILayer} of this Project.
+     * @return The project's current active ILayer according to what Layer is set as active
+     */
+    public ILayer getActiveLayer() { return layerManager.getLayer(layerManager.getActiveLayerId()); }
 
     /**
      * Sets which layer is currently active. The ID specified must be the ID of
      * a layer that is managed by this LayerManager. If the ID is not a valid
      * layer, the active layer will not change.
      */
-    void setActiveLayer(int id){ layerManager.setActiveLayer(id); }
+    public void setActiveLayer(int id){
+        layerManager.setActiveLayer(id);
+        activeLayer = layerManager.getLayer(id);
+    }
+
+    public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+        observers.remove(observer);
+    }
+
+    public void notify(Tuple2<Vector2D, Vector2D> data) {
+        for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers){
+            observer.notify(data);
+        }
+    }
 }

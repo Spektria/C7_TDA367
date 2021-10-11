@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class ResetProperties extends AnchorPane {
+class ResetProperties extends AnchorPane {
     @FXML Button button;
 
     public ResetProperties(ITool tool, EventHandler<ActionEvent> interfaceUpdateHandler) {

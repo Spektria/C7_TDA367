@@ -1,4 +1,4 @@
-package C7.Model.Vector;
+package C7.Util;
 
 import java.util.Objects;
 
@@ -82,6 +82,43 @@ public final class Vector2D {
      */
     public Vector2D mult(double scalar){
         return new Vector2D(this.x * scalar, this.y * scalar);
+    }
+
+    /**
+     * Performs the dot product of this and a given vector.
+     * @param other the other, given vector
+     * @return the dot product of the two vectors
+     */
+    public double dot(Vector2D other){
+        return this.x * other.x + this.y * other.y;
+    }
+
+    /**
+     * Calculates the angle between this vector and another given vector.
+     * Note that the angle is in radians in the interval [0, pi]
+     * and neither this or the other vector may be 0.
+     * @param other the other, given vector
+     * @throws IllegalArgumentException if this.len() or other.len() == 0.
+     * @return the angle between the two given vectors in radians.
+     */
+    public double angleBetween(Vector2D other){
+        return Math.abs(angleBetweenWithSign(other));
+    }
+
+    /**
+     * Calculates the angle between this vector and another given vector.
+     * Note that the angle is in radians in the interval [-pi, pi]
+     * and neither this or the other vector may be 0.
+     * @param other the other, given vector
+     * @throws IllegalArgumentException if this.len() or other.len() == 0.
+     * @return the angle between the two given vectors in radians.
+     */
+    public double angleBetweenWithSign(Vector2D other){
+        // Formula:
+        // https://math.stackexchange.com/questions/2510897/calculate-the-angle-between-two-vectors-when-direction-is-important
+        if(this.len() == 0 || other.len() == 0)
+            throw new IllegalArgumentException();
+        return Math.atan((this.getX() * other.getY() - this.getY() * other.getX())/(this.getX() * other.getX() + this.getY() * other.getY()));
     }
 
     /**

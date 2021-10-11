@@ -1,11 +1,14 @@
 package C7.Model.Tools.Pattern;
 
-import C7.Model.Tools.Util.PixelGraphics;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Pattern which represents a disk, or alternatively a filled ellipse.
+ * @author Hugo Ekstrand
+ */
 class DiskPattern implements IPattern {
 
     @Override
@@ -24,7 +27,7 @@ class DiskPattern implements IPattern {
         final double yRadius = (scale.getY() * size - 1) /2d;
 
 
-        PixelGraphics.pixelDisk(0,0,
+        PixelShapeUtil.pixelDisk(0,0,
                 xRadius,
                 yRadius,
                 rotation, (x, y) -> points.add(new Vector2D(x, y)));

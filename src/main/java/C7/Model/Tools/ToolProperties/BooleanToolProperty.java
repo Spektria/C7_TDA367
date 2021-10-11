@@ -3,11 +3,15 @@ package C7.Model.Tools.ToolProperties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+/**
+ * A property representing a boolean.
+ * @author Hugo Ekstrand
+ */
 class BooleanToolProperty extends BaseToolProperty<Boolean> {
 
 
-    BooleanToolProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter) {
-        super(name, description, setter, getter);
+    BooleanToolProperty(String name, Consumer<Boolean> setter, Supplier<Boolean> getter) {
+        super(name, setter, getter);
     }
 
     @Override

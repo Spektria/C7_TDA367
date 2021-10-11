@@ -22,13 +22,7 @@ public interface IToolProperty {
      * Returns the name of this property.
      * @return the name of this property.
      */
-    String name();
-
-    /**
-     * Returns a string with a description of what this property does.
-     * @return the description as a string
-     */
-    String description();
+    String getName();
 
     /**
      * Returns the type of this property.

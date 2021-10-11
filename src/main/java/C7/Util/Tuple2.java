@@ -1,4 +1,4 @@
-package C7.Model.Util;
+package C7.Util;
 
 import C7.Model.IObserver;
 

@@ -5,11 +5,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class SliderProperty extends AnchorPane {
+class SliderProperty extends AnchorPane {
     @FXML
     Slider slider;
     @FXML
@@ -27,7 +28,8 @@ public class SliderProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(prop.name());
+        label.setText(PropertyDescription.getInstance().getName(prop));
+        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
 
         double value = prop.getDouble();
         slider.setValue(value);

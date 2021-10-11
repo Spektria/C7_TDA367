@@ -4,7 +4,7 @@ import C7.Model.Color;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.*;
 
@@ -14,12 +14,10 @@ import java.util.*;
  * while the rest are not.
  * @author Hugo Ekstrand
  */
-class FillBucket implements ITool{
+class FillBucket extends BaseTool{
 
-    private float threshold;
+    private float threshold;        // The threshold decided if an adjacent pixel should be "filled".
     private Color fill;
-
-    private final Collection<IToolProperty> properties;
 
     /**
      * Creates a new instance of this class
@@ -27,27 +25,25 @@ class FillBucket implements ITool{
      * @param threshold the threshold of which pixels should be filled
      */
     FillBucket(float threshold, Color fill){
+        Objects.requireNonNull(fill);
+
         this.threshold = threshold;
         this.fill = fill;
 
-        properties = Arrays.asList(
+        addProperties(
                 ToolPropertyFactory.createDoubleProperty("Threshold",
-                        "If the color distance of a color c from" +
-                                " the fill of bucket is less than this threshold" +
-                                " then c will be changed to the buckets fill.",
                         (d) -> this.threshold = d.floatValue(),
                         () -> (double)this.threshold,
                         0f, 2f),
 
                 ToolPropertyFactory.createColorProperty("Fill color",
-                        "The fill color of the bucket",
                         (c) -> this.fill = c,
                         () -> this.fill)
         );
     }
 
 
-    private void floodFill(int x, int y, ILayer surface, Color selectedColor) {
+    private void floodFill(int inX, int inY, ILayer surface, Color selectedColor) {
         // The algorithm scanline flood fill uses can be found here: https://lodev.org/cgtutor/floodfill.html
         // Though do note that it has been modified to handle more than binary values.
 
@@ -57,48 +53,44 @@ class FillBucket implements ITool{
 
 
         Deque<Integer> stack = new ArrayDeque<>();
-        stack.push(x);
-        stack.push(y);
+        stack.push(inX);
+        stack.push(inY);
 
         while(!stack.isEmpty()){
-            y = stack.pop();
-            x = stack.pop();
-            int x1 = x;
+            int y = stack.pop();
+            int x = stack.pop();
 
             // Do a scan on a horizontal line so that we find the first x which should not be filled.
-            while(x1 >= 0 && shouldFill(surface.getLocalPixel(x1, y), selectedColor)) x1--;
-            x1++;
+            while(x >= 0 && shouldFill(surface.getLocalPixel(x, y), selectedColor)) x--;
+            x++;
 
-            while(x1 < surface.getWidth() && shouldFill(surface.getLocalPixel(x1,y), selectedColor)){
+            while(x < surface.getWidth() && shouldFill(surface.getLocalPixel(x,y), selectedColor)){
 
                 // Fill pixel
-                surface.setLocalPixel(x1, y, fill);
+                surface.setLocalPixel(x, y, fill);
 
                 // Check if the y - 1 line should be filled, if it has not already been checked.
-                if(y > 0 && shouldFill(surface.getLocalPixel(x1, y-1), selectedColor)){
+                if(y > 0 && shouldFill(surface.getLocalPixel(x, y-1), selectedColor)){
 
                     // If it should be filled, push another coordinate in the stack
-                    stack.push(x1);
+                    stack.push(x);
                     stack.push(y - 1);
                 }
 
                 // Do the same for below as for above. Except with y + 1.
-                if(y < surface.getHeight() - 1 && shouldFill(surface.getLocalPixel(x1, y+1), selectedColor)){
-                    stack.push(x1);
+                if(y < surface.getHeight() - 1 && shouldFill(surface.getLocalPixel(x, y+1), selectedColor)){
+                    stack.push(x);
                     stack.push(y+1);
                 }
 
                 // Next pixel in the line.
-                x1++;
+                x++;
             }
         }
 
     }
 
     private boolean shouldFill(Color color, Color selectedColor){
-
-        if(color == null)
-            return true;
 
         // If it is the same as the fill, it has already been filled.
         if(fill.equals(color))
@@ -110,26 +102,25 @@ class FillBucket implements ITool{
 
         // Else if none of these, check how different the color is
         // and if the difference is low enough fill it.
-        float delta = Color.getColorDifference(selectedColor, color);;
-        if(delta == 0)
-            return false;
-        return delta <= threshold;
+        float differance = Color.getColorDifference(selectedColor, color);;
+        return differance <= threshold;
 
-    }
-
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
     }
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
-        if(layer.isPointOnLayer(v0)){
-            Vector2D localVec = layer.getPixelPositionAtPoint(v0);
+        // Make sure the points is on the given layer.
+        if(layer.isGlobalPointOnLayer(v0)){
+
+            // If it is convert to local layer space.
+            Vector2D localVec = layer.toLocalPixel(v0);
             int x = (int)localVec.getX();
             int y = (int)localVec.getY();
+
+            // Perform flood fill
             floodFill(x, y, layer, layer.getLocalPixel(x, y));
+
             layer.update();
         }
 
@@ -137,11 +128,7 @@ class FillBucket implements ITool{
 
     @Override
     public boolean isContinuous() {
-        return false;
+        return false; // This tool only requires one click.
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

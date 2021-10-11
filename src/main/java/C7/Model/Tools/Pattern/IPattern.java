@@ -1,6 +1,6 @@
 package C7.Model.Tools.Pattern;
 
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.Collection;
 
@@ -16,9 +16,11 @@ public interface IPattern {
      * Returns a list of discreet points for this pattern.
      * The patterns shape may be modified by its xy-scale, size, or rotation.
      * @param size the size of the pattern's diameter.
+     *             Or if the shape doesn't have a diameter it is
+     *             the largest distance between two points in the shape.
      * @param scale the patterns scale.
      * @param rotation the rotation of the pattern in radians
-     * @return the list of points for this pattern
+     * @return the list of points for this pattern centered at origo (0,0).
      */
     Collection<Vector2D> getPoints(int size, Vector2D scale, double rotation);
 

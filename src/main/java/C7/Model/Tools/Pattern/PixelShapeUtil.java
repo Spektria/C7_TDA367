@@ -1,4 +1,4 @@
-package C7.Model.Tools.Util;
+package C7.Model.Tools.Pattern;
 
 import java.util.function.BiConsumer;
 
@@ -8,7 +8,7 @@ import java.util.function.BiConsumer;
  *
  * @author Hugo Ekstrand
  */
-public final class PixelGraphics {
+final class PixelShapeUtil {
 
     /**
      * Performs an action at every pixel of a pixel-approximated line between the points (x0, y0) and (x1, y1).
@@ -18,7 +18,7 @@ public final class PixelGraphics {
      * @param y1 end y coordinate of the line
      * @param doOnLinePixel the action to be performed at every pixel in the approximated line.
      */
-    public static void pixelLine(int x0, int y0, int x1, int y1, BiConsumer<Integer, Integer> doOnLinePixel){
+    static void pixelLine(int x0, int y0, int x1, int y1, BiConsumer<Integer, Integer> doOnLinePixel){
 
         // Algorithm used can be found here.
         // https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm)#Program
@@ -52,7 +52,7 @@ public final class PixelGraphics {
      * @param semiMinor the semi-minor axis length of the ellipse
      * @param doOnEveryPixel the action to be performed at evey pixel in teh approximated line.
      */
-    public static void pixelDisk(int x0, int y0, double semiMajor,
+    static void pixelDisk(int x0, int y0, double semiMajor,
                                  double semiMinor, double rotation,
                                  BiConsumer<Integer, Integer> doOnEveryPixel){
 

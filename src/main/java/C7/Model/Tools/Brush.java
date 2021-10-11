@@ -6,7 +6,7 @@ import C7.Model.Tools.Pattern.IPattern;
 import C7.Model.Tools.StrokeInterpolation.IStrokeInterpolator;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,10 +20,7 @@ import java.util.Objects;
  *
  * @author Hugo Ekstrand
  */
-class Brush implements ITool {
-
-    private final Collection<IToolProperty> properties;
-
+class Brush extends BaseTool {
     // Common properties for all brushes.
     private int size;
     private double rotation = 0; // Radians
@@ -45,46 +42,65 @@ class Brush implements ITool {
         this.color = color;
         this.size = size;
 
-        this.properties = Arrays.asList(
-                ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
+        addProperties(
+                ToolPropertyFactory.createIntegerProperty("Stroke size",
                         (i) -> this.size = i, () -> this.size, 0, 50),
-                ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
+                ToolPropertyFactory.createDoubleProperty("Rotation",
                         (rot) -> this.rotation = Math.toRadians(rot), () -> Math.toDegrees(this.rotation), 0, 360),
-                ToolPropertyFactory.createDoubleProperty("Y-scale", "The scale of the brush stroke in the y axis",
+                ToolPropertyFactory.createDoubleProperty("Y-scale",
                         (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 5),
-                ToolPropertyFactory.createDoubleProperty("X-scale", "The scale of the brush stroke in the x axis",
+                ToolPropertyFactory.createDoubleProperty("X-scale",
                         (x) -> this.scale = new Vector2D(x, scale.getY()), () -> this.scale.getY(), 0, 5),
-                ToolPropertyFactory.createColorProperty("Stroke color", "The color of the stroke",
+                ToolPropertyFactory.createColorProperty("Stroke color",
                         (c) -> this.color = c, () -> this.color),
-                ToolPropertyFactory.createDoubleProperty("Point frequency", "How many times the brush should draw per pixel",
+                ToolPropertyFactory.createDoubleProperty("Point frequency",
                         (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
         );
     }
 
-    @Override
-    public Collection<IToolProperty> getProperties() {
-        return properties;
+    private Collection<Vector2D> fetchPoints(ILayer layer){
+        Vector2D inverseScale = new Vector2D(1d/layer.getScale().getY(), 1d/layer.getScale().getY());
+
+        // Fetch pattern pixels
+        return strokePattern.getPoints(size,
+
+                // The scale of the pattern will be inverse of the layers scale if we are to perseve a consistent pattern size
+                // regardless of the layer scale. I.e. if the layer is at 1/2x scale the pattern should be at 2x scale
+                scale.scale(inverseScale),
+
+                // Rotation should also not be affected by the layers current rotation,
+                // so we need to compensate by rotating in the reverse direction
+                rotation - layer.getRotation());
     }
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
-        // Fetch pattern pixels
-        final Collection<Vector2D> points = strokePattern.getPoints(size, scale, rotation);
+        final Collection<Vector2D> patternPoints = fetchPoints(layer);
+
+        // Convert to local space of the layer
+        final Vector2D localV0 = layer.toLocalPixel(v0);
+        final Vector2D localV1 = layer.toLocalPixel(v1);
+
+        // the amount of points per pixel also needs to be compensated so that it is consistent with
+        // regardless of the layers scale.
+        double scaledPointFrequency = pointFrequency * layer.getScale().len();
 
         // Interpolate the given points so that any "holes" of empty points are filled.
-        strokeInterpolator.interpolate(pointFrequency, v0, v1)
+        strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
                 .parallelStream()
 
-                // For each point, translate it to the current
-                // interpolated point's position.
-                .forEach(point ->
-                        points.stream()
-                                .parallel()
-                                .map(v -> v.add(point))
-                                // Then draw the translated points onto the layer
-                                .filter(layer::isPointOnLayer)
-                                .forEach(v -> layer.setGlobalPixel((int)v.getX(), (int)v.getY(), color)));
+                // For each interpolated point...
+                .forEach(interpolatedClickPoint ->
+                        // For each point in the pattern
+                        patternPoints.stream()
+                                // Translate the pattern point to interpolated point position (i.e. mouse click)
+                                .map(v -> v.add(interpolatedClickPoint))
+                                // Check so that the new, translated pattern point is on the layer
+                                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
+                                // If it is on the layer, draw the points which are on the layer.
+                                .forEach(v -> layer.setLocalPixel((int)v.getX(), (int)v.getY(), color)));
+
         layer.update();
     }
 
@@ -93,8 +109,4 @@ class Brush implements ITool {
         return true;
     }
 
-    @Override
-    public void setToDefault() {
-        properties.forEach(IToolProperty::setToDefault);
-    }
 }

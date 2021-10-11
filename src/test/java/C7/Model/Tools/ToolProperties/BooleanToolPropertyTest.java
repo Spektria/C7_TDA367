@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class BooleanToolPropertyTest {
 
     private boolean internalProp = true;
-    private IToolProperty boolProp = ToolPropertyFactory.createBooleanProperty("testBoolProp", "testing", (b) -> internalProp = b, () -> internalProp);
+    private IToolProperty boolProp = ToolPropertyFactory.createBooleanProperty("testBoolProp", (b) -> internalProp = b, () -> internalProp);
 
     @BeforeEach
     public void init(){

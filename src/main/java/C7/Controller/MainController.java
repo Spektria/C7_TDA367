@@ -1,153 +1,106 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
-import C7.Model.IObserver;
-import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
+import C7.Model.Project;
 import C7.Model.Tools.ITool;
-import C7.Model.Tools.ToolFactory;
-import C7.Model.Tools.ToolProperties.IToolProperty;
-import C7.Model.Util.Tuple2;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
-import C7.View.View;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.canvas.*;
-import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Objects;
 
 
-public class MainController implements Initializable {
-    @FXML Canvas canvas;
-    @FXML ScrollPane scrollPaneCanvas;
-    GraphicsContext gc;
-    @FXML SplitPane splitPaneToolsProps;
-    @FXML AnchorPane contentPaneToolsProps;
-    @FXML AnchorPane contentPaneTools;
-    @FXML ScrollPane scrollPaneTools;
-    @FXML FlowPane flowPaneTools;
-    @FXML AnchorPane contentPaneProperties;
-    @FXML ScrollPane scrollPaneProperties;
-    @FXML FlowPane flowPaneProperties;
-    @FXML AnchorPane layersArea;
+class MainController implements IMainController {
+    private @FXML Canvas canvas;
+    private @FXML ScrollPane scrollPaneCanvas;
+    private @FXML SplitPane splitPaneToolsProps;
+    private @FXML AnchorPane contentPaneToolsProps;
+    private @FXML AnchorPane contentPaneTools;
+    private @FXML ScrollPane scrollPaneTools;
+    private @FXML AnchorPane contentPaneProperties;
+    private @FXML ScrollPane scrollPaneProperties;
+    private @FXML AnchorPane layersArea;
 
-    IView view;
+    private ToolsController toolsController;
 
-    ILayer layer; //Only one for now
+    private PropertiesController propertiesController;
 
-    ITool currentTool;
+    private Project project; //Only one for now
+    //private ILayerManager manager; //Only one for now
+    //ILayer layer; //Only one for now
+
+    private IView view;
+
+    private ITool currentTool;
 
     private Vector2D oldPos;
+    private Vector2D pressedPos;
 
-    public MainController(GridPane root) throws Exception {
+    public MainController(IView view, Project project, AnchorPane root) throws Exception {
+        Objects.requireNonNull(view);
+        Objects.requireNonNull(project);
+        Objects.requireNonNull(root);
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/MainWindow.fxml"));
         fxmlLoader.setRoot(root);
         fxmlLoader.setController(this);
         fxmlLoader.load();
+
+        this.project = project;
+        this.view = view;
+
+        scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
+        scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+
+        view.setGraphicsContext(canvas.getGraphicsContext2D());
+        view.setBounds(canvas.widthProperty(), canvas.heightProperty());
+
+        scrollPaneCanvas.setContent(canvas);
+
+        view.render();
+
+        propertiesController = new PropertiesController(contentPaneProperties);
+
+        toolsController = new ToolsController(contentPaneTools, this);
+
+        splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
+
+        layersArea.getChildren().add(new LayersController());
+
     }
 
     public void setCurrentTool(ITool tool) {
         this.currentTool = tool;
 
-        updatePropertiesView();
+        propertiesController.update(tool);
     }
 
-    public void setView(IView view) {
-        this.view = view;
-    }
-
-    void updatePropertiesView() {
-        flowPaneProperties.getChildren().clear();
-        for (IToolProperty property:
-                currentTool.getProperties()) {
-
-            flowPaneProperties.getChildren().add(ToolPropertyViewFactory.createFrom(property));
-        }
-
-        //This might be a crime against nature, I'm in new territory here
-        ResetProperties reset = new ResetProperties(currentTool, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                //This looks like recursion but it isn't
-                updatePropertiesView();
-            }
-        });
-
-        flowPaneProperties.getChildren().add(reset);
-    }
-
-    public void initialize(URL location, ResourceBundle resources) {
-
-        layer = new Layer(600, 500, new C7.Model.Color(0, 0, 0, 0));
-
-        setView(new View());
-
-        canvas.setWidth(layer.getWidth());
-        canvas.setHeight(layer.getHeight());
-
-        gc = canvas.getGraphicsContext2D();
-
-        scrollPaneCanvas.setContent(canvas);
-
-        updateCanvas();
-
-        splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
-        scrollPaneTools.prefHeightProperty().bind(contentPaneTools.heightProperty());
-        scrollPaneProperties.prefHeightProperty().bind(contentPaneProperties.heightProperty());
-
-        layersArea.getChildren().add(new LayersView());
-
-        setCurrentTool(ToolFactory.CreateCircularBrush(5, new C7.Model.Color(1, 0, 0, 1)));
-
-        //Maybe shouldn't send controller? Couldn't come up with a better solution off the top of my head
-        flowPaneTools.getChildren().add(new ToolButton(currentTool, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new C7.Model.Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1)), "Fill", this));
-
-
-
-
-    }
 
     void importFileAsLayer(File file) {
         Layer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
-            layer = importedLayer;
-            gc.clearRect(0,0,canvas.getWidth(), canvas.getHeight());
-            updateCanvas();
+            project.setActiveLayer(project.addLayer(importedLayer));
+            view.render();
         }
     }
 
-    void updateCanvas() {
-        view.updateCanvas(gc, layer, 0, 0, (int)canvas.getWidth(), (int)canvas.getHeight());
-    }
-
     @FXML
-    void onImport (Event event) {
+    private void onImport (Event event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose image to import");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")));
@@ -157,60 +110,68 @@ public class MainController implements Initializable {
         if (file != null) importFileAsLayer(file);
     }
 
-    @FXML void onCanvasDragOver (DragEvent event) {
-            if (event.getGestureSource() != canvas
-                    && event.getDragboard().hasFiles()) {
-                /* allow for both copying and moving, whatever user chooses */
-                event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-            }
-            event.consume();
+    @FXML
+    private void onCanvasDragOver (DragEvent event) {
+        if (event.getGestureSource() != canvas
+                && event.getDragboard().hasFiles()) {
+            /* allow for both copying and moving, whatever user chooses */
+            event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
         }
+        event.consume();
+    }
 
 
-    @FXML void onCanvasDragDropped (DragEvent event) {
-            Dragboard db = event.getDragboard();
-            boolean success = false;
-            if (db.hasFiles()) {
-                success = true;
+    @FXML
+    private void onCanvasDragDropped (DragEvent event) {
+        Dragboard db = event.getDragboard();
+        boolean success = false;
+        if (db.hasFiles()) {
+            success = true;
 
-                List<File> files = db.getFiles();
+            List<File> files = db.getFiles();
 
-                for (int i = 0; i < files.size(); i++) {
-                    importFileAsLayer(files.get(i));
-                }
-            }
-
-            event.setDropCompleted(success);
-
-            event.consume();
-        }
-
-
-    @FXML void onCanvasMouseDragged (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                Vector2D point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, oldPos, point);
-                oldPos = point;
-                updateCanvas();
+            for (int i = 0; i < files.size(); i++) {
+                importFileAsLayer(files.get(i));
             }
         }
 
+        event.setDropCompleted(success);
 
-    @FXML void onCanvasMousePressed (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                var point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, point, point);
-                oldPos = point;
+        event.consume();
+    }
 
-                updateCanvas();
-            }
+
+    @FXML
+    private void onCanvasMouseDragged (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            Vector2D point = new Vector2D(event.getX(), event.getY());
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, oldPos, point);
+            oldPos = point;
         }
+    }
 
 
-@FXML void onCanvasMouseReleased (MouseEvent event) {
-            if (event.getButton() == MouseButton.PRIMARY) {
-                var point = new Vector2D(event.getX(), event.getY());
-                currentTool.apply(layer, point, point);
-            }
+    @FXML
+    private void onCanvasMousePressed (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            var point = new Vector2D(event.getX(), event.getY());
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, point, point);
+            oldPos = point;
+            pressedPos = point;
         }
+    }
+
+
+    @FXML
+    private void onCanvasMouseReleased (MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            var point = new Vector2D(event.getX(), event.getY());
+            if(currentTool.isContinuous())
+                project.applyTool(currentTool, point, point);
+            else
+                project.applyTool(currentTool, pressedPos, point);
+        }
+    }
 }

@@ -1,9 +1,8 @@
 package C7.Model.Tools.StrokeInterpolation;
 
-import C7.Model.Vector.*;
+import C7.Util.Vector2D;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -11,7 +10,7 @@ import java.util.stream.IntStream;
 
 
 /**
- * LinearStrokeInterpolator is a {@link IStrokeInterpolator} which adds extra {@link Vector2D, Vector2Ds} to
+ * LinearStrokeInterpolator is a {@link IStrokeInterpolator} which adds extra {@link Vector2D , Vector2Ds} to
  * an interval between two given {@link Vector2D, Vector2Ds} linearly. This means that every interpolated
  * {@link Vector2D, Vector2Ds} will be on the line between the two given {@link Vector2D, Vector2Ds}.
  *
