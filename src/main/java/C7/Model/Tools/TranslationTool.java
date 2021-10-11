@@ -18,7 +18,7 @@ class TranslationTool extends BaseTool {
 
     TranslationTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Continuous translation", "The translation is continuously updated on the screen during the translation action.",
+                ToolPropertyFactory.createBooleanProperty("Continuous translation",
                         (b) -> isContinuous = b, () -> isContinuous)
         );
     }

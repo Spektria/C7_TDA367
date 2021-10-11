@@ -25,12 +25,6 @@ public interface IToolProperty {
     String getName();
 
     /**
-     * Returns a string with a description of what this property does.
-     * @return the description as a string
-     */
-    String getDescription();
-
-    /**
      * Returns the type of this property.
      * @return the type of this property.
      */

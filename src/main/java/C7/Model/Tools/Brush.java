@@ -43,17 +43,17 @@ class Brush extends BaseTool {
         this.size = size;
 
         addProperties(
-                ToolPropertyFactory.createIntegerProperty("Stroke size", "The size of the stroke",
+                ToolPropertyFactory.createIntegerProperty("Stroke size",
                         (i) -> this.size = i, () -> this.size, 0, 50),
-                ToolPropertyFactory.createDoubleProperty("Rotation", "The rotation of the stroke. E.g. a line could be rotated to PI/4",
+                ToolPropertyFactory.createDoubleProperty("Rotation",
                         (rot) -> this.rotation = Math.toRadians(rot), () -> Math.toDegrees(this.rotation), 0, 360),
-                ToolPropertyFactory.createDoubleProperty("Y-scale", "The scale of the brush stroke in the y axis",
+                ToolPropertyFactory.createDoubleProperty("Y-scale",
                         (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 5),
-                ToolPropertyFactory.createDoubleProperty("X-scale", "The scale of the brush stroke in the x axis",
+                ToolPropertyFactory.createDoubleProperty("X-scale",
                         (x) -> this.scale = new Vector2D(x, scale.getY()), () -> this.scale.getY(), 0, 5),
-                ToolPropertyFactory.createColorProperty("Stroke color", "The color of the stroke",
+                ToolPropertyFactory.createColorProperty("Stroke color",
                         (c) -> this.color = c, () -> this.color),
-                ToolPropertyFactory.createDoubleProperty("Point frequency", "How many times the brush should draw per pixel",
+                ToolPropertyFactory.createDoubleProperty("Point frequency",
                         (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
         );
     }

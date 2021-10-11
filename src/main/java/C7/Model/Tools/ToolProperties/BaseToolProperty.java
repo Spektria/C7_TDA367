@@ -14,7 +14,6 @@ import java.util.function.Supplier;
 abstract class BaseToolProperty<T> implements IToolProperty {
 
     private final String name;          // This property's name
-    private final String description;   // Description of what this property is
 
     // The getter and setter used for the property on its owner.
     // e.g. it may be a direct reference to a field or set method.
@@ -24,7 +23,7 @@ abstract class BaseToolProperty<T> implements IToolProperty {
     private final T defaultValue;
 
 
-    BaseToolProperty(String name, String description,
+    BaseToolProperty(String name,
                  Consumer<T> setter,
                  Supplier<T> getter){
         Objects.requireNonNull(name);
@@ -32,7 +31,6 @@ abstract class BaseToolProperty<T> implements IToolProperty {
         Objects.requireNonNull(getter);
 
         this.name = name;
-        this.description = description;
         this.setter = setter;
         this.getter = getter;
 
@@ -48,11 +46,6 @@ abstract class BaseToolProperty<T> implements IToolProperty {
     @Override
     public String getName() {
         return this.name;
-    }
-
-    @Override
-    public String getDescription() {
-        return this.description;
     }
 
     @Override

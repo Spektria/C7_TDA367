@@ -10,8 +10,8 @@ import java.util.function.Supplier;
 class IntegerToolProperty extends NumericalToolProperty<Integer> {
 
 
-    IntegerToolProperty(String name, String description, Consumer<Integer> setter, Supplier<Integer> getter, int min, int max) {
-        super(name, description, setter, getter, min, max);
+    IntegerToolProperty(String name, Consumer<Integer> setter, Supplier<Integer> getter, int min, int max) {
+        super(name, setter, getter, min, max);
     }
 
     @Override

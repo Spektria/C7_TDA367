@@ -10,8 +10,8 @@ import java.util.function.Supplier;
  * @author Hugo Ekstrand
  */
 class ColorToolProperty extends BaseToolProperty<Color> {
-    ColorToolProperty(String name, String description, Consumer<Color> setter, Supplier<Color> getter) {
-        super(name, description, setter, getter);
+    ColorToolProperty(String name, Consumer<Color> setter, Supplier<Color> getter) {
+        super(name, setter, getter);
     }
 
     @Override

@@ -13,8 +13,8 @@ abstract class NumericalToolProperty<T extends Number & Comparable<T>> extends B
     private final T min;
     private final T max;
 
-    NumericalToolProperty(String name, String description, Consumer<T> setter, Supplier<T> getter, T min, T max) {
-        super(name, description, setter, getter);
+    NumericalToolProperty(String name, Consumer<T> setter, Supplier<T> getter, T min, T max) {
+        super(name, setter, getter);
         this.max = max;
         this.min = min;
     }

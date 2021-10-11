@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class DoubleToolPropertyTest {
 
     private double internalProp  = 1.337;
-    private IToolProperty doubleProp = ToolPropertyFactory.createDoubleProperty("testDoubleProp", "testing", (d) -> internalProp = d, () -> internalProp, -0.2, 5.5);
+    private IToolProperty doubleProp = ToolPropertyFactory.createDoubleProperty("testDoubleProp", (d) -> internalProp = d, () -> internalProp, -0.2, 5.5);
 
     @BeforeEach
     public void init(){

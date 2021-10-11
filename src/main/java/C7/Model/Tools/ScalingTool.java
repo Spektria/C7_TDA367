@@ -19,9 +19,9 @@ class ScalingTool extends BaseTool {
 
     ScalingTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Continuous scaling", "The scaling is continuously updated on the screen during the scaling action.",
+                ToolPropertyFactory.createBooleanProperty("Continuous scaling",
                         (b) -> isContinuous = b, () -> isContinuous),
-                ToolPropertyFactory.createBooleanProperty("Relative to quadrant", "Is the scaling supposed to be relative to the layers quadrants or absolute?",
+                ToolPropertyFactory.createBooleanProperty("Relative to quadrant",
                         (b) -> relative = b, () -> relative)
         );
     }

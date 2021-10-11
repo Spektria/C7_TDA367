@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 public class IntegerToolPropertyTest {
 
     private int internalProp = 1337;
-    private IToolProperty intProp = ToolPropertyFactory.createIntegerProperty("testIntProp", "testing", (i) -> internalProp = i, () -> internalProp, 5, 1000000);
+    private IToolProperty intProp = ToolPropertyFactory.createIntegerProperty("testIntProp", (i) -> internalProp = i, () -> internalProp, 5, 1000000);
 
     @BeforeEach
     public void init(){

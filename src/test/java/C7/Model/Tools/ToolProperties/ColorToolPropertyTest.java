@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class ColorToolPropertyTest {
 
     private Color internalProp = new Color(1f, 1f, 1f, 1f);
-    private IToolProperty boolProp = ToolPropertyFactory.createColorProperty("testColorProp", "testing", (c) -> internalProp = c, () -> internalProp);
+    private IToolProperty boolProp = ToolPropertyFactory.createColorProperty("testColorProp", (c) -> internalProp = c, () -> internalProp);
 
     @BeforeEach
     public void init(){

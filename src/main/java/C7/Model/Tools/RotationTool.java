@@ -18,7 +18,7 @@ class RotationTool extends BaseTool {
 
     RotationTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Continuous rotation", "The rotation is continuously updated on the screen during the rotation action.",
+                ToolPropertyFactory.createBooleanProperty("Continuous rotation",
                         (b) -> isContinuous = b, () -> isContinuous)
         );
     }

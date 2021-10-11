@@ -32,15 +32,11 @@ class FillBucket extends BaseTool{
 
         addProperties(
                 ToolPropertyFactory.createDoubleProperty("Threshold",
-                        "If the color distance of a color c from" +
-                                " the fill of bucket is less than this threshold" +
-                                " then c will be changed to the buckets fill.",
                         (d) -> this.threshold = d.floatValue(),
                         () -> (double)this.threshold,
                         0f, 2f),
 
                 ToolPropertyFactory.createColorProperty("Fill color",
-                        "The fill color of the bucket",
                         (c) -> this.fill = c,
                         () -> this.fill)
         );

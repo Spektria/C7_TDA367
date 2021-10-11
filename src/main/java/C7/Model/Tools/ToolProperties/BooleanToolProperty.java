@@ -10,8 +10,8 @@ import java.util.function.Supplier;
 class BooleanToolProperty extends BaseToolProperty<Boolean> {
 
 
-    BooleanToolProperty(String name, String description, Consumer<Boolean> setter, Supplier<Boolean> getter) {
-        super(name, description, setter, getter);
+    BooleanToolProperty(String name, Consumer<Boolean> setter, Supplier<Boolean> getter) {
+        super(name, setter, getter);
     }
 
     @Override
