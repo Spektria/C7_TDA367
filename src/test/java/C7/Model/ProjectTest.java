@@ -4,6 +4,9 @@ import C7.IO.LayerIO;
 import C7.IO.ResourceIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
+import C7.Model.Tools.ITool;
+import C7.Model.Tools.ToolFactory;
+import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -66,11 +69,60 @@ public class ProjectTest {
     }
 
     @Test
-    public void createAndPaintLayers(){
-        /*Project proj = new Project(10,10);
-        int layerID = proj.createLayer(10,10, new Vector2D(0,0));
-        ITool tool = ToolFactory.CreateFillBucket();
-        proj.setActiveLayer(layerID);
-        proj.applyTool(ToolFactory.CreateFillBucket(), new Vector2D(0,0), new Vector2D(0,0));
-    */}
+    public void createAndRenderPaintedLayers(){
+        Color[][] layer1Render;
+        Color[][] layer2Render;
+
+        Project proj = new Project(10,10);
+
+        //Create layers with different constructors
+        int layer1ID = proj.createLayer(10,10, new Vector2D(0,0));
+        int layer2ID = proj.createLayer(10,10,new Vector2D(1,1), 0.1, new Vector2D(1,2));
+
+        //Are their variables different?
+        Assertions.assertNotEquals(
+                proj.getLayer(layer1ID).getPosition(),
+                proj.getLayer(layer2ID).getPosition());
+        Assertions.assertNotEquals(
+                proj.getLayer(layer1ID).getRotation(),
+                proj.getLayer(layer2ID).getRotation());
+        Assertions.assertNotEquals(
+                proj.getLayer(layer1ID).getScale(),
+                proj.getLayer(layer2ID).getScale());
+
+        //Paint layers with blue color
+        ITool tool = ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1));
+        //Paint layer 1 by implicitly using active layer
+        proj.setActiveLayer(layer1ID);
+        proj.applyTool(tool, new Vector2D(5,5), new Vector2D(5,5));
+        //Paint layer 2 by explicitly stating ID
+        proj.applyTool(tool, new Vector2D(5,5), new Vector2D(5,5), layer2ID);
+
+
+        //They should be different because of different rotation/scale/position
+        layer1Render = proj.renderLayer(layer1ID);
+        layer2Render = proj.renderLayer(layer2ID);
+        Assertions.assertFalse(colorMatricesEqual(layer1Render, layer2Render));
+
+        //Reset position, rotation, and scale and rerender. They should now be the same.
+        proj.getLayer(layer2ID).setPosition(new Vector2D(0,0));
+        proj.getLayer(layer2ID).setRotation(0);
+        proj.getLayer(layer2ID).setScale(new Vector2D(1,1));
+
+
+        layer2Render = proj.renderLayer(layer2ID);
+        Assertions.assertTrue(colorMatricesEqual(layer1Render, layer2Render));
+    }
+
+    private boolean colorMatricesEqual(Color[][] array1, Color[][] array2){
+        for (int x = 0; x < array1.length; x++) {
+            for (int y = 0; y < array1[0].length; y++) {
+                //If they are not the same return false
+                if (array1[x][y].equals(array2[x][y]) == false) return false;
+            }
+        }
+
+        //If we didn't return false before, they are the same.
+        return true;
+    }
 }
