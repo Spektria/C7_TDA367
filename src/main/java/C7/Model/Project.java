@@ -165,6 +165,10 @@ public class Project implements IObserver<Tuple2<Vector2D, Vector2D>>{
         return newLayerID;
     }
 
+    public int[] getAllLayerIds() {
+        return layerManager.getAllLayerIds();
+    }
+
     /**
      * Gets the layer object for the specified ID.
      * @param id The ID of the layer to get.

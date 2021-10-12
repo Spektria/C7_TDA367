@@ -1,7 +1,7 @@
 package C7.Controller;
 
 import C7.IO.LayerIO;
-import C7.Model.Layer.Layer;
+import C7.Model.Layer.ILayer;
 import C7.Model.Project;
 import C7.Model.Tools.ITool;
 import C7.Util.Vector2D;
@@ -11,6 +11,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SplitPane;
 import javafx.scene.input.MouseButton;
@@ -25,6 +26,9 @@ import java.util.List;
 import java.util.Objects;
 
 
+/**
+ *
+ */
 class MainController implements IMainController {
     private @FXML Canvas canvas;
     private @FXML ScrollPane scrollPaneCanvas;
@@ -35,6 +39,7 @@ class MainController implements IMainController {
     private @FXML AnchorPane contentPaneProperties;
     private @FXML ScrollPane scrollPaneProperties;
     private @FXML AnchorPane layersArea;
+    private @FXML MenuBar menuBar;
 
     private ToolsController toolsController;
 
@@ -80,7 +85,7 @@ class MainController implements IMainController {
 
         splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
 
-        layersArea.getChildren().add(new LayersController());
+        layersArea.getChildren().add(new LayersController(project));
 
     }
 
@@ -92,11 +97,30 @@ class MainController implements IMainController {
 
 
     void importFileAsLayer(File file) {
-        Layer importedLayer = LayerIO.layerFromFile(file.getPath());
+        ILayer importedLayer = LayerIO.layerFromFile(file.getPath());
         if (importedLayer != null) {
             project.setActiveLayer(project.addLayer(importedLayer));
             view.render();
         }
+    }
+
+    private void getScene() {
+
+    }
+
+    @FXML
+    private void onNew (Event event) {
+
+    }
+
+    @FXML
+    private void onOpen (Event event) {
+
+    }
+
+    @FXML
+    private void onSave (Event event) {
+
     }
 
     @FXML
@@ -105,9 +129,13 @@ class MainController implements IMainController {
         fileChooser.setTitle("Choose image to import");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png", "*.jpg", "*.jpeg", "*.bmp", "*.gif")));
 
-        //Feels very hacky to get the scene from an arbitrary node
-        File file = fileChooser.showOpenDialog(scrollPaneCanvas.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
         if (file != null) importFileAsLayer(file);
+    }
+
+    @FXML
+    private void onExport (Event event) {
+
     }
 
     @FXML
@@ -174,4 +202,5 @@ class MainController implements IMainController {
                 project.applyTool(currentTool, pressedPos, point);
         }
     }
+
 }
