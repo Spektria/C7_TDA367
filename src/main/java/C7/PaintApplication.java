@@ -18,7 +18,7 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Create model
-        IProject project = ProjectFactory.createProject(1920, 1080);
+        IProject project = ProjectFactory.createProject("Project1", 1920, 1080);
         int firstLayerID = project.createLayer(600, 600, new Vector2D(1,1), 0, new Vector2D(1,1));
         project.setActiveLayer(firstLayerID);
 

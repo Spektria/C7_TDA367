@@ -12,7 +12,7 @@ import java.io.IOException;
 public class ProjectIOTest {
     @Test
     public void saveLoadCombo() throws IOException {
-        IProject project = ProjectFactory.createProject(10,10);
+        IProject project = ProjectFactory.createProject("tst",10,10);
         project.createLayer(10,10,new Vector2D(0,0));
 
         //Looks quite disgusting but should work for this test

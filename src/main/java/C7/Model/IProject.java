@@ -6,7 +6,24 @@ import C7.Util.Color;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
+/**
+ * IProject is an interface representing a complete project.
+ * Included is all image data required to reconstruct previous work as well as any saved metadata.
+ */
 public interface IProject extends IObservable<Tuple2<Vector2D, Vector2D>> {
+
+    /**
+     * Sets the name of this project. The name must be a non-null String which is not blank or empty.
+     * @throws IllegalArgumentException if the name is null or an empty or blank string.
+     * @param name the name to be set to.
+     */
+    void setName(String name);
+
+    /**
+     * Returns this project's name
+     * @return this project's name.
+     */
+    String getName();
 
     /**
      * Gets the projects' window's width

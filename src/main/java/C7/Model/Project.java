@@ -11,6 +11,7 @@ import C7.Util.Vector2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Project is a class representing a complete project.
@@ -21,13 +22,15 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     private ILayerManager layerManager;
     private ILayer activeLayer;
     private int width, height;
+    private String name;
 
     /**
      * Create a Project with the specified size drawing area.
      * @param width Width of Project drawing area
      * @param height Height of Project drawing area
+     * @param name The name of Project.
      */
-    public Project(int width, int height){
+    public Project(String name, int width, int height){
         if (width < 1 || height < 1)
             throw new IllegalArgumentException("Width & height can not be less than 1 in a project");
         else{
@@ -35,12 +38,27 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
             this.height = height;
         }
 
+        setName(name);
+
         //Specific LayerManager
         layerManager = new LayerManager();
 
         //Observe
         observers = new ArrayList<>();
         layerManager.addObserver(this);
+    }
+
+    @Override
+    public void setName(String name) {
+        Objects.requireNonNull(name);
+        if(name.isEmpty() || name.isBlank())
+            throw new IllegalArgumentException("Name of project must be a non-null String which is not blank or empty.");
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return this.name;
     }
 
     /**
