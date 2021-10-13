@@ -1,16 +1,12 @@
 package C7.Controller;
 
-import C7.Model.Color;
-import C7.Model.IObservable;
+import C7.Util.Color;
 import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Project;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
-import C7.View.ViewFactory;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,8 +14,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -29,8 +23,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LayersController extends AnchorPane {
     @FXML
@@ -126,7 +118,7 @@ public class LayersController extends AnchorPane {
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
-        Layer testLayer = new Layer(600, 400, new C7.Model.Color(0, 0, 0, 0));
+        Layer testLayer = new Layer(600, 400, new Color(0, 0, 0, 0));
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 50; j++) {
                 testLayer.setLocalPixel(i, j, new Color(0,1,0,1));

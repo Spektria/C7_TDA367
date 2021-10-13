@@ -1,6 +1,6 @@
 package C7.IO;
 
-import C7.Model.Color;
+import C7.Util.Color;
 import C7.Model.Layer.Layer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

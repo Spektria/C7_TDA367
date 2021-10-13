@@ -1,6 +1,6 @@
 package C7.IO;
 
-import C7.Model.Color;
+import C7.Util.Color;
 import C7.Model.Layer.Layer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;

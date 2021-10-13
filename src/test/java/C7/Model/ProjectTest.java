@@ -6,6 +6,7 @@ import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
+import C7.Util.Color;
 import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -91,7 +92,7 @@ public class ProjectTest {
                 proj.getLayer(layer2ID).getScale());
 
         //Paint layers with blue color
-        ITool tool = ToolFactory.CreateFillBucket( 0.2f, new C7.Model.Color(0, 0, 1, 1));
+        ITool tool = ToolFactory.CreateFillBucket( 0.2f, new Color(0, 0, 1, 1));
         //Paint layer 1 by implicitly using active layer
         proj.setActiveLayer(layer1ID);
         proj.applyTool(tool, new Vector2D(5,5), new Vector2D(5,5));

@@ -1,6 +1,6 @@
 package C7.Model.Tools.ToolProperties;
 
-import C7.Model.Color;
+import C7.Util.Color;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
