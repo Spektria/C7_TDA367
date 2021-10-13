@@ -1,6 +1,6 @@
 package C7.Model.Tools.ToolProperties;
 
-import C7.Model.Color;
+import C7.Util.Color;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

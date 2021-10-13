@@ -1,4 +1,4 @@
-package C7.Model;
+package C7.Util;
 
 import java.io.Serializable;
 import java.util.Objects;

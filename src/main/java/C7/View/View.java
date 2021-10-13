@@ -51,7 +51,7 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
         render(0, 0, (int)width.get(), (int)height.get());
     }
 
-    private Color toJFXColor(C7.Model.Color color){
+    private Color toJFXColor(C7.Util.Color color){
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
@@ -60,7 +60,7 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
         Objects.requireNonNull(gc);
 
         //Get color data from Project
-        C7.Model.Color[][] colorMatrix = project.renderProject(x0,y0,width,height);
+        C7.Util.Color[][] colorMatrix = project.renderProject(x0,y0,width,height);
 
         // Simply goes inside the given bounds and
         // draws onto the graphics context pixel by pixel.

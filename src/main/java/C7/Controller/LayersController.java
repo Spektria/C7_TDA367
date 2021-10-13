@@ -1,16 +1,12 @@
 package C7.Controller;
 
-import C7.Model.Color;
-import C7.Model.IObservable;
+import C7.Util.Color;
 import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Project;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
-import C7.View.ViewFactory;
-import javafx.beans.InvalidationListener;
-import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,9 +15,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -43,8 +36,8 @@ public class LayersController extends AnchorPane {
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
-    private static final int THUMBNAIL_WIDTH = 100;
-    private static final int THUMBNAIL_HEIGHT = 70;
+    private static final int THUMBNAIL_WIDTH = 200;
+    private static final int THUMBNAIL_HEIGHT = 200;
 
     public LayersController(Project project) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/LayersView.fxml"));
@@ -130,7 +123,7 @@ public class LayersController extends AnchorPane {
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
-        Layer testLayer = new Layer(600, 400, new C7.Model.Color(0, 0, 0, 0));
+        Layer testLayer = new Layer(600, 400, new Color(0, 0, 0, 0));
         for (int i = 0; i < 50; i++) {
             for (int j = 0; j < 50; j++) {
                 testLayer.setLocalPixel(i, j, new Color(0,1,0,1));

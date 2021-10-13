@@ -1,8 +1,7 @@
 package C7.Model.Tools;
 
-import C7.Model.Color;
+import C7.Util.Color;
 import C7.Model.Layer.ILayer;
-import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Util.Vector2D;
 

@@ -33,7 +33,7 @@ class ColorProperty extends AnchorPane {
         label.setText(PropertyDescription.getInstance().getName(prop));
         Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
 
-        C7.Model.Color color = prop.getColor();
+        C7.Util.Color color = prop.getColor();
         colorPicker.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
 
 
@@ -41,7 +41,7 @@ class ColorProperty extends AnchorPane {
             @Override
             public void handle(ActionEvent actionEvent) {
                 Color color = colorPicker.getValue();
-                prop.setColor(new C7.Model.Color((float)color.getRed(), (float)color.getGreen(), (float)color.getBlue(), (float)color.getOpacity()));
+                prop.setColor(new C7.Util.Color((float)color.getRed(), (float)color.getGreen(), (float)color.getBlue(), (float)color.getOpacity()));
             }
         });
     }
