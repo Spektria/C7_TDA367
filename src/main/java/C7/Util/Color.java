@@ -85,6 +85,25 @@ public final class Color implements Serializable {
     }
 
     /**
+     * Adds two colors.
+     * The resulting color is
+     * <code>result = dest + src * src.alpha</code>
+     * @param dest The destination color.
+     * @param src The source color.
+     * @return The source color added to the destination color.
+     */
+    public static Color add(Color dest, Color src) {
+        float r, g, b, a;
+
+        r = dest.getRed() + src.getRed() * src.getAlpha();
+        g = dest.getGreen() + src.getGreen() * src.getAlpha();
+        b = dest.getBlue() + src.getBlue() * src.getAlpha();
+        a = dest.getAlpha() + src.getAlpha() * src.getAlpha();
+
+        return new Color(r, g, b, a);
+    }
+
+    /**
      * Gets the current value of the red channel of this color. The value is
      * between 0, representing no intensity, and 1, representing maximum
      * intensity, or above 1, representing colors above maximum display
