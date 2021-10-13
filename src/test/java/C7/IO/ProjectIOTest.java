@@ -5,18 +5,20 @@ import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
+
 public class ProjectIOTest {
     @Test
-    public void saveLoadCombo(){
-        Project a = new Project(10,10);
-        a.createLayer(10,10,new Vector2D(0,0));
+    public void saveLoadCombo() throws IOException {
+        Project project = new Project(10,10);
+        project.createLayer(10,10,new Vector2D(0,0));
 
-        String property = "java.io.tmpdir";
-        String tempDir = System.getProperty(property);
-        String saveLocation = tempDir + "Pro.project";
+        //Looks quite disgusting but should work for this test
+        String saveLocation = File.createTempFile("projectsave", "project").getAbsolutePath();
 
-        ProjectIO.saveProject(a, saveLocation);
-        a = ProjectIO.loadProject(saveLocation);
-        Assertions.assertNotEquals(a, null);
+        ProjectIO.saveProject(project, saveLocation);
+        project = ProjectIO.loadProject(saveLocation);
+        Assertions.assertNotEquals(project, null);
     }
 }
