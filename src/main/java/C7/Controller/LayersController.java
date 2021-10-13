@@ -16,8 +16,10 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -29,6 +31,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,9 @@ public class LayersController extends AnchorPane {
     private Project project;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
+
+    private static final int THUMBNAIL_WIDTH = 100;
+    private static final int THUMBNAIL_HEIGHT = 70;
 
     public LayersController(Project project) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/LayersView.fxml"));
@@ -81,43 +87,41 @@ public class LayersController extends AnchorPane {
         });
 
         TableColumn thumbnail = tableView.getColumns().get(1); //Definitely change this, give them an fxid or something //Actually maybe it doesn't matter idk
+        thumbnail.setPrefWidth(THUMBNAIL_WIDTH);
 
-        /*thumbnail.setCellFactory(param -> {
-            final Canvas canvas = new Canvas();
+        thumbnail.setCellFactory(v -> new TableCell<Layer, Canvas>() {
 
-            //Set up the Table
-            TableCell<Layer, Canvas> cell = new TableCell<Layer, Canvas>() {
-                public void updateItem(Layer layer) {
-                    PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
-                    for (int y = 0; y < layer.getHeight(); y++) {
-                        for (int x = 0; x < layer.getWidth(); x++) {
-                            // Note, we need to change the color type from C7 color to JavaFX color.
-                            Color color = layer.getLocalPixel(x, y);
-                            pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                        }
-                    }
+            @Override
+            protected void updateItem(Canvas item, boolean empty) {
+                super.updateItem(item, empty);
+                if (!empty) {
+                    setGraphic(item);
                 }
-            };
+            }
 
-            // Attach the canvas to the cell
-            cell.setGraphic(canvas);
-
-            return cell;
-        });*/
+        });
 
         thumbnail.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Layer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
-            Canvas canvas = new Canvas();
+            Canvas canvas = new Canvas(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
 
             ILayer layer = arg0.getValue();
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
                 @Override
                 public void notify(Tuple2<Vector2D, Vector2D> data) {
                     PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
-                    for (int y = 0; y < layer.getHeight(); y++) {
-                        for (int x = 0; x < layer.getWidth(); x++) {
+                    for (int y = (int)data.getVal1().getY(); y < (int)data.getVal2().getY(); y++) {
+                        for (int x = (int)data.getVal1().getX(); x < (int)data.getVal2().getX(); x++) {
                             // Note, we need to change the color type from C7 color to JavaFX color.
-                            Color color = layer.getLocalPixel(x, y);
-                            pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                            Color color = layer.getGlobalPixel(x, y);
+                            //These will be the same until the project changes dimensions. Is it suboptimal to change them every frame or does it not matter?
+                            double xscale = canvas.getWidth()/project.getWidth();
+                            double yscale = canvas.getHeight()/project.getHeight();
+                            if (xscale > yscale) {
+                                pw.setColor((int) (x * yscale), (int) (y * yscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                            } else {
+                                pw.setColor((int) (x * xscale), (int) (y * xscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+
+                            }
                         }
                     }
                 }
