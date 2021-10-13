@@ -104,6 +104,25 @@ public final class Color implements Serializable {
     }
 
     /**
+     * Multiplies two colors.
+     * The resulting color is
+     * <code>result = dest * src</code>
+     * @param dest The destination color.
+     * @param src The source color.
+     * @return The source color multiplied by the destination color.
+     */
+    public static Color multiply(Color dest, Color src) {
+        float r, g, b, a;
+
+        r = dest.getRed() * src.getRed();
+        g = dest.getGreen() * src.getGreen();
+        b = dest.getBlue() * src.getBlue();
+        a = dest.getAlpha() * src.getAlpha();
+
+        return new Color(r, g, b, a);
+    }
+
+    /**
      * Gets the current value of the red channel of this color. The value is
      * between 0, representing no intensity, and 1, representing maximum
      * intensity, or above 1, representing colors above maximum display
