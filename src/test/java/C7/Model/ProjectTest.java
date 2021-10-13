@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 public class ProjectTest {
     @Test
     public void addAndRemoveLayers(){
-        Project proj = new Project(10,10);
+        Project proj = new Project("tst",10,10);
 
         ILayer createdLayer = new Layer(10,10, new Color(0,0,0,0));
         ILayer retrievedLayer;
@@ -34,7 +34,7 @@ public class ProjectTest {
 
     @Test
     public void changeLayer(){
-        Project proj = new Project(10,10);
+        Project proj = new Project("tst",10,10);
 
         ILayer createdLayer1 = new Layer(10,10, new Color(0,0,0,0));
         ILayer createdLayer2 = new Layer(10,10, new Color(0,0,0,0));
@@ -55,7 +55,7 @@ public class ProjectTest {
 
     @Test
     public void renderProject(){
-        Project proj = new Project(15,15);
+        Project proj = new Project("tst",15,15);
         ILayer testLayer = LayerIO.layerFromFile(ResourceIO.getGlobalResource("redsquares.png").getPath());
 
         proj.addLayer(testLayer);
@@ -74,7 +74,7 @@ public class ProjectTest {
         Color[][] layer1Render;
         Color[][] layer2Render;
 
-        Project proj = new Project(10,10);
+        Project proj = new Project("tst",10,10);
 
         //Create layers with different constructors
         int layer1ID = proj.createLayer(10,10, new Vector2D(0,0));

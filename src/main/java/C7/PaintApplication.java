@@ -2,7 +2,8 @@ package C7;
 
 import C7.Controller.ControllerFactory;
 import C7.Controller.IMainController;
-import C7.Model.Project;
+import C7.Model.IProject;
+import C7.Model.ProjectFactory;
 import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
@@ -17,7 +18,7 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Create model
-        Project project = new Project(1920, 1080);
+        IProject project = ProjectFactory.createProject("Project1", 1920, 1080);
         int firstLayerID = project.createLayer(600, 600, new Vector2D(1,1), 0, new Vector2D(1,1));
         project.setActiveLayer(firstLayerID);
 
