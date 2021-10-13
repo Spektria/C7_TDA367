@@ -22,6 +22,7 @@ import javafx.scene.input.*;
 import javafx.stage.FileChooser;
 
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
@@ -136,7 +137,14 @@ class MainController implements IMainController {
 
     @FXML
     private void onExport (Event event) {
-        new ImageExporter().export(project);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose where to save exported image");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png")));
+        fileChooser.setInitialFileName(project.getName());
+        fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getDefaultDirectory());
+
+        File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
+        if(file != null) new ImageExporter(project).export(file.getPath());
     }
 
     @FXML
