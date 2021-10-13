@@ -1,8 +1,9 @@
 package C7.Controller;
 
+import C7.IO.ImageExporter;
 import C7.IO.LayerIO;
+import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
-import C7.Model.Project;
 import C7.Model.Tools.ITool;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
@@ -45,7 +46,7 @@ class MainController implements IMainController {
 
     private PropertiesController propertiesController;
 
-    private Project project; //Only one for now
+    private IProject project; //Only one for now
     //private ILayerManager manager; //Only one for now
     //ILayer layer; //Only one for now
 
@@ -56,7 +57,7 @@ class MainController implements IMainController {
     private Vector2D oldPos;
     private Vector2D pressedPos;
 
-    public MainController(IView view, Project project, AnchorPane root) throws Exception {
+    public MainController(IView view, IProject project, AnchorPane root) throws Exception {
         Objects.requireNonNull(view);
         Objects.requireNonNull(project);
         Objects.requireNonNull(root);
@@ -135,7 +136,7 @@ class MainController implements IMainController {
 
     @FXML
     private void onExport (Event event) {
-
+        new ImageExporter().export(project);
     }
 
     @FXML

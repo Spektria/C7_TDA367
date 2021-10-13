@@ -1,7 +1,7 @@
 package C7.View;
 
 import C7.Model.IObserver;
-import C7.Model.Project;
+import C7.Model.IProject;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-    private final Project project;          // The model this view reads from
+    private final IProject project;          // The model this view reads from
     private GraphicsContext gc;             // The graphics context this view draws onto
 
     private ReadOnlyDoubleProperty width;   // The width and height property of this view.
@@ -36,7 +36,7 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
      * Creates an instance of this type.
      * @param project the Project this object will read from.
      */
-    View(Project project){
+    View(IProject project){
         Objects.requireNonNull(project);
         this.project = project;
 

@@ -1,10 +1,10 @@
 package C7.Controller;
 
+import C7.Model.IProject;
 import C7.Util.Color;
 import C7.Model.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
-import C7.Model.Project;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import javafx.beans.property.SimpleObjectProperty;
@@ -32,14 +32,14 @@ public class LayersController extends AnchorPane {
     @FXML
     TableView<ILayer> tableView;
 
-    private Project project;
+    private IProject project;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
     private static final int THUMBNAIL_WIDTH = 200;
     private static final int THUMBNAIL_HEIGHT = 200;
 
-    public LayersController(Project project) {
+    public LayersController(IProject project) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/LayersView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -101,7 +101,7 @@ public class LayersController extends AnchorPane {
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
                 @Override
                 public void notify(Tuple2<Vector2D, Vector2D> data) {
-                    PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
+                    /*PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
                     for (int y = (int)data.getVal1().getY(); y < (int)data.getVal2().getY(); y++) {
                         for (int x = (int)data.getVal1().getX(); x < (int)data.getVal2().getX(); x++) {
                             // Note, we need to change the color type from C7 color to JavaFX color.
@@ -116,7 +116,7 @@ public class LayersController extends AnchorPane {
 
                             }
                         }
-                    }
+                    }*/
                 }
             });
 
