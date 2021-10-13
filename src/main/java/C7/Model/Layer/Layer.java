@@ -5,6 +5,7 @@ import C7.Model.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -14,7 +15,7 @@ import java.util.*;
  * @author Hugo Ekstrand
  * @version 2.0
  */
-public class Layer implements ILayer {
+public class Layer implements ILayer, Serializable {
 
     private final Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
@@ -29,8 +30,8 @@ public class Layer implements ILayer {
 
     // represents the rectangle in which any pixel has been modified. E.g.
     // if one were to modify pixel (20, 20), (25, 20), and (30, 30) the rectangle of change would be ((20,20), (30,30)).
-    private Optional<Vector2D> rectangleOfChangeMin = Optional.empty(); // Stores smallest x and y
-    private Optional<Vector2D> rectangleOfChangeMax = Optional.empty(); // Stores largest x and y
+    private transient Optional<Vector2D> rectangleOfChangeMin = Optional.empty(); // Stores smallest x and y
+    private transient Optional<Vector2D> rectangleOfChangeMax = Optional.empty(); // Stores largest x and y
 
 
     /**
@@ -334,5 +335,12 @@ public class Layer implements ILayer {
             rectangleOfChangeMin = Optional.empty();
             rectangleOfChangeMax = Optional.empty();
         }
+    }
+
+    //Create empty references for Optional:s so that they are not null
+    private Object readResolve(){
+        this.rectangleOfChangeMin = Optional.empty();
+        this.rectangleOfChangeMax = Optional.empty();
+        return this;
     }
 }

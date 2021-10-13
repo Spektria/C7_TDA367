@@ -7,6 +7,7 @@ import C7.Model.Tools.ITool;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -14,7 +15,7 @@ import java.util.Collection;
  * Project is a class representing a complete project.
  * Included is all image data required to reconstruct previous work as well as any saved metadata.
  * */
-public class Project implements IObserver<Tuple2<Vector2D, Vector2D>>{
+public class Project implements IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
     final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
     private ILayerManager layerManager;
     private ILayer activeLayer;

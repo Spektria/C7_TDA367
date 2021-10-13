@@ -1,12 +1,13 @@
 package C7.Util;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Vector2D is a class representing an immutable mathematical 2d vector.
  * @author Hugo Ekstrand
  */
-public final class Vector2D {
+public final class Vector2D implements Serializable {
 
     public static final Vector2D ZERO = new Vector2D(0,0);
 

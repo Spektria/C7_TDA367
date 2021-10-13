@@ -5,6 +5,7 @@ import C7.Model.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author Love Gustafsson
  * @version 1.1
  */
-public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>> {
+public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
 
 	final private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
 	private int nextId;										// ID number to assign to the next created layer.

@@ -1,5 +1,6 @@
 package C7.Model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Objects;
  * @author Love Svalby
  * @version 1.3
  */
-public final class Color {
+public final class Color implements Serializable {
 
     private float r;  // Red value
     private float g;  // Green value
