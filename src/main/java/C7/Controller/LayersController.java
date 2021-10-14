@@ -101,7 +101,7 @@ public class LayersController extends AnchorPane {
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
                 @Override
                 public void notify(Tuple2<Vector2D, Vector2D> data) {
-                    /*PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
+                    PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
                     for (int y = (int)data.getVal1().getY(); y < (int)data.getVal2().getY(); y++) {
                         for (int x = (int)data.getVal1().getX(); x < (int)data.getVal2().getX(); x++) {
                             // Note, we need to change the color type from C7 color to JavaFX color.
@@ -116,19 +116,12 @@ public class LayersController extends AnchorPane {
 
                             }
                         }
-                    }*/
+                    }
                 }
             });
 
             return new SimpleObjectProperty<Canvas>(canvas);
         });
-
-        Layer testLayer = new Layer(600, 400, new Color(0, 0, 0, 0));
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
-                testLayer.setLocalPixel(i, j, new Color(0,1,0,1));
-            }
-        }
 
         updateLayers();
 
