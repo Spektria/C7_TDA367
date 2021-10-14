@@ -1,16 +1,11 @@
-package C7.IO;
+package C7.Services;
 
 import C7.Model.IProject;
 import C7.Util.Color;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.Raster;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**

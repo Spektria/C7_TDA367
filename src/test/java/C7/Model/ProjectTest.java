@@ -1,7 +1,7 @@
 package C7.Model;
 
-import C7.IO.LayerIO;
-import C7.IO.ResourceIO;
+import C7.Services.LayerIO;
+import C7.Services.ResourceIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;

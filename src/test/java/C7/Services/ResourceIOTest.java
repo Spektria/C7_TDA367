@@ -1,4 +1,4 @@
-package C7.IO;
+package C7.Services;
 
 
 import org.junit.jupiter.api.Assertions;
@@ -8,7 +8,7 @@ public class ResourceIOTest {
 
     @Test
     public void globalResourceIO() {
-        Assertions.assertNotEquals(null, ResourceIO.getGlobalResource("C7/IO/DeepIO"));
+        Assertions.assertNotEquals(null, ResourceIO.getGlobalResource("C7/Services/DeepIO"));
         Assertions.assertEquals(null, ResourceIO.getGlobalResource("DeepIO"));
         Assertions.assertNotEquals(null, ResourceIO.getGlobalResource("shallowIO"));
     }
