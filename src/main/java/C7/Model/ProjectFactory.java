@@ -29,7 +29,8 @@ public final class ProjectFactory {
      */
     public static IProject createProjectWithBaseLayer(String name, int width, int height){
         IProject proj = createProject(name, width, height);
-        proj.addLayer(new Layer(width, height, new Color(0, 0, 0, 0)));
+        int layerId = proj.addLayer(new Layer(width, height, new Color(0, 0, 0, 0)));
+        proj.setActiveLayer(layerId);
         return proj;
     }
 }
