@@ -1,9 +1,8 @@
-package C7.IO;
+package C7.Services;
 
 import C7.Model.IProject;
 
 import java.io.*;
-import java.net.URL;
 
 /**
  * ProjectIO contains static methods for the saving and loading of {@link IProject} objects.

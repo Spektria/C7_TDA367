@@ -1,7 +1,7 @@
 package C7.Controller;
 
-import C7.IO.ImageExporter;
-import C7.IO.LayerIO;
+import C7.Services.ImageExporter;
+import C7.Services.LayerIO;
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
