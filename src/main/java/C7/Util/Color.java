@@ -15,6 +15,29 @@ import java.util.Objects;
  */
 public final class Color implements Serializable {
 
+    // Preset colors
+    public final static Color BLACK = new Color(0, 0, 0, 1);
+    public final static Color WHITE = new Color(1, 1, 1, 1);
+    public final static Color RED = new Color(1, 0, 0, 1);
+    public final static Color GREEN = new Color(0, 1, 0, 1);
+    public final static Color BLUE = new Color(0, 0, 1, 1);
+    public final static Color YELLOW = new Color(1, 1, 0, 1);
+    public final static Color FUCHSIA = new Color(1, 0, 1, 1);
+    public final static Color CYAN = new Color(0, 1, 1, 1);
+    public final static Color ORANGE = new Color(1, 0.5f, 0, 1);
+    public final static Color PURPLE = new Color(0.5f, 0, 1, 1);
+    public final static Color PINK = new Color(1.0f, 0.5f, 0.5f, 1);
+    public final static Color GRAY = new Color(0.5f, 0.5f, 0.5f, 1);
+    public final static Color DARK_GRAY = new Color(0.25f, 0.25f, 0.25f, 1);
+    public final static Color LIGHT_GRAY = new Color(0.75f, 0.75f, 0.75f, 1);
+    public final static Color OFFWHITE = new Color(0.95f, 0.95f, 0.9f, 1);
+    public final static Color CELADON = new Color(0.675f, 0.882f, 0.686f, 1);
+    public final static Color DARK_BLUE = new Color(0, 0, 0.5f, 1);
+    public final static Color DARKER_BLUE = new Color(0, 0, 0.25f, 1);
+    public final static Color VERY_DARK_BLUE = new Color(0, 0, 0.1f, 1);
+    public final static Color LOVES_FAVOURITE_SHADE_OF_BLUE = new Color(0.08f, 0.532f, 0.8f, 1);
+    public final static Color TRANSLUCENT_LIME = new Color(0.2f, 1, 0f, 0.5f);
+
     private float r;  // Red value
     private float g;  // Green value
     private float b;  // Blue value
