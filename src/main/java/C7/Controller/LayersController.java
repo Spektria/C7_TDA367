@@ -95,7 +95,22 @@ public class LayersController extends AnchorPane {
         });
 
         thumbnail.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Layer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
-            Canvas canvas = new Canvas(THUMBNAIL_WIDTH, THUMBNAIL_HEIGHT);
+            Canvas canvas = new Canvas(project.getWidth(), project.getHeight());
+
+            double xscale = (double)THUMBNAIL_WIDTH/project.getWidth();
+            double yscale = (double)THUMBNAIL_HEIGHT/project.getHeight();
+
+
+            if (xscale > yscale) {
+                System.out.println("henlo");
+                canvas.setScaleX(100 * (double)THUMBNAIL_WIDTH / project.getHeight());
+                canvas.setScaleY(yscale);
+            } else {
+                //canvas.setScaleX(xscale);
+                //canvas.setScaleY(100 * (double)THUMBNAIL_HEIGHT / project.getWidth());
+                canvas.setScaleX(1.1);
+                canvas.setScaleY(1.1);
+            }
 
             ILayer layer = arg0.getValue();
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
@@ -106,14 +121,12 @@ public class LayersController extends AnchorPane {
                         for (int x = (int)data.getVal1().getX(); x < (int)data.getVal2().getX(); x++) {
                             // Note, we need to change the color type from C7 color to JavaFX color.
                             Color color = layer.getGlobalPixel(x, y);
-                            //These will be the same until the project changes dimensions. Is it suboptimal to change them every frame or does it not matter?
-                            double xscale = canvas.getWidth()/project.getWidth();
-                            double yscale = canvas.getHeight()/project.getHeight();
+
                             if (xscale > yscale) {
                                 pw.setColor((int) (x * yscale), (int) (y * yscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                             } else {
-                                pw.setColor((int) (x * xscale), (int) (y * xscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-
+                                //pw.setColor((int) (x * xscale), (int) (y * xscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+                                pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
                             }
                         }
                     }
