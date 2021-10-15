@@ -1,4 +1,4 @@
-package C7.Model;
+package C7.Util;
 
 /**
  * Interface for an observable in the observer pattern. This object can be observed by

@@ -1,7 +1,5 @@
 package C7.Util;
 
-import C7.Model.IObserver;
-
 import java.util.Objects;
 
 /**

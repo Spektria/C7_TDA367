@@ -1,6 +1,6 @@
 package C7.View;
 
-import C7.Model.IObserver;
+import C7.Util.IObserver;
 import C7.Model.IProject;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
