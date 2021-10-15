@@ -80,7 +80,7 @@ public class LayersController extends AnchorPane {
         });
 
         TableColumn thumbnail = tableView.getColumns().get(1); //Definitely change this, give them an fxid or something //Actually maybe it doesn't matter idk
-        thumbnail.setPrefWidth(THUMBNAIL_WIDTH);
+        thumbnail.setPrefWidth(THUMBNAIL_WIDTH/2);
 
         thumbnail.setCellFactory(v -> new TableCell<Layer, Canvas>() {
 
@@ -99,18 +99,20 @@ public class LayersController extends AnchorPane {
 
             double xscale = (double)THUMBNAIL_WIDTH/project.getWidth();
             double yscale = (double)THUMBNAIL_HEIGHT/project.getHeight();
-
+            double scale;
 
             if (xscale > yscale) {
-                System.out.println("henlo");
-                canvas.setScaleX(100 * (double)THUMBNAIL_WIDTH / project.getHeight());
-                canvas.setScaleY(yscale);
+                scale = yscale;
             } else {
-                //canvas.setScaleX(xscale);
-                //canvas.setScaleY(100 * (double)THUMBNAIL_HEIGHT / project.getWidth());
-                canvas.setScaleX(1.1);
-                canvas.setScaleY(1.1);
+                scale = xscale;
             }
+
+
+            canvas.setScaleX(scale);
+            canvas.setScaleY(scale);
+
+            canvas.setTranslateX(canvas.getWidth()*(scale/2-1d/2));
+            canvas.setTranslateY(canvas.getHeight()*(scale/2-1d/2));
 
             ILayer layer = arg0.getValue();
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
