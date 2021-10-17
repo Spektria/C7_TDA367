@@ -56,7 +56,7 @@ public class ProjectTest {
     @Test
     public void renderProject(){
         Project proj = new Project("tst",15,15);
-        ServiceFactory.createLayerImportService(ResourceIO.getGlobalResource("redsquares.png").getPath(), proj::addLayer);
+        ServiceFactory.createLayerImportService(ResourceIO.getGlobalResource("redsquares.png").getPath(), proj::addLayer).execute();
 
         Color[][] render = proj.renderProject(0,0, proj.getWidth(), proj.getHeight());
 
