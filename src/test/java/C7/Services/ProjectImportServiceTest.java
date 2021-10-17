@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 
-public class ProjectIOTest {
+public class ProjectImportServiceTest {
     @Test
     public void saveLoadCombo() throws IOException {
         IProject project = ProjectFactory.createProject("tst",10,10);
@@ -18,8 +18,8 @@ public class ProjectIOTest {
         //Looks quite disgusting but should work for this test
         String saveLocation = File.createTempFile("projectsave", "project").getAbsolutePath();
 
-        ProjectIO.saveProject(project, saveLocation);
-        project = ProjectIO.loadProject(saveLocation);
-        Assertions.assertNotEquals(project, null);
+        ServiceFactory.createProjectSaverService(saveLocation, project).execute();
+        ServiceFactory.createProjectLoaderService(saveLocation, imported
+                -> Assertions.assertNotNull(imported)).execute();
     }
 }

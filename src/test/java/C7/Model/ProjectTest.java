@@ -1,7 +1,7 @@
 package C7.Model;
 
-import C7.Services.LayerIO;
-import C7.Services.ResourceIO;
+import C7.Services.ServiceFactory;
+import C7.Util.ResourceIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
@@ -56,9 +56,7 @@ public class ProjectTest {
     @Test
     public void renderProject(){
         Project proj = new Project("tst",15,15);
-        ILayer testLayer = LayerIO.layerFromFile(ResourceIO.getGlobalResource("redsquares.png").getPath());
-
-        proj.addLayer(testLayer);
+        ServiceFactory.createLayerImportService(ResourceIO.getGlobalResource("redsquares.png").getPath(), proj::addLayer);
 
         Color[][] render = proj.renderProject(0,0, proj.getWidth(), proj.getHeight());
 

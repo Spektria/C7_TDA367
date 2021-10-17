@@ -1,22 +1,24 @@
 package C7.Services;
 
+import C7.Model.Layer.ILayer;
 import C7.Util.Color;
 import C7.Model.Layer.Layer;
+import C7.Util.ResourceIO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 
-public class LayerIOTest {
+public class LayerImportServiceTest {
 
     URL imagePath = ResourceIO.getPackageResource(this, "redsquares.png");
-    Layer importedLayer;
+    ILayer importedLayer;
 
 
     @BeforeEach
     public void importTest(){
-        importedLayer = LayerIO.layerFromFile(imagePath.getPath());
+        ServiceFactory.createLayerImportService(imagePath.getPath(), l -> importedLayer = l).execute();
         Assertions.assertNotEquals(null, importedLayer);
     }
 
