@@ -4,10 +4,10 @@ import C7.Model.IProject;
 import C7.Util.Color;
 import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
-import C7.Model.Layer.Layer;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -28,14 +28,19 @@ public class LayersController extends AnchorPane {
     @FXML
     TableView<ILayer> tableView;
 
+    @FXML TableColumn columnShowHide;
+    @FXML TableColumn columnPreview;
+    @FXML TableColumn columnName;
+
+
     private IProject project;
 
     private static final DataFormat SERIALIZED_MIME_TYPE = new DataFormat("application/x-java-serialized-object");
 
-    private static final int THUMBNAIL_WIDTH = 200;
-    private static final int THUMBNAIL_HEIGHT = 200;
+    private static final int THUMBNAIL_WIDTH = 100;
+    private static final int THUMBNAIL_HEIGHT = 70;
 
-    public LayersController(IProject project) {
+    public LayersController(AnchorPane parent, IProject project) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/LayersView.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -46,12 +51,12 @@ public class LayersController extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
+        parent.getChildren().add(this);
+
         this.project = project;
 
-        TableColumn showhide = tableView.getColumns().get(0);
-
-        showhide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Layer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
-            Layer layer = arg0.getValue();
+        columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
+            ILayer layer = arg0.getValue();
 
             CheckBox checkBox = new CheckBox();
 
@@ -75,10 +80,9 @@ public class LayersController extends AnchorPane {
 
         });
 
-        TableColumn thumbnail = tableView.getColumns().get(1); //Definitely change this, give them an fxid or something //Actually maybe it doesn't matter idk
-        thumbnail.setPrefWidth(THUMBNAIL_WIDTH/2);
+        columnPreview.setPrefWidth(THUMBNAIL_WIDTH);
 
-        thumbnail.setCellFactory(v -> new TableCell<Layer, Canvas>() {
+        columnPreview.setCellFactory(v -> new TableCell<ILayer, Canvas>() {
 
             @Override
             protected void updateItem(Canvas item, boolean empty) {
@@ -90,7 +94,7 @@ public class LayersController extends AnchorPane {
 
         });
 
-        thumbnail.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Layer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
+        columnPreview.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
             Canvas canvas = new Canvas(project.getWidth(), project.getHeight());
 
             double xscale = (double)THUMBNAIL_WIDTH/project.getWidth();
@@ -110,31 +114,26 @@ public class LayersController extends AnchorPane {
             canvas.setTranslateX(canvas.getWidth()*(scale/2-1d/2));
             canvas.setTranslateY(canvas.getHeight()*(scale/2-1d/2));
 
+
+
             ILayer layer = arg0.getValue();
             layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
                 @Override
                 public void notify(Tuple2<Vector2D, Vector2D> data) {
-                    PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
-                    for (int y = (int)data.getVal1().getY(); y < (int)data.getVal2().getY(); y++) {
-                        for (int x = (int)data.getVal1().getX(); x < (int)data.getVal2().getX(); x++) {
-                            // Note, we need to change the color type from C7 color to JavaFX color.
-                            Color color = layer.getGlobalPixel(x, y);
-
-                            if (xscale > yscale) {
-                                pw.setColor((int) (x * yscale), (int) (y * yscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                            } else {
-                                //pw.setColor((int) (x * xscale), (int) (y * xscale), new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                                pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-                            }
-                        }
-                    }
+                    renderLayer(layer, canvas, data);
                 }
             });
+
+            renderLayer(layer, canvas, new Tuple2<>(new Vector2D(0, 0), new Vector2D(layer.getWidth(), layer.getHeight())));
 
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
+        //columnName.setCellValueFactory(new SimpleStringProperty());
+
         updateLayers();
+
+        tableView.setFixedCellSize(THUMBNAIL_HEIGHT);
 
         tableView.setRowFactory(tv -> {
             TableRow<ILayer> row = new TableRow<>();
@@ -188,12 +187,24 @@ public class LayersController extends AnchorPane {
 
     }
 
-    private void updateLayers() {
+    public void updateLayers() {
         tableView.getItems().clear();
 
         for (int id:
              project.getAllLayerIds()) {
             tableView.getItems().add(project.getLayer(id));
+        }
+    }
+
+    private void renderLayer(ILayer layer, Canvas canvas, Tuple2<Vector2D, Vector2D> area) {
+        PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
+        for (int y = (int)area.getVal1().getY(); y < (int)area.getVal2().getY(); y++) {
+            for (int x = (int)area.getVal1().getX(); x < (int)area.getVal2().getX(); x++) {
+                // Note, we need to change the color type from C7 color to JavaFX color.
+                Color color = layer.getGlobalPixel(x, y);
+
+                pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
+            }
         }
     }
 }

@@ -46,6 +46,7 @@ class MainController implements IMainController {
     private ToolsController toolsController;
 
     private PropertiesController propertiesController;
+    private LayersController layersController;
 
     private IProject project; //Only one for now
     //private ILayerManager manager; //Only one for now
@@ -71,8 +72,11 @@ class MainController implements IMainController {
         this.project = project;
         this.view = view;
 
-        scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
-        scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        //scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
+        //scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        canvas.setWidth(project.getWidth());
+        canvas.setHeight(project.getHeight());
+
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
         view.setBounds(canvas.widthProperty(), canvas.heightProperty());
@@ -87,7 +91,7 @@ class MainController implements IMainController {
 
         splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
 
-        layersArea.getChildren().add(new LayersController(project));
+        layersController = new LayersController(layersArea, project);
 
     }
 
@@ -104,6 +108,8 @@ class MainController implements IMainController {
             project.setActiveLayer(project.addLayer(importedLayer));
             view.render();
         }
+
+        layersController.updateLayers();
     }
 
     private void getScene() {
