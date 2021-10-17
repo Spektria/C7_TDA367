@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -61,7 +62,7 @@ class LayerImportService implements IService {
 
             doAfter.accept(new Layer(colorData));
         }
-        catch (Exception e){
+        catch (IOException e){
             System.out.println(e.getMessage());
         }
     }
