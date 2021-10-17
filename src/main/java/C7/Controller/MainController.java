@@ -82,7 +82,7 @@ class MainController implements IMainController {
 
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
-        view.setBounds(canvas.widthProperty(), canvas.heightProperty());
+        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
 
         scrollPaneCanvas.setContent(canvas);
 
