@@ -206,8 +206,6 @@ class MainController implements IMainController {
     private void onCanvasMousePressed (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
             var point = new Vector2D(event.getX(), event.getY());
-            if(currentTool.isContinuous())
-                project.applyTool(currentTool, point, point);
             oldPos = point;
             pressedPos = point;
         }
