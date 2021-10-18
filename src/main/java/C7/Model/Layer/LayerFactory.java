@@ -74,6 +74,7 @@ public final class LayerFactory {
 		layer.setPosition(position);
 		layer.setRotation(angle);
 		layer.setScale(scale);
+		layer.update();
 
 		return layer;
 	}
