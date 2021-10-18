@@ -28,6 +28,8 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     private ReadOnlyDoubleProperty height;  // How large of a rectangle should this view draw?
                                             // This is given by these two properties.
 
+    private boolean firstNotify = true;     // Keeps track of if the notify method has been called before.
+
     private Tuple2<Vector2D, Vector2D> lastUpdateRect;  // The last updated rectangle this view did.
                                                         // This is used so that the view can clean
                                                         // the last drawn spot so that there is no leftover pixels
@@ -101,15 +103,23 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
                 C7Math.limit(data.getVal2().getY() + 1, 0d, height.get()).intValue()
         );
 
+
         // We update the last rectangle too, so that no leftovers are visible on the view.
         // That is, if we were not to do this ghost images may be left on the view.
-        if(lastUpdateRect != null)
+        // Before that however, we need to check that this is not the first call to this method.
+        // If it is, we should re-render the whole view since we do not know where any potential leftover may be.
+        if(firstNotify){
+            render();
+            firstNotify = false;
+        }
+        else
             render(
                     C7Math.limit(lastUpdateRect.getVal1().getX(), 0d, width.get()).intValue(),
                     C7Math.limit(lastUpdateRect.getVal1().getY(), 0d, height.get()).intValue(),
                     C7Math.limit(lastUpdateRect.getVal2().getX() + 1d, 0d, width.get()).intValue(),
                     C7Math.limit(lastUpdateRect.getVal2().getY() + 1d, 0d, height.get()).intValue()
-                    );
+            );
+
 
         this.lastUpdateRect = data;
     }
