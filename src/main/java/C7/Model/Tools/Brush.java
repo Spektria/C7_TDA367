@@ -6,10 +6,11 @@ import C7.Model.Tools.Pattern.IPattern;
 import C7.Model.Tools.StrokeInterpolation.IStrokeInterpolator;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
+import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -85,20 +86,32 @@ class Brush extends BaseTool {
         // regardless of the layers scale.
         double scaledPointFrequency = pointFrequency * layer.getScale().len();
 
-        // Interpolate the given points so that any "holes" of empty points are filled.
-        strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
-                .parallelStream()
 
-                // For each interpolated point...
-                .forEach(interpolatedClickPoint ->
-                        // For each point in the pattern
-                        patternPoints.stream()
-                                // Translate the pattern point to interpolated point position (i.e. mouse click)
-                                .map(v -> v.add(interpolatedClickPoint))
-                                // Check so that the new, translated pattern point is on the layer
-                                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
-                                // If it is on the layer, draw the points which are on the layer.
-                                .forEach(v -> layer.setLocalPixel((int)v.getX(), (int)v.getY(), color)));
+        // Interpolate the given points so that any "holes" of empty points are filled.
+        // Then for each of these points do:
+        // 1: Add points for the Brush's pattern around the given point.
+        // 2: Round the points to the closest integer so that they represent pixels.
+        // Lastly, after doing this collect all the created points as a set so that any duplicate points are removed.
+        Set<Vector2D> strokePoints = strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
+                .stream()
+                .flatMap(interpolatedPoint -> patternPoints.stream().map(v -> v.add(interpolatedPoint)))
+                .map(v -> new Vector2D((int)v.getX(), (int)v.getY()))
+                //.map(v -> new Tuple2<>((int)v.getX(), (int)v.getY()))
+                .collect(Collectors.toSet());
+
+        // For these points which we should draw,
+        // 1: check that they are on the layer which we're drawing on.
+        // 2: blend the current color with the color being drawn.
+        // 3: write the blended color to the layer.
+        strokePoints
+                .stream()
+                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
+                // If it is on the layer, draw the points which are on the layer.
+                .forEach(v -> {
+                    Color beforeColor = layer.getLocalPixel((int)v.getX(), (int)v.getY());
+                    Color blendedColor = Color.blend(beforeColor, this.color);
+                    layer.setLocalPixel((int)v.getX(), (int)v.getY(), blendedColor);
+                });
 
         layer.update();
     }
