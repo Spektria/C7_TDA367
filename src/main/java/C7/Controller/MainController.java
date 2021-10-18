@@ -8,6 +8,8 @@ import C7.Services.ServiceFactory;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -74,15 +76,10 @@ class MainController implements IMainController {
 
         this.project = project;
         this.view = view;
+        bindView();
 
-        //scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
-        //scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
         canvas.setWidth(project.getWidth());
         canvas.setHeight(project.getHeight());
-
-
-        view.setGraphicsContext(canvas.getGraphicsContext2D());
-        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
 
         scrollPaneCanvas.setContent(canvas);
 
@@ -96,6 +93,25 @@ class MainController implements IMainController {
 
         layersController = new LayersController(layersArea, project);
 
+    }
+
+    /**
+     * Connects the view with this controller.
+     * Does any necessary operation to make the view work with this controller.
+     */
+    private void bindView(){
+        ChangeListener<Number> reRenderIfBigger = (observable, oldValue, newValue) -> {
+            if(oldValue.intValue() < newValue.intValue())
+                view.render();
+        };
+
+        // We want to rerender the view if we change the size of the window.
+        // We also only want to rerender if it gets bigger since it is otherwise already rendered.
+        scrollPaneCanvas.widthProperty().addListener(reRenderIfBigger);
+        scrollPaneCanvas.heightProperty().addListener(reRenderIfBigger);
+
+        view.setGraphicsContext(canvas.getGraphicsContext2D());
+        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
     }
 
     public void setCurrentTool(ITool tool) {
