@@ -73,6 +73,35 @@ class Brush extends BaseTool {
                 rotation - layer.getRotation());
     }
 
+    private Collection<Vector2D> getStrokePoints(Collection<Vector2D> patternPoints, double pointFrequency, Vector2D v0, Vector2D v1){
+        // Interpolate the given points so that any "holes" of empty points are filled.
+        // Then for each of these points do:
+        // 1: Add points for the Brush's pattern around the given point.
+        // 2: Round the points to the closest integer so that they represent pixels.
+        // Lastly, after doing this collect all the created points as a set so that any duplicate points are removed.
+        return strokeInterpolator.interpolate(pointFrequency, v0, v1)
+                .stream()
+                .flatMap(interpolatedPoint -> patternPoints.stream().map(v -> v.add(interpolatedPoint)))
+                .map(v -> new Vector2D((int)v.getX(), (int)v.getY()))
+                //.map(v -> new Tuple2<>((int)v.getX(), (int)v.getY()))
+                .collect(Collectors.toSet());
+    }
+
+    private void drawPointsOnLayer(Collection<Vector2D> points, ILayer layer){
+        // For these points which we should draw,
+        // 1: check that they are on the layer which we're drawing on.
+        // 2: blend the current color with the color being drawn.
+        // 3: write the blended color to the layer.
+        points.stream()
+                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
+                // If it is on the layer, draw the points which are on the layer.
+                .forEach(v -> {
+                    Color beforeColor = layer.getLocalPixel((int)v.getX(), (int)v.getY());
+                    Color blendedColor = Color.blend(beforeColor, this.color);
+                    layer.setLocalPixel((int)v.getX(), (int)v.getY(), blendedColor);
+                });
+    }
+
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
 
@@ -86,32 +115,10 @@ class Brush extends BaseTool {
         // regardless of the layers scale.
         double scaledPointFrequency = pointFrequency * layer.getScale().len();
 
+        // Get all the strokes points in local space.
+        Collection<Vector2D> strokePoints = getStrokePoints(patternPoints, scaledPointFrequency, localV0, localV1);
 
-        // Interpolate the given points so that any "holes" of empty points are filled.
-        // Then for each of these points do:
-        // 1: Add points for the Brush's pattern around the given point.
-        // 2: Round the points to the closest integer so that they represent pixels.
-        // Lastly, after doing this collect all the created points as a set so that any duplicate points are removed.
-        Set<Vector2D> strokePoints = strokeInterpolator.interpolate(scaledPointFrequency, localV0, localV1)
-                .stream()
-                .flatMap(interpolatedPoint -> patternPoints.stream().map(v -> v.add(interpolatedPoint)))
-                .map(v -> new Vector2D((int)v.getX(), (int)v.getY()))
-                //.map(v -> new Tuple2<>((int)v.getX(), (int)v.getY()))
-                .collect(Collectors.toSet());
-
-        // For these points which we should draw,
-        // 1: check that they are on the layer which we're drawing on.
-        // 2: blend the current color with the color being drawn.
-        // 3: write the blended color to the layer.
-        strokePoints
-                .stream()
-                .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
-                // If it is on the layer, draw the points which are on the layer.
-                .forEach(v -> {
-                    Color beforeColor = layer.getLocalPixel((int)v.getX(), (int)v.getY());
-                    Color blendedColor = Color.blend(beforeColor, this.color);
-                    layer.setLocalPixel((int)v.getX(), (int)v.getY(), blendedColor);
-                });
+        drawPointsOnLayer(strokePoints, layer);
 
         layer.update();
     }
