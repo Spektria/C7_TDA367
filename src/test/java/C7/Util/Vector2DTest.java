@@ -1,4 +1,4 @@
-package C7.Model.Vector;
+package C7.Util;
 
 
 import C7.Util.Vector2D;

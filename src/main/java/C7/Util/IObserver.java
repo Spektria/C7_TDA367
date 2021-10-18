@@ -1,4 +1,4 @@
-package C7.Model;
+package C7.Util;
 
 /**
  * An observer to an {@link IObservable} object. This observer observes changes in

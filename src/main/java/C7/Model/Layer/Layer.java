@@ -1,9 +1,6 @@
 package C7.Model.Layer;
 
-import C7.Util.Color;
-import C7.Model.IObserver;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
+import C7.Util.*;
 
 import java.io.Serializable;
 import java.util.*;
@@ -155,19 +152,24 @@ public class Layer implements ILayer, Serializable {
      * makes the rectangle points be (0, 0) and (width, height).
      */
     private void maxRectangleOfChange(){
+        // The corners of the layer's rectangle translated to global coordinates
         Vector2D v0 = toGlobalPixel(Vector2D.ZERO);
         Vector2D v1 = toGlobalPixel(new Vector2D(0, width));
         Vector2D v2 = toGlobalPixel(new Vector2D(height, 0));
         Vector2D v3 = toGlobalPixel(new Vector2D(width, height));
 
-        List<Double> xVals = List.of(v0.getX(), v1.getX(), v2.getX(), v3.getX());
-        List<Double> yVals = List.of(v0.getY(), v1.getY(), v2.getY(), v3.getY());
+        // Put all the values in an array...
+        Double[] xVals = new Double[]{v0.getX(), v1.getX(), v2.getX(), v3.getX()};
+        Double[] yVals = new Double[]{v0.getY(), v1.getY(), v2.getY(), v3.getY()};
 
-        int xMin = xVals.stream().min(Double::compareTo).get().intValue();
-        int xMax = xVals.stream().max(Double::compareTo).get().intValue();
-        int yMin = yVals.stream().min(Double::compareTo).get().intValue();
-        int yMax = yVals.stream().max(Double::compareTo).get().intValue();
+        // So that we can find the global rectangle corners which
+        // contains this local layer rectangle.
+        int xMin = C7Math.min(xVals).intValue();
+        int xMax = C7Math.max(xVals).intValue();
+        int yMin = C7Math.min(yVals).intValue();
+        int yMax = C7Math.max(yVals).intValue();
 
+        // This guarantees to fill the whole layer's rectangle in global space.
         rectangleOfChangeMin = Optional.of(new Vector2D(xMin, yMin));
         rectangleOfChangeMax = Optional.of(new Vector2D(xMax, yMax));
     }

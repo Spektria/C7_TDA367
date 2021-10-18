@@ -1,7 +1,7 @@
 package C7.Model.Layer;
 
 import C7.Util.Color;
-import C7.Model.IObserver;
+import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 

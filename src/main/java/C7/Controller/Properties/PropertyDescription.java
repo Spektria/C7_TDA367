@@ -1,6 +1,6 @@
 package C7.Controller.Properties;
 
-import C7.Services.ResourceIO;
+import C7.Util.ResourceIO;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 
 import java.io.BufferedReader;

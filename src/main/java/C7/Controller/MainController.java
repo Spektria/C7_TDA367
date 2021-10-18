@@ -1,10 +1,10 @@
 package C7.Controller;
 
-import C7.Services.ImageExporter;
-import C7.Services.LayerIO;
+import C7.Services.ImageFormatName;
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
+import C7.Services.ServiceFactory;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
@@ -24,8 +24,11 @@ import javafx.stage.FileChooser;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.security.Provider;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 /**
@@ -46,6 +49,7 @@ class MainController implements IMainController {
     private ToolsController toolsController;
 
     private PropertiesController propertiesController;
+    private LayersController layersController;
 
     private IProject project; //Only one for now
     //private ILayerManager manager; //Only one for now
@@ -71,11 +75,14 @@ class MainController implements IMainController {
         this.project = project;
         this.view = view;
 
-        scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
-        scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        //scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
+        //scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
+        canvas.setWidth(project.getWidth());
+        canvas.setHeight(project.getHeight());
+
 
         view.setGraphicsContext(canvas.getGraphicsContext2D());
-        view.setBounds(canvas.widthProperty(), canvas.heightProperty());
+        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
 
         scrollPaneCanvas.setContent(canvas);
 
@@ -87,7 +94,7 @@ class MainController implements IMainController {
 
         splitPaneToolsProps.prefHeightProperty().bind(contentPaneToolsProps.heightProperty());
 
-        layersArea.getChildren().add(new LayersController(project));
+        layersController = new LayersController(layersArea, project);
 
     }
 
@@ -99,11 +106,12 @@ class MainController implements IMainController {
 
 
     void importFileAsLayer(File file) {
-        ILayer importedLayer = LayerIO.layerFromFile(file.getPath());
-        if (importedLayer != null) {
-            project.setActiveLayer(project.addLayer(importedLayer));
+        ServiceFactory.createLayerImportService(file.getPath(), (layer) -> {
+            project.setActiveLayer(project.addLayer(layer));
             view.render();
-        }
+        }).execute();
+
+        layersController.updateLayers();
     }
 
     private void getScene() {
@@ -139,12 +147,17 @@ class MainController implements IMainController {
     private void onExport (Event event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose where to save exported image");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", List.of("*.png")));
+        List<String> formats = Arrays.stream(ImageFormatName.values()).map(ImageFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", formats));
         fileChooser.setInitialFileName(project.getName());
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getDefaultDirectory());
 
         File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
-        if(file != null) new ImageExporter(project).export(file.getPath());
+        if(file != null) {
+            String chosenExtStr = fileChooser.getSelectedExtensionFilter().getExtensions().get(0).substring(2);
+            ImageFormatName chosenExt = ImageFormatName.valueOf(ImageFormatName.class, chosenExtStr.toUpperCase());
+            ServiceFactory.createImageExportService(project, chosenExt, file.getPath()).execute();
+        }
     }
 
     @FXML

@@ -8,9 +8,9 @@
    <children>
       <TableView fx:id="tableView" prefHeight="200.0" prefWidth="360.0">
         <columns>
-          <TableColumn prefWidth="75.0" sortable="false" text="Show/Hide" />
-          <TableColumn editable="false" prefWidth="112.79998779296875" sortable="false" text="Thumbnail" />
-            <TableColumn prefWidth="171.20001220703125" sortable="false" text="Name" />
+          <TableColumn fx:id="columnShowHide" prefWidth="75.0" sortable="false" text="Show/Hide" />
+          <TableColumn fx:id="columnPreview" editable="false" prefWidth="112.79998779296875" sortable="false" text="Preview" />
+            <TableColumn fx:id="columnName" prefWidth="171.20001220703125" sortable="false" text="Name" />
         </columns>
       </TableView>
    </children>

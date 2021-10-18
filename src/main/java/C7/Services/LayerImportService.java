@@ -1,23 +1,41 @@
 package C7.Services;
 
+import C7.Model.Layer.ILayer;
 import C7.Util.Color;
 import C7.Model.Layer.Layer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
 
 /**
  * LayerIO contains any input/output operations to/from a {@link Layer}.
  */
-public class LayerIO {
+class LayerImportService implements IService {
+
+    private final String filePath;
+    private final Consumer<ILayer> doAfter;
+
     /**
      * Constructs a new layer from a filepath
      * ONLY SUPPORTS 8bit image of type: BMP, GIF, JPEG, PNG.
-     * @param filePath The path to the requested image
+     * @param path The path to the requested image
      * @return New Layer created from image data in file, if error has occurred returns NULL
      */
-    public static Layer layerFromFile(String filePath){
+    LayerImportService(String path, Consumer<ILayer> doAfter){
+        Objects.requireNonNull(path);
+        Objects.requireNonNull(doAfter);
+
+        this.filePath = path;
+        this.doAfter = doAfter;
+    }
+
+
+    @Override
+    public void execute() {
         try{
             FileInputStream fileStream = new FileInputStream(filePath);
             Image fileImage = new Image(fileStream);
@@ -42,11 +60,10 @@ public class LayerIO {
                 }
             }
 
-            return new Layer(colorData);
+            doAfter.accept(new Layer(colorData));
         }
-        catch (Exception e){
+        catch (IOException e){
             System.out.println(e.getMessage());
-            return null;
         }
     }
 }

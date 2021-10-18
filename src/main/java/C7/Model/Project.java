@@ -5,6 +5,7 @@ import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.LayerManager;
 import C7.Model.Tools.ITool;
 import C7.Util.Color;
+import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
