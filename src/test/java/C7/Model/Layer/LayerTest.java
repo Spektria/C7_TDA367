@@ -13,7 +13,7 @@ public class LayerTest {
 
     @Test
     public void sizeTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         Assertions.assertEquals(200, layer.getWidth());
         Assertions.assertEquals(100, layer.getHeight());
@@ -21,19 +21,19 @@ public class LayerTest {
 
     @Test
     public void invalidSizeConstructorTest(){
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(-1, -1, new Color(0, 0, 0, 1)));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(-1, 5, new Color(0, 0, 0, 1)));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Layer(5, -1, new Color(0, 0, 0, 1)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> LayerFactory.createDefaultLayer(-1, -1, new Color(0, 0, 0, 1)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> LayerFactory.createDefaultLayer(-1, 5, new Color(0, 0, 0, 1)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> LayerFactory.createDefaultLayer(5, -1, new Color(0, 0, 0, 1)));
     }
 
     @Test
     public void invalidColorConstructorTest(){
-        Assertions.assertThrows(NullPointerException.class, () -> new Layer(5, 5, null));
+        Assertions.assertThrows(NullPointerException.class, () -> LayerFactory.createDefaultLayer(5, 5, null));
     }
 
     @Test
     public void defaultColorTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
@@ -44,7 +44,7 @@ public class LayerTest {
 
     @Test
     public void setWidthTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         layer.setWidth(400);
 
@@ -54,7 +54,7 @@ public class LayerTest {
 
     @Test
     public void setHeightTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         layer.setHeight(400);
 
@@ -64,7 +64,7 @@ public class LayerTest {
 
     @Test
     public void setPixelTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         layer.setGlobalPixel(0, 0, new Color(1, 0, 0, 1));
 
@@ -73,24 +73,24 @@ public class LayerTest {
 
     @Test
     public void equalsSelfTest() {
-        ILayer layer = new Layer(200, 100, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(200, 100, new Color(0, 0, 0, 1));
 
         Assertions.assertEquals(layer, layer);
     }
 
     @Test
     public void equalsTest() {
-        ILayer layer = new Layer(2, 2, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(2, 2, new Color(0, 0, 0, 1));
 
-        Assertions.assertEquals(new Layer(2, 2, new Color(0, 0, 0, 1)), layer);
+        Assertions.assertEquals(LayerFactory.createDefaultLayer(2, 2, new Color(0, 0, 0, 1)), layer);
         Assertions.assertNotEquals(layer, new Object());
-        Assertions.assertNotEquals(new Layer(3,2, new Color(0, 0, 0, 1)), layer);
-        Assertions.assertNotEquals(new Layer(2,2, new Color(0, 0, 0.1f, 1)), layer);
+        Assertions.assertNotEquals(LayerFactory.createDefaultLayer(3,2, new Color(0, 0, 0, 1)), layer);
+        Assertions.assertNotEquals(LayerFactory.createDefaultLayer(2,2, new Color(0, 0, 0.1f, 1)), layer);
     }
 
     @Test
     public void setPixelOutOfBounds(){
-        ILayer layer = new Layer(2, 2, new Color(0, 0, 0, 1));
+        ILayer layer = LayerFactory.createDefaultLayer(2, 2, new Color(0, 0, 0, 1));
         Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setGlobalPixel(3,1, new Color(0,0,0,0)));
         layer.setPosition(new Vector2D(5,5));
         Assertions.assertThrows(IllegalArgumentException.class, () -> layer.setGlobalPixel(2,2, new Color(0,0,0,0)));
@@ -99,7 +99,7 @@ public class LayerTest {
 
     @Test
     public void isPointOnTranslatedAndRotatedLayerTest(){
-        ILayer layer = new Layer(100, 100, new Color(0,0,0,1));
+        ILayer layer = LayerFactory.createDefaultLayer(100, 100, new Color(0,0,0,1));
 
         layer.setPosition(new Vector2D(100,100));
         layer.setRotation(Math.PI/4); // Rotated 45 degrees
@@ -114,7 +114,7 @@ public class LayerTest {
         int w = 20;
         int h = 20;
         Vector2D translation = new Vector2D(20, 20);
-        ILayer layer = new Layer(w, h, new Color(0,0,0,1));
+        ILayer layer = LayerFactory.createDefaultLayer(w, h, new Color(0,0,0,1));
 
 
         layer.setPosition(translation);
@@ -131,7 +131,7 @@ public class LayerTest {
 
     @Test
     public void getPixelOutOfBounds(){
-        ILayer layer = new Layer(100, 100, new Color(0,0,0,1));
+        ILayer layer = LayerFactory.createDefaultLayer(100, 100, new Color(0,0,0,1));
         Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 5));
         Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(5, 500));
         Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 500));
@@ -142,7 +142,7 @@ public class LayerTest {
         int w = 30;
         int h = 30;
         Vector2D translation = new Vector2D(30, 30);
-        ILayer layer = new Layer(w, h, new Color(0,0,0,1));
+        ILayer layer = LayerFactory.createDefaultLayer(w, h, new Color(0,0,0,1));
 
         layer.setLocalPixel(0, h - 1, new Color(1,1,1,1)); // Top left
         layer.setLocalPixel(w/2,h/2, new Color(1,0,1,1)); // Center
@@ -162,7 +162,7 @@ public class LayerTest {
     @Test
     public void rectangleOfChangeSetPixelTest(){
         AtomicBoolean wasNotified = new AtomicBoolean(false);
-        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(1000, 1000, new Color(1,1,1,1));
         layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
             @Override
             public void notify(Tuple2<Vector2D, Vector2D> data) {
@@ -187,7 +187,7 @@ public class LayerTest {
     @Test
     public void addObserverAndRemoveObserverTest(){
         AtomicBoolean shouldBeNotified = new AtomicBoolean(true);
-        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(1000, 1000, new Color(1,1,1,1));
         IObserver<Tuple2<Vector2D, Vector2D>> ob = new IObserver<Tuple2<Vector2D, Vector2D>>() {
             @Override
             public void notify(Tuple2<Vector2D, Vector2D> data) {
@@ -212,7 +212,7 @@ public class LayerTest {
 
     @Test
     public void rectangleOfChangeRotateTest(){
-        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(1000, 1000, new Color(1,1,1,1));
         layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
             @Override
             public void notify(Tuple2<Vector2D, Vector2D> data) {
@@ -226,7 +226,7 @@ public class LayerTest {
 
     @Test
     public void rectangleOfChangeTranslateTest(){
-        ILayer layer = new Layer(1000, 1000, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(1000, 1000, new Color(1,1,1,1));
         layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
             @Override
             public void notify(Tuple2<Vector2D, Vector2D> data) {
@@ -242,7 +242,7 @@ public class LayerTest {
     public void getPixelFromScaledAndTranslatedLayerTest(){
         int w = 12;
         int h = 12;
-        ILayer layer = new Layer(w, h, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(w, h, new Color(1,1,1,1));
 
         Vector2D translation = new Vector2D(w/2d, h/2d);
         Vector2D scale = new Vector2D(2, 2);
@@ -263,7 +263,7 @@ public class LayerTest {
     public void getPixelAtPointForScaledAndTranslatedAndRotatedLayerTest(){
         int w = 14;
         int h = w;
-        ILayer layer = new Layer(w, h, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(w, h, new Color(1,1,1,1));
 
         Vector2D translation = new Vector2D(4, 7);
         double rotation = Math.PI / 4d;

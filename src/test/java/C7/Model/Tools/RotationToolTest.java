@@ -1,8 +1,8 @@
 package C7.Model.Tools;
 
+import C7.Model.Layer.LayerFactory;
 import C7.Util.Color;
 import C7.Model.Layer.ILayer;
-import C7.Model.Layer.Layer;
 import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +20,7 @@ public class RotationToolTest {
 
     @Test
     public void rotationTest(){
-        ILayer layer = new Layer(10, 10, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(10, 10, new Color(1,1,1,1));
 
         Vector2D center = layer.getLocalCenterPoint();
 

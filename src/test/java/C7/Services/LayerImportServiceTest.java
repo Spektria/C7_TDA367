@@ -2,7 +2,6 @@ package C7.Services;
 
 import C7.Model.Layer.ILayer;
 import C7.Util.Color;
-import C7.Model.Layer.Layer;
 import C7.Util.ResourceIO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

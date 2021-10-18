@@ -39,7 +39,7 @@ public class LayerManagerTest {
 
 		ILayer layer = layerManager.getLayer(id);
 
-		Assertions.assertEquals(new Layer(16, 16, new Color(0, 0, 0, 0)), layer);
+		Assertions.assertEquals(LayerFactory.createDefaultLayer(16, 16, new Color(0, 0, 0, 0)), layer);
 	}
 
 	/**
@@ -82,7 +82,7 @@ public class LayerManagerTest {
 	@Test
 	public void addLayerTest() {
 		ILayerManager layerManager = new LayerManager();
-		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+		ILayer layer = LayerFactory.createDefaultLayer(16, 16, new Color(0, 0, 0, 0));
 
 		int id = layerManager.addLayer(layer);
 
@@ -96,7 +96,7 @@ public class LayerManagerTest {
 	@Test
 	public void addLayerSameIdTest() {
 		ILayerManager layerManager = new LayerManager();
-		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+		ILayer layer = LayerFactory.createDefaultLayer(16, 16, new Color(0, 0, 0, 0));
 
 		int existingId = layerManager.addLayer(layer);
 		int newId = layerManager.addLayer(layer);
@@ -111,7 +111,7 @@ public class LayerManagerTest {
 	@Test
 	public void addLayerEqualsTest() {
 		ILayerManager layerManager = new LayerManager();
-		ILayer layer = new Layer(16, 16, new Color(0, 0, 0, 0));
+		ILayer layer = LayerFactory.createDefaultLayer(16, 16, new Color(0, 0, 0, 0));
 
 		int id = layerManager.addLayer(layer);
 

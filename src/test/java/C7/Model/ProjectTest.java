@@ -1,9 +1,9 @@
 package C7.Model;
 
+import C7.Model.Layer.LayerFactory;
 import C7.Services.ServiceFactory;
 import C7.Util.ResourceIO;
 import C7.Model.Layer.ILayer;
-import C7.Model.Layer.Layer;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
 import C7.Util.Color;
@@ -16,7 +16,7 @@ public class ProjectTest {
     public void addAndRemoveLayers(){
         Project proj = new Project("tst",10,10);
 
-        ILayer createdLayer = new Layer(10,10, new Color(0,0,0,0));
+        ILayer createdLayer = LayerFactory.createDefaultLayer(10, 10, new Color(0, 0, 0, 0), new Vector2D(0, 0), 0, new Vector2D(1, 1));
         ILayer retrievedLayer;
 
         //Add layer and check if retrieving returns same layer
@@ -36,8 +36,8 @@ public class ProjectTest {
     public void changeLayer(){
         Project proj = new Project("tst",10,10);
 
-        ILayer createdLayer1 = new Layer(10,10, new Color(0,0,0,0));
-        ILayer createdLayer2 = new Layer(10,10, new Color(0,0,0,0));
+        ILayer createdLayer1 = LayerFactory.createDefaultLayer(10, 10, new Color(0, 0, 0, 0), new Vector2D(0, 0), 0, new Vector2D(1, 1));
+        ILayer createdLayer2 = LayerFactory.createDefaultLayer(10, 10, new Color(0, 0, 0, 0), new Vector2D(0, 0), 0, new Vector2D(1, 1));
 
         int createdLayer1ID = proj.addLayer(createdLayer1);
         int createdLayer2ID = proj.addLayer(createdLayer2);

@@ -1,8 +1,8 @@
 package C7.Model.Tools;
 
+import C7.Model.Layer.LayerFactory;
 import C7.Util.Color;
 import C7.Model.Layer.ILayer;
-import C7.Model.Layer.Layer;
 import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ public class TranslationToolTest {
 
     @Test
     public void translateTest(){
-        ILayer layer = new Layer(10, 10, new Color(1,1,1,1));
+        ILayer layer = LayerFactory.createDefaultLayer(10, 10, new Color(1,1,1,1));
 
         // Move by (15, 20)/2
         translationTool.apply(layer, new Vector2D(0, 0), new Vector2D(15, 20));

@@ -1,7 +1,9 @@
 package C7.Model;
 
-import C7.Model.Layer.Layer;
+import C7.Model.Layer.ILayer;
+import C7.Model.Layer.LayerFactory;
 import C7.Util.Color;
+import C7.Util.Vector2D;
 
 /**
  * A factory for creating {@link IProject}.
@@ -29,7 +31,10 @@ public final class ProjectFactory {
      */
     public static IProject createProjectWithBaseLayer(String name, int width, int height){
         IProject proj = createProject(name, width, height);
-        int layerId = proj.addLayer(new Layer(width, height, new Color(0, 0, 0, 0)));
+
+        ILayer layer = LayerFactory.createDefaultLayer(width, height, new Color(0, 0, 0, 0), new Vector2D(0, 0), 0, new Vector2D(1, 1));
+        int layerId = proj.addLayer(layer);
+
         proj.setActiveLayer(layerId);
         return proj;
     }

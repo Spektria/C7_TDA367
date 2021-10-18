@@ -1,8 +1,8 @@
 package C7.Services;
 
 import C7.Model.Layer.ILayer;
+import C7.Model.Layer.LayerFactory;
 import C7.Util.Color;
-import C7.Model.Layer.Layer;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * LayerIO contains any input/output operations to/from a {@link Layer}.
+ * LayerIO contains any input/output operations to/from an {@link ILayer}.
  */
 class LayerImportService implements IService {
 
@@ -60,7 +60,7 @@ class LayerImportService implements IService {
                 }
             }
 
-            doAfter.accept(new Layer(colorData));
+            doAfter.accept(LayerFactory.createDefaultLayer(colorData));
         }
         catch (IOException e){
             System.out.println(e.getMessage());
