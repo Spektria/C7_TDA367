@@ -12,7 +12,7 @@ import java.util.*;
  * @author Hugo Ekstrand
  * @version 2.1
  */
-public class Layer implements ILayer, Serializable {
+class Layer implements ILayer, Serializable {
 
     private final Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
