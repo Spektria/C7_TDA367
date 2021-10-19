@@ -6,6 +6,9 @@ import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
+import C7.View.IView;
+import C7.View.ModelAdapter.RenderAdapterFactory;
+import C7.View.ViewFactory;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -114,17 +117,11 @@ public class LayersController extends AnchorPane {
             canvas.setTranslateX(canvas.getWidth()*(scale/2-1d/2));
             canvas.setTranslateY(canvas.getHeight()*(scale/2-1d/2));
 
-
-
             ILayer layer = arg0.getValue();
-            layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
-                @Override
-                public void notify(Tuple2<Vector2D, Vector2D> data) {
-                    renderLayer(layer, canvas, data);
-                }
-            });
-
-            renderLayer(layer, canvas, new Tuple2<>(new Vector2D(0, 0), new Vector2D(layer.getWidth(), layer.getHeight())));
+            IView view = ViewFactory.createView(layer);
+            view.setGraphicsContext(canvas.getGraphicsContext2D());
+            view.setBounds(canvas.widthProperty(), canvas.heightProperty());
+            view.render();
 
             return new SimpleObjectProperty<Canvas>(canvas);
         });
@@ -193,18 +190,6 @@ public class LayersController extends AnchorPane {
         for (int id:
              project.getAllLayerIds()) {
             tableView.getItems().add(project.getLayer(id));
-        }
-    }
-
-    private void renderLayer(ILayer layer, Canvas canvas, Tuple2<Vector2D, Vector2D> area) {
-        PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
-        for (int y = (int)area.getVal1().getY(); y < (int)area.getVal2().getY(); y++) {
-            for (int x = (int)area.getVal1().getX(); x < (int)area.getVal2().getX(); x++) {
-                // Note, we need to change the color type from C7 color to JavaFX color.
-                Color color = layer.getGlobalPixel(x, y);
-
-                pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-            }
         }
     }
 }
