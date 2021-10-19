@@ -5,6 +5,8 @@ import C7.Util.IObserver;
 import C7.Model.IProject;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
+import C7.View.ModelAdapter.IRender;
+import C7.View.ModelAdapter.RenderAdapterFactory;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -13,15 +15,15 @@ import javafx.scene.paint.Color;
 import java.util.Objects;
 
 /**
- * An {@link IView} implementation. This view renders data from a LayerManager model object onto a graphics context.
+ * An {@link IView} implementation. This view renders data from an {@link IRender} object onto a graphics context.
  * The graphics context is to be set before usage of this class via the {@link #setGraphicsContext(GraphicsContext)}
- * otherwise this object will throw an exception. A width and heigth property needs to be set too before usage via
+ * otherwise this object will throw an exception. A width and height property needs to be set too before usage via
  * the {@link #setBounds(ReadOnlyDoubleProperty, ReadOnlyDoubleProperty)} method.
  * @author Hugo Ekstrand
  */
 class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-    private final IProject project;          // The model this view reads from
+    private final IRender render;          // The render this view reads from
     private GraphicsContext gc;             // The graphics context this view draws onto
 
     private ReadOnlyDoubleProperty width;   // The width and height property of this view.
@@ -37,13 +39,13 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     /**
      * Creates an instance of this type.
-     * @param project the Project this object will read from.
+     * @param render the object which pixel data will be fetched from this object will read from.
      */
-    View(IProject project){
-        Objects.requireNonNull(project);
-        this.project = project;
+    View(IRender render){
+        Objects.requireNonNull(render);
+        this.render = render;
 
-        project.addObserver(this);
+        render.addObserver(this);
     }
 
     @Override
@@ -55,6 +57,8 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     }
 
     private Color toJFXColor(C7.Util.Color color){
+        if(color == null)
+            return Color.TRANSPARENT;
         return new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
     }
 
@@ -62,16 +66,21 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     public void render(int x0, int y0, int width, int height) {
         Objects.requireNonNull(gc);
 
+        int xMin = C7Math.limit(x0, 0, this.width.intValue());
+        int yMin = C7Math.limit(y0, 0, this.height.intValue());
+        int xMax = C7Math.limit(width, 0, this.width.intValue());
+        int yMax = C7Math.limit(height, 0, this.height.intValue());
+
         //Get color data from Project
-        C7.Util.Color[][] colorMatrix = project.renderProject(x0,y0,width,height);
+        C7.Util.Color[][] colorMatrix = render.render(xMin,yMin,xMax,yMax);
 
         // Simply goes inside the given bounds and
         // draws onto the graphics context pixel by pixel.
         PixelWriter pw = gc.getPixelWriter();
-        for (int y = y0; y < height; y++) {
-            for (int x = x0; x < width; x++) {
+        for (int y = yMin; y < yMax; y++) {
+            for (int x = xMin; x < xMax; x++) {
                 // Note, we need to change the color type from C7 color to JavaFX color.
-                pw.setColor(x, y, toJFXColor(colorMatrix[x - x0][y - y0]));
+                pw.setColor(x, y, toJFXColor(colorMatrix[x - xMin][y - yMin]));
             }
         }
     }
@@ -93,14 +102,13 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     @Override
     public void notify(Tuple2<Vector2D, Vector2D> data) {
 
-
         // Render only what is in the canvas. That is, any value under 0 or above the view's width
         // should be ignored.
         render(
-                C7Math.limit(data.getVal1().getX(), 0d, width.get()).intValue(),
-                C7Math.limit(data.getVal1().getY(), 0d, height.get()).intValue(),
-                C7Math.limit(data.getVal2().getX() + 1, 0d, width.get()).intValue(),
-                C7Math.limit(data.getVal2().getY() + 1, 0d, height.get()).intValue()
+                (int)data.getVal1().getX(),
+                (int)data.getVal1().getY(),
+                (int)data.getVal2().getX() + 1,
+                (int)data.getVal2().getY() + 1
         );
 
 
@@ -114,10 +122,10 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
         }
         else
             render(
-                    C7Math.limit(lastUpdateRect.getVal1().getX(), 0d, width.get()).intValue(),
-                    C7Math.limit(lastUpdateRect.getVal1().getY(), 0d, height.get()).intValue(),
-                    C7Math.limit(lastUpdateRect.getVal2().getX() + 1d, 0d, width.get()).intValue(),
-                    C7Math.limit(lastUpdateRect.getVal2().getY() + 1d, 0d, height.get()).intValue()
+                    (int)lastUpdateRect.getVal1().getX(),
+                    (int)lastUpdateRect.getVal1().getY(),
+                    (int)lastUpdateRect.getVal2().getX() + 1,
+                    (int)lastUpdateRect.getVal2().getY() + 1
             );
 
 
