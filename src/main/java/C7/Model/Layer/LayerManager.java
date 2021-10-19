@@ -15,7 +15,41 @@ import java.util.List;
  */
 public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
 
-	final private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
+	private class LayerInfo {
+
+		final private ILayer layer;
+		final private int id;
+
+		private boolean visible;
+
+		public LayerInfo(ILayer layer, int id, boolean visible) {
+			this.layer = layer;
+			this.id = id;
+			this.visible = visible;
+		}
+
+		public LayerInfo(ILayer layer, int id) {
+			this(layer, id, true);
+		}
+
+		public ILayer getLayer() {
+			return this.layer;
+		}
+
+		public int getId() {
+			return this.id;
+		}
+
+		public void setIsVisible(boolean visible) {
+			this.visible = visible;
+		}
+
+		public boolean isVisible() {
+			return this.visible;
+		}
+	}
+
+	final private List<LayerInfo> layers;	// Collection of layers managed this layer manager.
 	private int nextId;										// ID number to assign to the next created layer.
 	private int activeLayerId;								// The ID number of the currently active layer.
 	final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
@@ -46,7 +80,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		layer.setScale(scale);
 
 		// Add layer to manager
-		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
+		layers.add(new LayerInfo(layer, nextId));
 
 		layer.addObserver(this);
 
@@ -56,14 +90,14 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	@Override
 	public int addLayer(ILayer layer) {
 		// Check if this layer already exists in this manager
-		for (Map.Entry<Integer, ILayer> entry : layers) {
-			if (entry.getValue() == layer) {
-				return entry.getKey();
+		for (LayerInfo entry : layers) {
+			if (entry.getLayer() == layer) {
+				return entry.getId();
 			}
 		}
 
 		// Add layer to manager
-		layers.add(new AbstractMap.SimpleEntry<Integer, ILayer>(nextId, layer));
+		layers.add(new LayerInfo(layer, nextId));
 
 		// Observe layer
 		layer.addObserver(this);
@@ -74,7 +108,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	@Override
 	public void destroyLayer(int id) {
 		// Remove the entry with matching key
-		layers.removeIf(entry -> entry.getKey().equals(id));
+		layers.removeIf(entry -> (entry.getId() == id));
 	}
 
 	@Override
@@ -84,8 +118,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 
 	@Override
 	public void setActiveLayer(int id) {
-		for (Map.Entry<Integer, ILayer> entry : layers) {
-			if (entry.getKey().equals(id)) {
+		for (LayerInfo entry : layers) {
+			if (entry.getId() == id) {
 				activeLayerId = id;
 				return;
 			}
@@ -95,10 +129,10 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	@Override
 	public ILayer getLayer(int id) {
 		// Find the layer with the associated ID.
-		for (Map.Entry<Integer, ILayer> entry : layers) {
+		for (LayerInfo entry : layers) {
 			// Return the layer with matching ID.
-			if (entry.getKey().equals(id)) {
-				return entry.getValue();
+			if (entry.getId() == id) {
+				return entry.getLayer();
 			}
 		}
 
@@ -112,8 +146,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		int i = 0;
 
 		// Iterate over layers and add all IDs to array
-		for (Map.Entry<Integer, ILayer> entry : layers) {
-			ids[i++] = entry.getKey();
+		for (LayerInfo entry : layers) {
+			ids[i++] = entry.getId();
 		}
 
 		return ids;
@@ -126,8 +160,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		// Find colors at center of current pixel
 		Vector2D point = new Vector2D(x + 0.5, y + 0.5);
 
-		for (Map.Entry<Integer, ILayer> entry : layers) {
-			ILayer layer = entry.getValue();
+		for (LayerInfo entry : layers) {
+			ILayer layer = entry.getLayer();
 
 			if (layer.isGlobalPointOnLayer(point)) {
 				Vector2D pixelPos = layer.toLocalPixel(point);
@@ -146,8 +180,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	@Override
 	public void setLayerIndex(int id, int index) {
 		// Find the index with the specified id
-		for (Map.Entry<Integer, ILayer> entry : layers) {
-			if (entry.getKey() == id) {
+		for (LayerInfo entry : layers) {
+			if (entry.getId() == id) {
 				int currentIndex = layers.indexOf(entry);
 
 				// If we're already in the right index, do nothing
