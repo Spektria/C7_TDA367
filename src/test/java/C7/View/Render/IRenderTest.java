@@ -1,4 +1,4 @@
-package C7.View.ModelAdapter;
+package C7.View.Render;
 
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
