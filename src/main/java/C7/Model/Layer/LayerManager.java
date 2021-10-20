@@ -7,7 +7,6 @@ import C7.Util.Vector2D;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author Love Gustafsson

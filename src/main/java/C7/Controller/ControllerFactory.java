@@ -3,7 +3,6 @@ package C7.Controller;
 import C7.Model.IProject;
 import C7.View.IView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  *

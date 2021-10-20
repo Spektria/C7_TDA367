@@ -9,12 +9,10 @@ import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Project is a class representing a complete project.

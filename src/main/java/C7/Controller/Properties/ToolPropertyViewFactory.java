@@ -1,7 +1,6 @@
 package C7.Controller.Properties;
 
 import C7.Model.Tools.ToolProperties.IToolProperty;
-import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import javafx.scene.layout.AnchorPane;
 
 public class ToolPropertyViewFactory{
