@@ -4,7 +4,7 @@ import C7.Util.C7Math;
 import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
-import C7.View.ModelAdapter.IRender;
+import C7.View.Render.IRender;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;

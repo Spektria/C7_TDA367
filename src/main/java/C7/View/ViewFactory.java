@@ -2,7 +2,7 @@ package C7.View;
 
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
-import C7.View.ModelAdapter.RenderAdapterFactory;
+import C7.View.Render.RenderAdapterFactory;
 
 /**
  * Factory for the creation of instances of {@link IView}.
