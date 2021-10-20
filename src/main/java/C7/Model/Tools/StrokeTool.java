@@ -1,12 +1,10 @@
 package C7.Model.Tools;
 
-import C7.Util.Color;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.Pattern.IPattern;
 import C7.Model.Tools.StrokeInterpolation.IStrokeInterpolator;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
-import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
 import java.util.*;
@@ -14,14 +12,14 @@ import java.util.stream.Collectors;
 
 /**
  *
- * A Brush is a {@link ITool} which draws a finite series of patterns on a {@link ILayer}.
- * The brush if modifiable in runtime via its {@link IToolProperty properties} via the {@link #getProperties()}
+ * A StrokeTool is a {@link ITool} which draws a finite series of patterns on a {@link ILayer} between two given points.
+ * The StrokeTool can be modified in runtime via its {@link IToolProperty properties} via the {@link #getProperties()}
  * method.
  *
  * @author Hugo Ekstrand
  */
 abstract class StrokeTool extends BaseTool {
-    // Common properties for all brushes.
+    // Common properties for all stroke tools.
     private int size;
     private double rotation = 0; // Radians
     private Vector2D scale = new Vector2D(1,1);
@@ -71,7 +69,7 @@ abstract class StrokeTool extends BaseTool {
     private Collection<Vector2D> getStrokePoints(Collection<Vector2D> patternPoints, double pointFrequency, Vector2D v0, Vector2D v1){
         // Interpolate the given points so that any "holes" of empty points are filled.
         // Then for each of these points do:
-        // 1: Add points for the Brush's pattern around the given point.
+        // 1: Add points for the Tools's pattern around the given point.
         // 2: Round the points to the closest integer so that they represent pixels.
         // Lastly, after doing this collect all the created points as a set so that any duplicate points are removed.
         return strokeInterpolator.interpolate(pointFrequency, v0, v1)
