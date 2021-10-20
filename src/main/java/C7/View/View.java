@@ -2,11 +2,9 @@ package C7.View;
 
 import C7.Util.C7Math;
 import C7.Util.IObserver;
-import C7.Model.IProject;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import C7.View.ModelAdapter.IRender;
-import C7.View.ModelAdapter.RenderAdapterFactory;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -63,16 +61,18 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     }
 
     @Override
-    public void render(int x0, int y0, int width, int height) {
+    public void render(int x0, int y0, int x1, int y1) {
         Objects.requireNonNull(gc);
 
         int xMin = C7Math.limit(x0, 0, this.width.intValue());
         int yMin = C7Math.limit(y0, 0, this.height.intValue());
-        int xMax = C7Math.limit(width, 0, this.width.intValue());
-        int yMax = C7Math.limit(height, 0, this.height.intValue());
+        int xMax = C7Math.limit(x1, 0, this.width.intValue());
+        int yMax = C7Math.limit(y1, 0, this.height.intValue());
 
         //Get color data from Project
-        C7.Util.Color[][] colorMatrix = render.render(xMin,yMin,xMax,yMax);
+        int width = xMax - xMin;
+        int height = yMax - yMin;
+        C7.Util.Color[][] colorMatrix = render.render(xMin, yMin, width, height);
 
         // Simply goes inside the given bounds and
         // draws onto the graphics context pixel by pixel.
