@@ -1,23 +1,16 @@
 package C7.Controller;
 
 import C7.Model.IProject;
-import C7.Util.Color;
-import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
 import C7.View.IView;
-import C7.View.ModelAdapter.RenderAdapterFactory;
 import C7.View.ViewFactory;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
