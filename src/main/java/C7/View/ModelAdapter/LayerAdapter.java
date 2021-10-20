@@ -17,12 +17,15 @@ class LayerAdapter implements IRender {
 
     @Override
     public Color[][] render(int x0, int y0, int width, int height) {
+        if(width < 0 || height < 0)
+            throw new IllegalArgumentException();
+
         Color[][] render = new Color[width][height];
 
         // Create 2d color array from given layer instance.
         // Do this in the requested area.
-        for (int x = x0; x < width; x++) {
-            for (int y = y0; y < height; y++) {
+        for (int x = x0; x < width + x0; x++) {
+            for (int y = y0; y < height + y0; y++) {
 
                 // If the current (x,y) point is not on the layer,
                 // we should return transparent since we have no data here.
