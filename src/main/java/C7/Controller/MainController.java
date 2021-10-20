@@ -256,7 +256,7 @@ class MainController implements IMainController {
     @FXML
     private void onCanvasMousePressed (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            var point = new Vector2D(event.getX(), event.getY());
+            Vector2D point = new Vector2D(event.getX(), event.getY());
             oldPos = point;
             pressedPos = point;
         }
@@ -266,7 +266,7 @@ class MainController implements IMainController {
     @FXML
     private void onCanvasMouseReleased (MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-            var point = new Vector2D(event.getX(), event.getY());
+            Vector2D point = new Vector2D(event.getX(), event.getY());
             if(currentTool.isContinuous())
                 project.applyTool(currentTool, point, point);
             else
