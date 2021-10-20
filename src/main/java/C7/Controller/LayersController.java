@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class LayersController extends AnchorPane {
     @FXML
-    TableView<ILayer> tableView;
+    TableView<Integer> tableView;
 
     @FXML TableColumn columnShowHide;
     @FXML TableColumn columnPreview;
@@ -51,15 +51,12 @@ public class LayersController extends AnchorPane {
 
         this.project = project;
 
-        columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
-            ILayer layer = arg0.getValue();
+        columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
+            ILayer layer = project.getLayer(arg0.getValue());
 
             CheckBox checkBox = new CheckBox();
 
-            ///TODO: checkBox.selectedProperty().setValue() true/false depending on whether layer is selected
-            ///Later note: Did I mean visible?
-            ///I have to have meant visible
-
+            ///TODO: checkBox.selectedProperty().setValue() true/false depending on whether layer is visible
 
 
             checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -78,7 +75,7 @@ public class LayersController extends AnchorPane {
 
         columnPreview.setPrefWidth(THUMBNAIL_WIDTH);
 
-        columnPreview.setCellFactory(v -> new TableCell<ILayer, Canvas>() {
+        columnPreview.setCellFactory(v -> new TableCell<Integer, Canvas>() {
 
             @Override
             protected void updateItem(Canvas item, boolean empty) {
@@ -90,7 +87,7 @@ public class LayersController extends AnchorPane {
 
         });
 
-        columnPreview.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
+        columnPreview.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
             Canvas canvas = new Canvas(project.getWidth(), project.getHeight());
 
             double xscale = (double)THUMBNAIL_WIDTH/project.getWidth();
