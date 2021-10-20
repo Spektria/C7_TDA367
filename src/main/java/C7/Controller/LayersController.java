@@ -19,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LayersController extends AnchorPane {
     @FXML
@@ -179,6 +180,11 @@ public class LayersController extends AnchorPane {
             return row ;
         });
 
+    }
+
+    public void setIProject(IProject project){
+        Objects.requireNonNull(project);
+        this.project = project;
     }
 
     public void updateLayers() {

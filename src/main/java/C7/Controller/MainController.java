@@ -4,10 +4,12 @@ import C7.Services.ImageFormatName;
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
+import C7.Services.ProjectFormatName;
 import C7.Services.ServiceFactory;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
+import C7.View.Render.RenderAdapterFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
@@ -123,6 +125,19 @@ class MainController implements IMainController {
         propertiesController.update(tool);
     }
 
+    void importFileAsProject(File file) {
+        ServiceFactory.createProjectLoaderService(file.getPath(), (importedProject) -> {
+            this.project = importedProject;
+            view.setIRenderSource(RenderAdapterFactory.createAdapter(importedProject));
+            //TODO RECONNECT THUMBNAIL OBSERVERS
+            view.render();
+            layersController = new LayersController(layersArea, project);
+            //This does not work, who knows, maybe it will one day :(
+            //layersController.setIProject(importedProject);
+            layersController.updateLayers();
+        }).execute();
+
+    }
 
     void importFileAsLayer(File file) {
         ServiceFactory.createLayerImportService(file.getPath(), (layer) -> {
@@ -144,12 +159,29 @@ class MainController implements IMainController {
 
     @FXML
     private void onOpen (Event event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose project to import");
+        List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
 
+        File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
+        if (file != null) importFileAsProject(file);
+        view.render();
     }
 
     @FXML
     private void onSave (Event event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose where to save the project");
+        List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
+        fileChooser.setInitialFileName(project.getName());
+        fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getDefaultDirectory());
 
+        File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
+        if(file != null) {
+            ServiceFactory.createProjectSaverService(file.getPath(), project).execute();
+        }
     }
 
     @FXML

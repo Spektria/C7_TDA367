@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
-    private final IRender render;          // The render this view reads from
+    private IRender render;          // The render this view reads from
     private GraphicsContext gc;             // The graphics context this view draws onto
 
     private ReadOnlyDoubleProperty width;   // The width and height property of this view.
@@ -89,6 +89,13 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     public void setGraphicsContext(GraphicsContext gc) {
         Objects.requireNonNull(gc);
         this.gc = gc;
+    }
+
+    @Override
+    public void setIRenderSource(IRender render) {
+        Objects.requireNonNull(render);
+        this.render = render;
+        this.render.addObserver(this);
     }
 
     @Override

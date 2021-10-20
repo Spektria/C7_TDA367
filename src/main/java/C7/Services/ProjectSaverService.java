@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 
 /**
  * ProjectSaverService saves projects as a serialized file.
+ * @author Isak Gustafsson
  */
 class ProjectSaverService implements IService {
     private final String path;

@@ -1,5 +1,6 @@
 package C7.View;
 
+import C7.View.Render.IRender;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -31,6 +32,12 @@ public interface IView {
      * @param gc the given graphics context.
      */
     void setGraphicsContext(GraphicsContext gc);
+
+    /**
+     * Sets the source from which the IView will render.
+     * @param render the IRender source to render from.
+     */
+    void setIRenderSource(IRender render);
 
     /**
      * Sets the bounds of this view. That is, how wide and tall the image drawn by this view should be.

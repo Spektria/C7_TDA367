@@ -14,7 +14,7 @@ import java.util.*;
  */
 class Layer implements ILayer, Serializable {
 
-    private final Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
+    private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
     private Color[][] pixels;   // This layer's pixel data.
     private int width;          // The width, in pixels, of this layer.
@@ -339,10 +339,12 @@ class Layer implements ILayer, Serializable {
         }
     }
 
-    //Create empty references for Optional:s so that they are not null
+    //Create references for things so that they are not null and cause crashes after deserialization
     private Object readResolve(){
         this.rectangleOfChangeMin = Optional.empty();
         this.rectangleOfChangeMax = Optional.empty();
+
+        this.observers = new ArrayList<>();
         return this;
     }
 }

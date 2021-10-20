@@ -18,7 +18,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	final private List<Map.Entry<Integer, ILayer>> layers;	// Collection of layers managed this layer manager.
 	private int nextId;										// ID number to assign to the next created layer.
 	private int activeLayerId;								// The ID number of the currently active layer.
-	final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
+	private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
 
 	public LayerManager() {
 		layers			= new ArrayList<>();
@@ -178,5 +178,18 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers) {
 			observer.notify(data);
 		}
+	}
+
+	//Gets called after deserialization,
+	//currently uses default deserialization and then connects observers.
+	private Object readResolve(){
+		observers = new ArrayList<>();
+
+		for (int i = 0; i < layers.size(); i++) {
+			ILayer layer = layers.get(i).getValue();
+			//layer.removeObserver(this);
+			layer.addObserver(this);
+		}
+		return this;
 	}
 }

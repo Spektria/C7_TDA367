@@ -9,17 +9,19 @@ import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Project is a class representing a complete project.
  * Included is all image data required to reconstruct previous work as well as any saved metadata.
  * */
 class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
-    final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
+    private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
     private ILayerManager layerManager;
     private ILayer activeLayer;
     private int width, height;
@@ -262,5 +264,15 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
         for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers){
             observer.notify(data);
         }
+    }
+
+    //Gets called after deserialization,
+    //currently uses default deserialization and then connects observers.
+    private Object readResolve(){
+        observers = new ArrayList<>();
+
+        layerManager.addObserver(this);
+
+        return this;
     }
 }
