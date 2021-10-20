@@ -20,26 +20,23 @@ import java.util.stream.Collectors;
  *
  * @author Hugo Ekstrand
  */
-class Brush extends BaseTool {
+abstract class StrokeTool extends BaseTool {
     // Common properties for all brushes.
     private int size;
     private double rotation = 0; // Radians
     private Vector2D scale = new Vector2D(1,1);
-    private Color color;
     private double pointFrequency  = 1.5d; // points per pixel
 
     private final IStrokeInterpolator strokeInterpolator;
 
     private final IPattern strokePattern;
 
-    Brush(int size, Color color, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
+    StrokeTool(int size, IPattern strokePattern, IStrokeInterpolator strokeInterpolator){
         Objects.requireNonNull(strokeInterpolator);
         Objects.requireNonNull(strokePattern);
-        Objects.requireNonNull(color);
 
         this.strokePattern = strokePattern;
         this.strokeInterpolator = strokeInterpolator;
-        this.color = color;
         this.size = size;
 
         addProperties(
@@ -51,8 +48,6 @@ class Brush extends BaseTool {
                         (y) -> this.scale = new Vector2D(scale.getX(), y), () -> this.scale.getY(), 0, 5),
                 ToolPropertyFactory.createDoubleProperty("X-scale",
                         (x) -> this.scale = new Vector2D(x, scale.getY()), () -> this.scale.getY(), 0, 5),
-                ToolPropertyFactory.createColorProperty("Stroke color",
-                        (c) -> this.color = c, () -> this.color),
                 ToolPropertyFactory.createDoubleProperty("Point frequency",
                         (freq) -> this.pointFrequency = freq, () -> this.pointFrequency, 0, 10)
         );
@@ -92,15 +87,15 @@ class Brush extends BaseTool {
         // 1: check that they are on the layer which we're drawing on.
         // 2: blend the current color with the color being drawn.
         // 3: write the blended color to the layer.
-        points.stream()
+        List<Vector2D> pointsOnLayer = points.parallelStream()
                 .filter(v -> layer.isPixelOnLocalLayer((int)v.getX(), (int)v.getY()))
-                // If it is on the layer, draw the points which are on the layer.
-                .forEach(v -> {
-                    Color beforeColor = layer.getLocalPixel((int)v.getX(), (int)v.getY());
-                    Color blendedColor = Color.blend(beforeColor, this.color);
-                    layer.setLocalPixel((int)v.getX(), (int)v.getY(), blendedColor);
-                });
+                .collect(Collectors.toList());
+
+        // If it is on the layer, draw the points which are on the layer.
+        affectLayer(pointsOnLayer, layer);
     }
+
+    protected abstract void affectLayer(Collection<Vector2D> pointsOnLayer, ILayer layer);
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
@@ -121,11 +116,6 @@ class Brush extends BaseTool {
         drawPointsOnLayer(strokePoints, layer);
 
         layer.update();
-    }
-
-    @Override
-    public boolean isContinuous() {
-        return true;
     }
 
 }

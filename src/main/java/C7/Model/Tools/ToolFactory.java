@@ -17,7 +17,7 @@ public class ToolFactory {
      * @return the created brush
      */
     public static ITool createCircularBrush(int size, Color color){
-        return new Brush(size, color, PatternFactory.createDiskPattern(), StrokeInterpolatorFactory.createLinearInterpolator());
+        return new BlendBrush(size, color, PatternFactory.createDiskPattern(), StrokeInterpolatorFactory.createLinearInterpolator());
     }
 
     /**
@@ -28,7 +28,7 @@ public class ToolFactory {
      * @return the created brush
      */
     public static ITool createCalligraphyBrush(int size, Color color){
-        return new Brush(size, color, PatternFactory.createLinePattern(), StrokeInterpolatorFactory.createLinearInterpolator());
+        return new BlendBrush(size, color, PatternFactory.createLinePattern(), StrokeInterpolatorFactory.createLinearInterpolator());
 
     }
 
