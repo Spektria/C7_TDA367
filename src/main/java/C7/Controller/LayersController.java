@@ -110,12 +110,11 @@ public class LayersController extends AnchorPane {
             canvas.setTranslateX(canvas.getWidth()*(scale/2-1d/2));
             canvas.setTranslateY(canvas.getHeight()*(scale/2-1d/2));
 
-            ILayer layer = arg0.getValue();
+            ILayer layer = project.getLayer(arg0.getValue());
             IView view = ViewFactory.createView(layer);
             view.setGraphicsContext(canvas.getGraphicsContext2D());
             view.setBounds(canvas.widthProperty(), canvas.heightProperty());
             view.render();
-
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
@@ -126,7 +125,11 @@ public class LayersController extends AnchorPane {
         tableView.setFixedCellSize(THUMBNAIL_HEIGHT);
 
         tableView.setRowFactory(tv -> {
-            TableRow<ILayer> row = new TableRow<>();
+            TableRow<Integer> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                project.setActiveLayer(row.getItem());
+            });
 
             row.setOnDragDetected(event -> {
                 if (! row.isEmpty()) {
@@ -154,7 +157,7 @@ public class LayersController extends AnchorPane {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    ILayer draggedLayer = tableView.getItems().remove(draggedIndex);
+                    int draggedLayer = tableView.getItems().remove(draggedIndex);
 
                     int dropIndex ;
 
@@ -165,6 +168,10 @@ public class LayersController extends AnchorPane {
                     }
 
                     tableView.getItems().add(dropIndex, draggedLayer);
+                    System.out.println("Dropped at " + (tableView.getItems().size()-dropIndex-1));
+                    project.setLayerIndex(draggedLayer, tableView.getItems().size()-dropIndex-1);
+
+
 
                     event.setDropCompleted(true);
                     tableView.getSelectionModel().select(dropIndex);
@@ -182,7 +189,7 @@ public class LayersController extends AnchorPane {
 
         for (int id:
              project.getAllLayerIds()) {
-            tableView.getItems().add(project.getLayer(id));
+            tableView.getItems().add(0, id);
         }
     }
 }

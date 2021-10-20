@@ -151,8 +151,9 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 				int currentIndex = layers.indexOf(entry);
 
 				// If we're already in the right index, do nothing
-				if (currentIndex == index)
+				if (currentIndex == index) {
 					return;
+				}
 
 				// Calculate new index
 				int newIndex = index;

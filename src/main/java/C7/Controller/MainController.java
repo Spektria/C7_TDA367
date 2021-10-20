@@ -93,6 +93,9 @@ class MainController implements IMainController {
 
         layersController = new LayersController(layersArea, project);
 
+        project.createLayer(500, 500, new Vector2D(0,0));
+        layersController.updateLayers();
+
     }
 
     /**

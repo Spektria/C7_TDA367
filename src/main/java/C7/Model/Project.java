@@ -241,6 +241,13 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     }
 
     @Override
+    public void setLayerIndex(int id, int index) {
+        layerManager.setLayerIndex(id, index);
+        //Should be changed to only update the area covered by the layer
+        notify(new Tuple2<>(new Vector2D(0, 0), new Vector2D(getWidth(), getHeight())));
+    }
+
+    @Override
     public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
         observers.add(observer);
     }

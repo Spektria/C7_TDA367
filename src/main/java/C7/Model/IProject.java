@@ -135,4 +135,15 @@ public interface IProject extends IObservable<Tuple2<Vector2D, Vector2D>> {
      */
     void setActiveLayer(int id);
 
+    /**
+     * Sets the index position of the specified layer. If the index is greater
+     * or equal to the total number of layers, the layer is placed in the last
+     * position. If the index is less than or equal to 0, the layer is placed
+     * in the first position. The layer that was on the index originally will
+     * be moved to the next index.
+     * @param id The id of the layer to set the position of.
+     * @param index The new index of the layer.
+     */
+    void setLayerIndex(int id, int index);
+
 }
