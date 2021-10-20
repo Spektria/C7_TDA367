@@ -47,6 +47,7 @@ class ToolsController extends ScrollPane {
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createScalingTool(), "Scale", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createRotationTool(), "Rotate", this));
 
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createEraserTool(5), "Eraser", this));
     }
 
     public void setCurrentTool(ITool tool){

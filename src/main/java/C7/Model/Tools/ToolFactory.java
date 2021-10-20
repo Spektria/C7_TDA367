@@ -67,4 +67,13 @@ public class ToolFactory {
     public static ITool createScalingTool(){
         return new ScalingTool();
     }
+
+    /**
+     * Creates an eraser tool with a circular cross-section. This tool removes raster data from a layer and replaces it with a zero alpha color.
+     * @param size the size of the erasers diameter
+     * @return the eraser tool
+     */
+    public static ITool createEraserTool(int size){
+        return new OverwriteBrush(size, new Color(0,0,0,0), PatternFactory.createDiskPattern(), StrokeInterpolatorFactory.createLinearInterpolator());
+    }
 }
