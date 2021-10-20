@@ -154,8 +154,8 @@ class Layer implements ILayer, Serializable {
     private void maxRectangleOfChange(){
         // The corners of the layer's rectangle translated to global coordinates
         Vector2D v0 = toGlobalPixel(Vector2D.ZERO);
-        Vector2D v1 = toGlobalPixel(new Vector2D(0, width));
-        Vector2D v2 = toGlobalPixel(new Vector2D(height, 0));
+        Vector2D v1 = toGlobalPixel(new Vector2D(0, height));
+        Vector2D v2 = toGlobalPixel(new Vector2D(width, 0));
         Vector2D v3 = toGlobalPixel(new Vector2D(width, height));
 
         // Put all the values in an array...
