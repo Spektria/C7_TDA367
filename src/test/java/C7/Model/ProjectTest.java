@@ -90,7 +90,7 @@ public class ProjectTest {
                 proj.getLayer(layer2ID).getScale());
 
         //Paint layers with blue color
-        ITool tool = ToolFactory.CreateFillBucket( 0.2f, new Color(0, 0, 1, 1));
+        ITool tool = ToolFactory.createFillBucket( 0.2f, new Color(0, 0, 1, 1));
         //Paint layer 1 by implicitly using active layer
         proj.setActiveLayer(layer1ID);
         proj.applyTool(tool, new Vector2D(5,5), new Vector2D(5,5));

@@ -37,11 +37,11 @@ class ToolsController extends ScrollPane {
         AnchorPane.setBottomAnchor(this, 0d);
 
         //This really needs to be reworked
-        ITool toolThatWeCreateSeparatelyToSetItAsTheDefault = ToolFactory.CreateCircularBrush(5, new Color(1, 0, 0, 1));
+        ITool toolThatWeCreateSeparatelyToSetItAsTheDefault = ToolFactory.createCircularBrush(5, new Color(1, 0, 0, 1));
         setCurrentTool(toolThatWeCreateSeparatelyToSetItAsTheDefault);
         flowPaneTools.getChildren().add(new ToolButton(toolThatWeCreateSeparatelyToSetItAsTheDefault, "Circle", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateCalligraphyBrush(5, new Color(0, 1, 0, 1)), "Calligraphy", this));
-        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.CreateFillBucket( 0.2f, new Color(0, 0, 1, 1)), "Fill", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createCalligraphyBrush(5, new Color(0, 1, 0, 1)), "Calligraphy", this));
+        flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createFillBucket( 0.2f, new Color(0, 0, 1, 1)), "Fill", this));
 
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createTranslationTool(), "Move", this));
         flowPaneTools.getChildren().add(new ToolButton(ToolFactory.createScalingTool(), "Scale", this));

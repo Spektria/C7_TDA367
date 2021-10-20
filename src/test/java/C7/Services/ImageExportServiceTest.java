@@ -16,11 +16,11 @@ public class ImageExportServiceTest {
         IProject proj = ProjectFactory.createProjectWithBaseLayer("Testproj", 100, 100);
 
         // Fill with (0,1,0,1)
-        proj.applyTool(ToolFactory.CreateFillBucket(2f, new Color(0,1,0,1)),
+        proj.applyTool(ToolFactory.createFillBucket(2f, new Color(0,1,0,1)),
                 new Vector2D(5,5), new Vector2D(5,5));
 
         // Draw line from (10,10) to (30,30)
-        proj.applyTool(ToolFactory.CreateCircularBrush(10, new Color(1,0,0,1)),
+        proj.applyTool(ToolFactory.createCircularBrush(10, new Color(1,0,0,1)),
                 new Vector2D(10, 10), new Vector2D(30, 30));
 
         ILayer layer = proj.getLayer(proj.getActiveLayerID());

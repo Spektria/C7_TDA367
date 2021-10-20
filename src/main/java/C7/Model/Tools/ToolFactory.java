@@ -16,7 +16,7 @@ public class ToolFactory {
      * @param color the color of the brush paint
      * @return the created brush
      */
-    public static ITool CreateCircularBrush(int size, Color color){
+    public static ITool createCircularBrush(int size, Color color){
         return new Brush(size, color, PatternFactory.createDiskPattern(), StrokeInterpolatorFactory.createLinearInterpolator());
     }
 
@@ -27,7 +27,7 @@ public class ToolFactory {
      * @param color the color of the brush paint
      * @return the created brush
      */
-    public static ITool CreateCalligraphyBrush(int size, Color color){
+    public static ITool createCalligraphyBrush(int size, Color color){
         return new Brush(size, color, PatternFactory.createLinePattern(), StrokeInterpolatorFactory.createLinearInterpolator());
 
     }
@@ -40,18 +40,30 @@ public class ToolFactory {
      * @param fill the fill color of the bucket
      * @return the created fill bucket tool
      */
-    public static ITool CreateFillBucket(float threshold, Color fill){
+    public static ITool createFillBucket(float threshold, Color fill){
         return new FillBucket(threshold, fill);
     }
 
+    /**
+     * Creates a translation too. This tool moves layers around in 2d space.
+     * @return the created translation tool
+     */
     public static ITool createTranslationTool(){
         return new TranslationTool();
     }
 
+    /**
+     * Creates a rotation tool. This tool rotates a layer around its center.
+     * @return the created rotation tool
+     */
     public static ITool createRotationTool(){
         return new RotationTool();
     }
 
+    /**
+     * Creates a scaling tool. This tool scales a layer in its x- and y-axis.
+     * @return the created scaling tool
+     */
     public static ITool createScalingTool(){
         return new ScalingTool();
     }
