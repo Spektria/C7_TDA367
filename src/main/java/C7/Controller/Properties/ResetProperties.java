@@ -10,6 +10,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 class ResetProperties extends AnchorPane {
     @FXML Button button;
 

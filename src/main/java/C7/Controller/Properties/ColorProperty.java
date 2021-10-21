@@ -13,6 +13,9 @@ import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 class ColorProperty extends AnchorPane {
     @FXML
     ColorPicker colorPicker;

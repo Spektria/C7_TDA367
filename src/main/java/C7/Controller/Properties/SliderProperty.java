@@ -10,6 +10,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 class SliderProperty extends AnchorPane {
     @FXML
     Slider slider;

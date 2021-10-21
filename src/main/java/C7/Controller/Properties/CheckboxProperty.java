@@ -11,6 +11,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 class CheckboxProperty extends AnchorPane {
     @FXML
     CheckBox checkBox;

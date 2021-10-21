@@ -3,6 +3,9 @@ package C7.Controller.Properties;
 import C7.Model.Tools.ToolProperties.IToolProperty;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * @author Elias Ersson
+ */
 public class ToolPropertyViewFactory{
 
     public static AnchorPane createFrom(IToolProperty property) {

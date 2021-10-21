@@ -23,6 +23,9 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * @author Elias Ersson
+*/
 public class LayersController extends AnchorPane {
     @FXML
     TableView<Integer> tableView;

@@ -12,6 +12,9 @@ import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 public class PropertiesController extends ScrollPane {
     @FXML
     FlowPane flowPaneProperties;
