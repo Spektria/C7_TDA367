@@ -1,5 +1,7 @@
 package C7.Controller;
 
+import C7.Controller.Tools.ToolsController;
+import C7.Model.ProjectFactory;
 import C7.Services.ImageFormatName;
 import C7.Model.IProject;
 import C7.Model.Tools.ITool;
@@ -14,9 +16,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
@@ -117,16 +117,22 @@ class MainController implements IMainController {
         propertiesController.update(tool);
     }
 
+    void setProject(IProject newProject) {
+        this.project = newProject;
+        canvas.setWidth(project.getWidth());
+        canvas.setHeight(project.getHeight());
+        view.setIRenderSource(RenderAdapterFactory.createAdapter(newProject));
+        //TODO RECONNECT THUMBNAIL OBSERVERS
+        view.render();
+        layersController = new LayersController(layersArea, project);
+        //This does not work, who knows, maybe it will one day :(
+        //layersController.setIProject(importedProject);
+        layersController.updateLayers();
+    }
+
     void importFileAsProject(File file) {
         ServiceFactory.createProjectLoaderService(file.getPath(), (importedProject) -> {
-            this.project = importedProject;
-            view.setIRenderSource(RenderAdapterFactory.createAdapter(importedProject));
-            //TODO RECONNECT THUMBNAIL OBSERVERS
-            view.render();
-            layersController = new LayersController(layersArea, project);
-            //This does not work, who knows, maybe it will one day :(
-            //layersController.setIProject(importedProject);
-            layersController.updateLayers();
+            setProject(importedProject);
         }).execute();
 
     }
@@ -140,13 +146,14 @@ class MainController implements IMainController {
         layersController.updateLayers();
     }
 
-    private void getScene() {
-
-    }
-
     @FXML
     private void onNew (Event event) {
+        NewSurfaceDialog dialog = new NewSurfaceDialog(project.getWidth(), project.getHeight());
+        dialog.setTitle("New project");
+        dialog.setHeaderText("Unsaved changes to the current project will be lost");
 
+        dialog.showAndWait()
+                .ifPresent(result -> setProject(ProjectFactory.createProjectWithBaseLayer("New project", result.getVal1(), result.getVal2())));
     }
 
     @FXML

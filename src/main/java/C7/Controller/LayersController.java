@@ -2,6 +2,7 @@ package C7.Controller;
 
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
+import C7.Model.ProjectFactory;
 import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
@@ -207,7 +208,13 @@ public class LayersController extends AnchorPane {
 
     @FXML
     private void newLayer() {
-        project.setActiveLayer(project.createLayer(project.getWidth(), project.getHeight(), Vector2D.ZERO));
+        NewSurfaceDialog dialog = new NewSurfaceDialog(project.getWidth(), project.getHeight());
+        dialog.setTitle("New layer");
+        dialog.setHeaderText("A new layer with the specified dimensions will be created");
+
+        dialog.showAndWait()
+                .ifPresent(result -> project.setActiveLayer(project.createLayer(result.getVal1(), result.getVal2(), Vector2D.ZERO)));
+
         updateLayers();
     }
 
