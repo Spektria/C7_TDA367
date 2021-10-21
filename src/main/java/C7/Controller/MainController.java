@@ -38,9 +38,7 @@ class MainController implements IMainController {
     private @FXML SplitPane splitPaneToolsProps;
     private @FXML AnchorPane contentPaneToolsProps;
     private @FXML AnchorPane contentPaneTools;
-    private @FXML ScrollPane scrollPaneTools;
     private @FXML AnchorPane contentPaneProperties;
-    private @FXML ScrollPane scrollPaneProperties;
     private @FXML AnchorPane layersArea;
     private @FXML MenuBar menuBar;
 
