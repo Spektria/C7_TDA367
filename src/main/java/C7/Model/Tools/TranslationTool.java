@@ -13,7 +13,7 @@ class TranslationTool extends BaseTool {
 
     TranslationTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Display live movement (May negatively impact performance)",
+                ToolPropertyFactory.createBooleanProperty("Continuous translation",
                         (b) -> isContinuous = b, () -> isContinuous)
         );
     }

@@ -13,7 +13,7 @@ class RotationTool extends BaseTool {
 
     RotationTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Display live rotation (May negatively impact performance)",
+                ToolPropertyFactory.createBooleanProperty("Continuous rotation",
                         (b) -> isContinuous = b, () -> isContinuous)
         );
     }
