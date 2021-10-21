@@ -61,19 +61,18 @@ public class LayersController extends AnchorPane {
         this.project = project;
 
         columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
-            ILayer layer = project.getLayer(arg0.getValue());
+            int layer = arg0.getValue();
 
             CheckBox checkBox = new CheckBox();
 
-            ///TODO: checkBox.selectedProperty().setValue() true/false depending on whether layer is visible
+            checkBox.setSelected(project.getLayerVisibility(layer));
 
 
             checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
                 public void changed(ObservableValue<? extends Boolean> ov,
                                     Boolean old_val, Boolean new_val) {
 
-                    ///TODO: Set layer as visible
-
+                    project.setLayerVisibility(layer, new_val);
 
                 }
             });
