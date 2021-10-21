@@ -7,10 +7,12 @@ import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.input.ClipboardContent;
@@ -60,6 +62,29 @@ public class LayersController extends AnchorPane {
 
         this.project = project;
 
+        columnShowHide.setCellFactory( new Callback< TableColumn<Integer, CheckBox>, TableCell<Integer, CheckBox>> ()
+        {
+
+            @Override
+            public TableCell<Integer, CheckBox> call(TableColumn<Integer, CheckBox> p) {
+                TableCell<Integer, CheckBox> tc =
+                        new TableCell<Integer, CheckBox>() {
+                            @Override
+                            protected void updateItem(CheckBox item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (!empty) {
+                                    setGraphic(item);
+                                } else {
+                                    setGraphic(null);
+                                }
+                            }
+                        };
+                tc.setAlignment(Pos.CENTER);
+                return tc;
+            }
+
+        });
+
         columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
             int layer = arg0.getValue();
 
@@ -69,11 +94,8 @@ public class LayersController extends AnchorPane {
 
 
             checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-                public void changed(ObservableValue<? extends Boolean> ov,
-                                    Boolean old_val, Boolean new_val) {
-
+                public void changed(ObservableValue<? extends Boolean> ov, Boolean old_val, Boolean new_val) {
                     project.setLayerVisibility(layer, new_val);
-
                 }
             });
 
@@ -87,9 +109,12 @@ public class LayersController extends AnchorPane {
 
             @Override
             protected void updateItem(Canvas item, boolean empty) {
-                super.updateItem(item, empty);
+                //This line was in the reference code, I don't think it does anything but I'm not sure. Delete it later if it all keeps working
+                //super.updateItem(item, empty);
                 if (!empty) {
                     setGraphic(item);
+                } else {
+                    setGraphic(null);
                 }
             }
 
@@ -123,7 +148,31 @@ public class LayersController extends AnchorPane {
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
-        //columnName.setCellValueFactory(new SimpleStringProperty());
+        columnName.setCellFactory( new Callback< TableColumn<Integer, String>, TableCell<Integer, String>> ()
+        {
+
+            @Override
+            public TableCell<Integer, String> call(TableColumn<Integer, String> p) {
+                TableCell<Integer, String> tc =
+                        new TableCell<Integer, String>() {
+                            @Override
+                            protected void updateItem(String item, boolean empty) {
+                                if (!empty) {
+                                    setText(item);
+                                } else {
+                                    setText(null);
+                                }
+                            }
+                        };
+                tc.setAlignment(Pos.CENTER_LEFT);
+                return tc;
+            }
+
+        });
+
+        columnName.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, String>, ObservableValue<String>>) arg0 -> {
+            return new SimpleStringProperty("Layer " + arg0.getValue());
+        });
 
         updateLayers();
 
