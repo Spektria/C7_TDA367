@@ -1,4 +1,4 @@
-package C7.Controller.Tools;
+package C7.Controller;
 
 import C7.Model.Tools.ITool;
 import javafx.event.ActionEvent;
@@ -10,6 +10,9 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
+/**
+ * @author Elias Ersson
+ */
 public class ToolButton extends AnchorPane {
 
     @FXML Button button;

@@ -1,6 +1,5 @@
-package C7.Controller.Tools;
+package C7.Controller;
 
-import C7.Controller.IMainController;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
 import C7.Util.Color;
@@ -12,7 +11,10 @@ import javafx.scene.layout.FlowPane;
 
 import java.io.IOException;
 
-public class ToolsController extends ScrollPane {
+/**
+ * @author Elias Ersson
+ */
+class ToolsController extends ScrollPane {
 
     private @FXML FlowPane flowPaneTools;
 
