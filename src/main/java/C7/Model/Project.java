@@ -257,6 +257,11 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     }
 
     @Override
+    public boolean getLayerVisibility(int id) {
+        return layerManager.getLayerVisibility(id);
+    }
+
+    @Override
     public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
         observers.add(observer);
     }

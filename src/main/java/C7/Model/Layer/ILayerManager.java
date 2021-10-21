@@ -93,4 +93,11 @@ public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @param visible Whether or not the layer should be visible.
      */
     void setLayerVisibility(int id, boolean visible);
+
+    /**
+     * Gets the visibility of the specified layer.
+     * @param id  The ID number of the layer to get the visibility of.
+     * @return Whether or not the layer is visible.
+     */
+    boolean getLayerVisibility(int id);
 }

@@ -228,6 +228,17 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		}
 	}
 
+	@Override
+	public boolean getLayerVisibility(int id) {
+		for (LayerInfo layerInfo : layers) {
+			if (layerInfo.getId() == id) {
+				return layerInfo.isVisible();
+			}
+		}
+
+		throw new IllegalArgumentException();
+	}
+
 	//Gets called after deserialization,
 	//currently uses default deserialization and then connects observers.
 	private Object readResolve(){
