@@ -3,12 +3,17 @@ package C7.Controller;
 import C7.Util.Tuple2;
 import com.sun.javafx.scene.control.skin.resources.ControlResources;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
+/**
+ * A dialog window that asks for a width and height. Used to create new projects and layers.
+ * @author Elias Ersson
+ */
 public class NewSurfaceDialog extends Dialog<Tuple2<Integer, Integer>> {
     private final GridPane grid;
     private final Label labelx;
@@ -39,14 +44,36 @@ public class NewSurfaceDialog extends Dialog<Tuple2<Integer, Integer>> {
         dialogPane.contentTextProperty().addListener((var1x) -> {
             this.updateGrid();
         });
-        //this.setTitle(ControlResources.getString("Dialog.confirm.title"));
-        //dialogPane.setHeaderText(ControlResources.getString("Dialog.confirm.header"));
         dialogPane.getStyleClass().add("text-input-dialog");
         dialogPane.getButtonTypes().addAll(new ButtonType[]{ButtonType.OK, ButtonType.CANCEL});
         this.updateGrid();
-        this.setResultConverter((var1x) -> {
-            ButtonData var2 = var1x == null ? null : var1x.getButtonData();
-            return var2 == ButtonData.OK_DONE ? new Tuple2<>(Integer.parseInt(this.textFieldx.getText()), Integer.parseInt(this.textFieldy.getText())) : null;
+
+        //Prevent window from closing on 'ok' if values are invalid
+        final Button okButton = (Button) dialogPane.lookupButton(ButtonType.OK);
+        okButton.addEventFilter(
+            ActionEvent.ACTION,
+            event -> {
+                try {
+                    int width = Integer.parseInt(this.textFieldx.getText());
+                    int height = Integer.parseInt(this.textFieldy.getText());
+                    if (width < 1 || height < 1)
+                        throw new Exception("Negative or zero entered");
+                } catch (Exception e) {
+                    dialogPane.setHeaderText("Please enter positive whole numbers for the width and height.");
+                    // Consume the event, preventing the rest of its effects
+                    event.consume();
+
+                }
+            }
+        );
+
+        this.setResultConverter((buttonType) -> {
+            ButtonData buttonData = buttonType == null ? null : buttonType.getButtonData();
+            if (buttonData == ButtonData.OK_DONE) {
+                int width = Integer.parseInt(this.textFieldx.getText());
+                int height = Integer.parseInt(this.textFieldy.getText());
+                return new Tuple2<>(width, height);
+            } else return null;
         });
     }
 

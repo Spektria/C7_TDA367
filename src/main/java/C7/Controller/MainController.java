@@ -147,16 +147,11 @@ class MainController implements IMainController {
         layersController.updateLayers();
     }
 
-    private void getScene() {
-
-    }
-
     @FXML
     private void onNew (Event event) {
         NewSurfaceDialog dialog = new NewSurfaceDialog(project.getWidth(), project.getHeight());
         dialog.setTitle("New project");
         dialog.setHeaderText("Unsaved changes to the current project will be lost");
-        //dialog.setContentText("New layer dimensions:");
 
         dialog.showAndWait()
                 .ifPresent(result -> setProject(ProjectFactory.createProjectWithBaseLayer("New project", result.getVal1(), result.getVal2())));
