@@ -1,20 +1,18 @@
 package C7.Controller;
 
 import C7.Model.IProject;
-import C7.Util.Color;
-import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
-import C7.Util.Tuple2;
+import C7.Model.ProjectFactory;
 import C7.Util.Vector2D;
+import C7.View.IView;
+import C7.View.ViewFactory;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
-import javafx.scene.image.PixelWriter;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -23,10 +21,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LayersController extends AnchorPane {
     @FXML
-    TableView<ILayer> tableView;
+    TableView<Integer> tableView;
 
     @FXML TableColumn columnShowHide;
     @FXML TableColumn columnPreview;
@@ -53,17 +52,17 @@ public class LayersController extends AnchorPane {
 
         parent.getChildren().add(this);
 
+        AnchorPane.setTopAnchor(this, 0d);
+        AnchorPane.setBottomAnchor(this, 0d);
+
         this.project = project;
 
-        columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
-            ILayer layer = arg0.getValue();
+        columnShowHide.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, CheckBox>, ObservableValue<CheckBox>>) arg0 -> {
+            ILayer layer = project.getLayer(arg0.getValue());
 
             CheckBox checkBox = new CheckBox();
 
-            ///TODO: checkBox.selectedProperty().setValue() true/false depending on whether layer is selected
-            ///Later note: Did I mean visible?
-            ///I have to have meant visible
-
+            ///TODO: checkBox.selectedProperty().setValue() true/false depending on whether layer is visible
 
 
             checkBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -82,7 +81,7 @@ public class LayersController extends AnchorPane {
 
         columnPreview.setPrefWidth(THUMBNAIL_WIDTH);
 
-        columnPreview.setCellFactory(v -> new TableCell<ILayer, Canvas>() {
+        columnPreview.setCellFactory(v -> new TableCell<Integer, Canvas>() {
 
             @Override
             protected void updateItem(Canvas item, boolean empty) {
@@ -94,7 +93,7 @@ public class LayersController extends AnchorPane {
 
         });
 
-        columnPreview.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ILayer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
+        columnPreview.setCellValueFactory((Callback<TableColumn.CellDataFeatures<Integer, Canvas>, ObservableValue<Canvas>>) arg0 -> {
             Canvas canvas = new Canvas(project.getWidth(), project.getHeight());
 
             double xscale = (double)THUMBNAIL_WIDTH/project.getWidth();
@@ -114,18 +113,11 @@ public class LayersController extends AnchorPane {
             canvas.setTranslateX(canvas.getWidth()*(scale/2-1d/2));
             canvas.setTranslateY(canvas.getHeight()*(scale/2-1d/2));
 
-
-
-            ILayer layer = arg0.getValue();
-            layer.addObserver(new IObserver<Tuple2<Vector2D, Vector2D>>() {
-                @Override
-                public void notify(Tuple2<Vector2D, Vector2D> data) {
-                    renderLayer(layer, canvas, data);
-                }
-            });
-
-            renderLayer(layer, canvas, new Tuple2<>(new Vector2D(0, 0), new Vector2D(layer.getWidth(), layer.getHeight())));
-
+            ILayer layer = project.getLayer(arg0.getValue());
+            IView view = ViewFactory.createView(layer);
+            view.setGraphicsContext(canvas.getGraphicsContext2D());
+            view.setBounds(canvas.widthProperty(), canvas.heightProperty());
+            view.render();
             return new SimpleObjectProperty<Canvas>(canvas);
         });
 
@@ -136,7 +128,13 @@ public class LayersController extends AnchorPane {
         tableView.setFixedCellSize(THUMBNAIL_HEIGHT);
 
         tableView.setRowFactory(tv -> {
-            TableRow<ILayer> row = new TableRow<>();
+            TableRow<Integer> row = new TableRow<>();
+
+            row.setOnMouseClicked(event -> {
+                if (row.getItem() != null) {
+                    project.setActiveLayer(row.getItem());
+                }
+            });
 
             row.setOnDragDetected(event -> {
                 if (! row.isEmpty()) {
@@ -164,7 +162,7 @@ public class LayersController extends AnchorPane {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(SERIALIZED_MIME_TYPE)) {
                     int draggedIndex = (Integer) db.getContent(SERIALIZED_MIME_TYPE);
-                    ILayer draggedLayer = tableView.getItems().remove(draggedIndex);
+                    int draggedLayer = tableView.getItems().remove(draggedIndex);
 
                     int dropIndex ;
 
@@ -175,6 +173,10 @@ public class LayersController extends AnchorPane {
                     }
 
                     tableView.getItems().add(dropIndex, draggedLayer);
+                    System.out.println("Dropped at " + (tableView.getItems().size()-dropIndex-1));
+                    project.setLayerIndex(draggedLayer, tableView.getItems().size()-dropIndex-1);
+
+
 
                     event.setDropCompleted(true);
                     tableView.getSelectionModel().select(dropIndex);
@@ -187,24 +189,38 @@ public class LayersController extends AnchorPane {
 
     }
 
+    public void setIProject(IProject project){
+        Objects.requireNonNull(project);
+        this.project = project;
+    }
+
     public void updateLayers() {
         tableView.getItems().clear();
 
         for (int id:
              project.getAllLayerIds()) {
-            tableView.getItems().add(project.getLayer(id));
+            tableView.getItems().add(0, id);
+            if (id == project.getActiveLayerID()) {
+                tableView.getSelectionModel().select(0);
+            }
         }
     }
 
-    private void renderLayer(ILayer layer, Canvas canvas, Tuple2<Vector2D, Vector2D> area) {
-        PixelWriter pw = canvas.getGraphicsContext2D().getPixelWriter();
-        for (int y = (int)area.getVal1().getY(); y < (int)area.getVal2().getY(); y++) {
-            for (int x = (int)area.getVal1().getX(); x < (int)area.getVal2().getX(); x++) {
-                // Note, we need to change the color type from C7 color to JavaFX color.
-                Color color = layer.getGlobalPixel(x, y);
+    @FXML
+    private void newLayer() {
+        NewSurfaceDialog dialog = new NewSurfaceDialog(project.getWidth(), project.getHeight());
+        dialog.setTitle("New layer");
+        dialog.setHeaderText("A new layer with the specified dimensions will be created");
 
-                pw.setColor(x, y, new javafx.scene.paint.Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
-            }
-        }
+        dialog.showAndWait()
+                .ifPresent(result -> project.setActiveLayer(project.createLayer(result.getVal1(), result.getVal2(), Vector2D.ZERO)));
+
+        updateLayers();
+    }
+
+    @FXML
+    private void deleteLayer() {
+        project.removeLayer(project.getActiveLayerID());
+        updateLayers();
     }
 }

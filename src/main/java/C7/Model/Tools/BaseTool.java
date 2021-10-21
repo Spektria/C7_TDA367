@@ -5,7 +5,6 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Abstract base implementation of {@link ITool}. It abstracts

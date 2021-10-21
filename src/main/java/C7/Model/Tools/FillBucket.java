@@ -101,7 +101,7 @@ class FillBucket extends BaseTool{
 
         // Else if none of these, check how different the color is
         // and if the difference is low enough fill it.
-        float differance = Color.getColorDifference(selectedColor, color);;
+        float differance = Color.getColorDifference(selectedColor, color);
         return differance <= threshold;
 
     }

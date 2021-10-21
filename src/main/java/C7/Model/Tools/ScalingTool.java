@@ -1,13 +1,8 @@
 package C7.Model.Tools;
 
 import C7.Model.Layer.ILayer;
-import C7.Model.Tools.ToolProperties.IToolProperty;
 import C7.Model.Tools.ToolProperties.ToolPropertyFactory;
 import C7.Util.Vector2D;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * A transform tool used for scaling a layer in its x- and y-axis.

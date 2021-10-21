@@ -1,10 +1,7 @@
 package C7.View;
 
-import C7.Model.Layer.ILayer;
-import C7.Model.Layer.ILayerManager;
-import javafx.beans.property.DoubleProperty;
+import C7.View.Render.IRender;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -20,13 +17,14 @@ public interface IView {
     void render();
 
     /**
-     * Tells the view to render a portion of an area, given by a rectangle.
+     * Tells the view to render a portion of an area, given by a rectangle described by two points.
+     * @throws IllegalArgumentException if x > x1 or y1 > y. I.e. the given rectangular are must be positive.
      * @param x the start x-coord
      * @param y the start y-coord
-     * @param width the width of the rectangle
-     * @param height the height of the rectangle
+     * @param x1 the end x-coord
+     * @param y1 the end y-coord
      */
-    void render(int x, int y, int width, int height);
+    void render(int x, int y, int x1, int y1);
 
     /**
      * Sets this views to a given graphics context.
@@ -34,6 +32,12 @@ public interface IView {
      * @param gc the given graphics context.
      */
     void setGraphicsContext(GraphicsContext gc);
+
+    /**
+     * Sets the source from which the IView will render.
+     * @param render the IRender source to render from.
+     */
+    void setIRenderSource(IRender render);
 
     /**
      * Sets the bounds of this view. That is, how wide and tall the image drawn by this view should be.

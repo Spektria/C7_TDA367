@@ -1,22 +1,22 @@
 package C7.Controller;
 
+import C7.Controller.Tools.ToolsController;
+import C7.Model.ProjectFactory;
 import C7.Services.ImageFormatName;
 import C7.Model.IProject;
-import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
+import C7.Services.ProjectFormatName;
 import C7.Services.ServiceFactory;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
+import C7.View.Render.RenderAdapterFactory;
+import javafx.beans.value.ChangeListener;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.*;
 import javafx.stage.FileChooser;
@@ -24,7 +24,6 @@ import javafx.stage.FileChooser;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
-import java.security.Provider;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -74,15 +73,10 @@ class MainController implements IMainController {
 
         this.project = project;
         this.view = view;
+        bindView();
 
-        //scrollPaneCanvas.widthProperty().addListener((observable, oldValue, newValue) -> canvas.setWidth(newValue.doubleValue()));
-        //scrollPaneCanvas.heightProperty().addListener((observable, oldValue, newValue) -> canvas.setHeight(newValue.doubleValue()));
         canvas.setWidth(project.getWidth());
         canvas.setHeight(project.getHeight());
-
-
-        view.setGraphicsContext(canvas.getGraphicsContext2D());
-        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
 
         scrollPaneCanvas.setContent(canvas);
 
@@ -98,12 +92,50 @@ class MainController implements IMainController {
 
     }
 
+    /**
+     * Connects the view with this controller.
+     * Does any necessary operation to make the view work with this controller.
+     */
+    private void bindView(){
+        ChangeListener<Number> reRenderIfBigger = (observable, oldValue, newValue) -> {
+            if(oldValue.intValue() < newValue.intValue())
+                view.render();
+        };
+
+        // We want to rerender the view if we change the size of the window.
+        // We also only want to rerender if it gets bigger since it is otherwise already rendered.
+        scrollPaneCanvas.widthProperty().addListener(reRenderIfBigger);
+        scrollPaneCanvas.heightProperty().addListener(reRenderIfBigger);
+
+        view.setGraphicsContext(canvas.getGraphicsContext2D());
+        view.setBounds(scrollPaneCanvas.widthProperty(), scrollPaneCanvas.heightProperty());
+    }
+
     public void setCurrentTool(ITool tool) {
         this.currentTool = tool;
 
         propertiesController.update(tool);
     }
 
+    void setProject(IProject newProject) {
+        this.project = newProject;
+        canvas.setWidth(project.getWidth());
+        canvas.setHeight(project.getHeight());
+        view.setIRenderSource(RenderAdapterFactory.createAdapter(newProject));
+        //TODO RECONNECT THUMBNAIL OBSERVERS
+        view.render();
+        layersController = new LayersController(layersArea, project);
+        //This does not work, who knows, maybe it will one day :(
+        //layersController.setIProject(importedProject);
+        layersController.updateLayers();
+    }
+
+    void importFileAsProject(File file) {
+        ServiceFactory.createProjectLoaderService(file.getPath(), (importedProject) -> {
+            setProject(importedProject);
+        }).execute();
+
+    }
 
     void importFileAsLayer(File file) {
         ServiceFactory.createLayerImportService(file.getPath(), (layer) -> {
@@ -114,23 +146,41 @@ class MainController implements IMainController {
         layersController.updateLayers();
     }
 
-    private void getScene() {
-
-    }
-
     @FXML
     private void onNew (Event event) {
+        NewSurfaceDialog dialog = new NewSurfaceDialog(project.getWidth(), project.getHeight());
+        dialog.setTitle("New project");
+        dialog.setHeaderText("Unsaved changes to the current project will be lost");
 
+        dialog.showAndWait()
+                .ifPresent(result -> setProject(ProjectFactory.createProjectWithBaseLayer("New project", result.getVal1(), result.getVal2())));
     }
 
     @FXML
     private void onOpen (Event event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose project to import");
+        List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
 
+        File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
+        if (file != null) importFileAsProject(file);
+        view.render();
     }
 
     @FXML
     private void onSave (Event event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Choose where to save the project");
+        List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
+        fileChooser.setInitialFileName(project.getName());
+        fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getDefaultDirectory());
 
+        File file = fileChooser.showSaveDialog(menuBar.getScene().getWindow());
+        if(file != null) {
+            ServiceFactory.createProjectSaverService(file.getPath(), project).execute();
+        }
     }
 
     @FXML
@@ -193,6 +243,7 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMouseDragged (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
             if(currentTool.isContinuous())
@@ -204,10 +255,9 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMousePressed (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
-            var point = new Vector2D(event.getX(), event.getY());
-            if(currentTool.isContinuous())
-                project.applyTool(currentTool, point, point);
+            Vector2D point = new Vector2D(event.getX(), event.getY());
             oldPos = point;
             pressedPos = point;
         }
@@ -216,8 +266,9 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMouseReleased (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
-            var point = new Vector2D(event.getX(), event.getY());
+            Vector2D point = new Vector2D(event.getX(), event.getY());
             if(currentTool.isContinuous())
                 project.applyTool(currentTool, point, point);
             else

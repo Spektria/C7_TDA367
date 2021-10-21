@@ -4,10 +4,11 @@ import C7.Util.Color;
 import C7.Util.IObserver;
 import C7.Util.Tuple2;
 import C7.Util.Vector2D;
+import jdk.jshell.spi.ExecutionControl;
 
 import java.io.Serializable;
+import java.nio.channels.NotYetBoundException;
 import java.util.*;
-import java.util.List;
 
 /**
  * @author Love Gustafsson
@@ -52,7 +53,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	final private List<LayerInfo> layers;	// Collection of layers managed this layer manager.
 	private int nextId;										// ID number to assign to the next created layer.
 	private int activeLayerId;								// The ID number of the currently active layer.
-	final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
+	private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
 
 	public LayerManager() {
 		layers			= new ArrayList<>();
@@ -185,8 +186,9 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 				int currentIndex = layers.indexOf(entry);
 
 				// If we're already in the right index, do nothing
-				if (currentIndex == index)
+				if (currentIndex == index) {
 					return;
+				}
 
 				// Calculate new index
 				int newIndex = index;
@@ -211,5 +213,22 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers) {
 			observer.notify(data);
 		}
+	}
+
+	@Override
+	public void setLayerVisibility(int id, boolean visible) {
+	}
+
+	//Gets called after deserialization,
+	//currently uses default deserialization and then connects observers.
+	private Object readResolve(){
+		observers = new ArrayList<>();
+
+		for (int i = 0; i < layers.size(); i++) {
+			ILayer layer = layers.get(i).getValue();
+			//layer.removeObserver(this);
+			layer.addObserver(this);
+		}
+		return this;
 	}
 }

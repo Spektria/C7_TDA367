@@ -4,7 +4,6 @@ import C7.Controller.ControllerFactory;
 import C7.Controller.IMainController;
 import C7.Model.IProject;
 import C7.Model.ProjectFactory;
-import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
 import javafx.application.Application;
@@ -18,7 +17,7 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Create model
-        IProject project = ProjectFactory.createProjectWithBaseLayer("Project1", 1920, 1080);
+        IProject project = ProjectFactory.createProjectWithBaseLayer("Project1", 700, 500);
 
         // Create view and controller
         IView view = ViewFactory.createView(project);

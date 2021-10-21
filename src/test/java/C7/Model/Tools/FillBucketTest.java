@@ -14,7 +14,7 @@ public class FillBucketTest {
     public void emptyFillTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
         Color fill = new Color(0.2f, 0.5f ,0.3f, 1f);
-        var brush = ToolFactory.CreateFillBucket( 0.5f, fill);
+        ITool brush = ToolFactory.createFillBucket( 0.5f, fill);
         brush.apply(testSurface, new Vector2D(3,3),new Vector2D(3,3));
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());
@@ -39,7 +39,7 @@ public class FillBucketTest {
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
-        var brush = ToolFactory.CreateFillBucket(0.05f, new Color(0,0,0,1f));
+        ITool brush = ToolFactory.createFillBucket(0.05f, new Color(0,0,0,1f));
         brush.apply(testSurface, new Vector2D(3,3), new Vector2D(3,3));
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());
@@ -73,7 +73,7 @@ public class FillBucketTest {
             }
         }
 
-        var brush = ToolFactory.CreateFillBucket( 0.501f, new Color(0,1f,0f,1f));
+        ITool brush = ToolFactory.createFillBucket( 0.501f, new Color(0,1f,0f,1f));
         brush.apply(testSurface, new Vector2D(0,0), new Vector2D(0,0));
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());

@@ -40,7 +40,7 @@ class SliderProperty extends AnchorPane {
 
         slider.valueProperty().addListener((observableValue, oldVal, newVal) -> {
             prop.setDouble(newVal.doubleValue());
-            var valueDisplayStr = "" + round2Decimals(newVal.doubleValue());
+            String valueDisplayStr = "" + round2Decimals(newVal.doubleValue());
             valueLabel.setText(valueDisplayStr);
         });
     }

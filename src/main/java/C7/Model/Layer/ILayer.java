@@ -12,7 +12,7 @@ import C7.Util.Vector2D;
  *
  * @author Elias Ersson
  * @author Love Gustafsson
- * @version 1.4
+ * @version 1.5
  */
 public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
@@ -151,4 +151,10 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * Forces this ILayer to notify its observers of any currently buffered change.
      */
     void update();
+
+    /**
+     * Gets the color pixel data format used by this layer.
+     * @return Pixel data format used by this layer.
+     */
+    LayerFormat getFormat();
 }

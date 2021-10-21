@@ -19,7 +19,7 @@ import java.util.Objects;
  * Included is all image data required to reconstruct previous work as well as any saved metadata.
  * */
 class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
-    final private Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
+    private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers;	// Update area observers
     private ILayerManager layerManager;
     private ILayer activeLayer;
     private int width, height;
@@ -213,7 +213,10 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
      * @param layerID
      */
     @Override
-    public void removeLayer(int layerID){ layerManager.destroyLayer(layerID); }
+    public void removeLayer(int layerID){
+        layerManager.destroyLayer(layerID);
+        notify(new Tuple2<>(Vector2D.ZERO, new Vector2D(getWidth(), getHeight())));
+    }
 
     /**
      * Get the active layerID of this Project.
@@ -241,6 +244,13 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     }
 
     @Override
+    public void setLayerIndex(int id, int index) {
+        layerManager.setLayerIndex(id, index);
+        //Should be changed to only update the area covered by the layer
+        notify(new Tuple2<>(Vector2D.ZERO, new Vector2D(getWidth(), getHeight())));
+    }
+
+    @Override
     public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
         observers.add(observer);
     }
@@ -255,5 +265,15 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
         for (IObserver<Tuple2<Vector2D, Vector2D>> observer : observers){
             observer.notify(data);
         }
+    }
+
+    //Gets called after deserialization,
+    //currently uses default deserialization and then connects observers.
+    private Object readResolve(){
+        observers = new ArrayList<>();
+
+        layerManager.addObserver(this);
+
+        return this;
     }
 }

@@ -26,7 +26,7 @@ class LinearStrokeInterpolator implements IStrokeInterpolator {
 
         Vector2D delta = p2.sub(p1).mult(1d/amountOfPointsToCreate);
 
-        var points = IntStream.range(0, amountOfPointsToCreate + 1)
+        List<Vector2D> points = IntStream.range(0, amountOfPointsToCreate + 1)
                 .mapToObj(index -> p1.add(delta.mult(index)))
                 .collect(Collectors.toList());
         return points;

@@ -10,11 +10,11 @@ import java.util.*;
  * @author Elias Ersson
  * @author Love Gustafsson
  * @author Hugo Ekstrand
- * @version 2.1
+ * @version 2.2
  */
-public class Layer implements ILayer, Serializable {
+class Layer implements ILayer, Serializable {
 
-    private final Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
+    private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
     private Color[][] pixels;   // This layer's pixel data.
     private int width;          // The width, in pixels, of this layer.
@@ -154,8 +154,8 @@ public class Layer implements ILayer, Serializable {
     private void maxRectangleOfChange(){
         // The corners of the layer's rectangle translated to global coordinates
         Vector2D v0 = toGlobalPixel(Vector2D.ZERO);
-        Vector2D v1 = toGlobalPixel(new Vector2D(0, width));
-        Vector2D v2 = toGlobalPixel(new Vector2D(height, 0));
+        Vector2D v1 = toGlobalPixel(new Vector2D(0, height));
+        Vector2D v2 = toGlobalPixel(new Vector2D(width, 0));
         Vector2D v3 = toGlobalPixel(new Vector2D(width, height));
 
         // Put all the values in an array...
@@ -339,10 +339,17 @@ public class Layer implements ILayer, Serializable {
         }
     }
 
-    //Create empty references for Optional:s so that they are not null
+    //Create references for things so that they are not null and cause crashes after deserialization
     private Object readResolve(){
         this.rectangleOfChangeMin = Optional.empty();
         this.rectangleOfChangeMax = Optional.empty();
+
+        this.observers = new ArrayList<>();
         return this;
+    }
+
+    @java.lang.Override
+    public LayerFormat getFormat() {
+        return LayerFormat.RGBA32F32F32F32F;
     }
 }

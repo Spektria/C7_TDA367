@@ -2,7 +2,6 @@ package C7.Services;
 
 import javax.imageio.ImageIO;
 import java.util.Arrays;
-import java.util.EnumSet;
 
 /**
  * Image format names.

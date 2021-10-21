@@ -121,11 +121,11 @@ public class LayerTest {
         layer.setRotation(Math.PI/4); // Rotated 45 degrees
 
         // This should be the center
-        var center = new Vector2D(w / 2d, h / 2d).add(translation);
+        Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
         Assertions.assertEquals(new Vector2D(w / 2d, h / 2d), layer.toLocalPixel(center));
 
         // This should be the rightmost edge. Which, if rotated 45 degrees, will be, if rotated back, the bottom right corner.
-        var rightCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(w / 2d, 0).mult(Math.sqrt(2)));
+        Vector2D rightCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(w / 2d, 0).mult(Math.sqrt(2)));
         Assertions.assertEquals(new Vector2D(w, 0), layer.toLocalPixel(rightCorner));
     }
 
@@ -151,11 +151,11 @@ public class LayerTest {
         layer.setRotation(Math.PI/4); // Rotated 45 degrees
 
         // This should be the center
-        var center = new Vector2D(w / 2d, h / 2d).add(translation);
+        Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
         Assertions.assertEquals(new Color(1,0,1,1), layer.getGlobalPixel((int)center.getX(), (int)center.getY()));
 
         // This should be the rightmost edge. Which, if rotated 45 degrees, will be, if rotated back, the bottom right corner.
-        var leftCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(-w / 2d, 0).mult(Math.sqrt(2) - 0.1d));
+        Vector2D leftCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(-w / 2d, 0).mult(Math.sqrt(2) - 0.1d));
         Assertions.assertEquals(new Color(1,1,1,1), layer.getGlobalPixel((int)leftCorner.getX(), (int)leftCorner.getY()));
     }
 
