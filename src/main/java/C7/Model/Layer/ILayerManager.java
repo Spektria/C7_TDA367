@@ -10,7 +10,7 @@ import C7.Util.Vector2D;
  * Layer managers are responsible for creating, destroying, and providing access
  * to layers inside of an image project.
  * @author Love Gustafsson
- * @version 1.2
+ * @version 1.3
  */
 public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
 
@@ -86,4 +86,11 @@ public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @param index The new index of the layer.
      */
     void setLayerIndex(int id, int index);
+
+    /**
+     * Sets the visibility of the specified layer.
+     * @param id The ID number of the layer to set the visibility of.
+     * @param visible Whether or not the layer should be visible.
+     */
+    void setLayerVisibility(int id, boolean visible);
 }

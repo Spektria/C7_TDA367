@@ -1,5 +1,6 @@
 package C7.Model.Tools;
 
+import C7.Model.Layer.LayerFormat;
 import C7.Util.Color;
 import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
@@ -147,5 +148,10 @@ public class TestISurfaceImpl implements ILayer {
     @Override
     public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
 
+    }
+
+    @Override
+    public LayerFormat getFormat() {
+        return LayerFormat.RGBA32F32F32F32F;
     }
 }

@@ -10,7 +10,7 @@ import java.util.*;
  * @author Elias Ersson
  * @author Love Gustafsson
  * @author Hugo Ekstrand
- * @version 2.1
+ * @version 2.2
  */
 class Layer implements ILayer, Serializable {
 
@@ -346,5 +346,10 @@ class Layer implements ILayer, Serializable {
 
         this.observers = new ArrayList<>();
         return this;
+    }
+
+    @java.lang.Override
+    public LayerFormat getFormat() {
+        return LayerFormat.RGBA32F32F32F32F;
     }
 }
