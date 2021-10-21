@@ -199,12 +199,15 @@ public class LayersController extends AnchorPane {
         for (int id:
              project.getAllLayerIds()) {
             tableView.getItems().add(0, id);
+            if (id == project.getActiveLayerID()) {
+                tableView.getSelectionModel().select(0);
+            }
         }
     }
 
     @FXML
     private void newLayer() {
-        project.createLayer(project.getWidth(), project.getHeight(), Vector2D.ZERO);
+        project.setActiveLayer(project.createLayer(project.getWidth(), project.getHeight(), Vector2D.ZERO));
         updateLayers();
     }
 

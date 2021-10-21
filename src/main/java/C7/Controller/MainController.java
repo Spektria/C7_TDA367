@@ -90,9 +90,6 @@ class MainController implements IMainController {
 
         layersController = new LayersController(layersArea, project);
 
-        project.createLayer(500, 500, new Vector2D(0,0));
-        layersController.updateLayers();
-
     }
 
     /**
@@ -239,6 +236,7 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMouseDragged (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
             if(currentTool.isContinuous())
@@ -250,6 +248,7 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMousePressed (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
             oldPos = point;
@@ -260,6 +259,7 @@ class MainController implements IMainController {
 
     @FXML
     private void onCanvasMouseReleased (MouseEvent event) {
+        if (project.getLayer(project.getActiveLayerID()) == null) return;
         if (event.getButton() == MouseButton.PRIMARY) {
             Vector2D point = new Vector2D(event.getX(), event.getY());
             if(currentTool.isContinuous())
