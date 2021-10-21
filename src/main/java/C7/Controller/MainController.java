@@ -1,12 +1,12 @@
 package C7.Controller;
 
+import C7.Controller.Tools.ToolsController;
 import C7.Model.ProjectFactory;
 import C7.Services.ImageFormatName;
 import C7.Model.IProject;
 import C7.Model.Tools.ITool;
 import C7.Services.ProjectFormatName;
 import C7.Services.ServiceFactory;
-import C7.Util.Tuple2;
 import C7.Util.Vector2D;
 import C7.Controller.Properties.*;
 import C7.View.IView;
@@ -27,7 +27,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
