@@ -217,6 +217,11 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 
 	@Override
 	public void setLayerVisibility(int id, boolean visible) {
+		for (LayerInfo layerInfo : layers) {
+			if (layerInfo.getId() == id) {
+				layerInfo.setIsVisible(visible);
+			}
+		}
 	}
 
 	//Gets called after deserialization,
@@ -225,7 +230,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		observers = new ArrayList<>();
 
 		for (int i = 0; i < layers.size(); i++) {
-			ILayer layer = layers.get(i).getValue();
+			ILayer layer = layers.get(i).getLayer();
 			//layer.removeObserver(this);
 			layer.addObserver(this);
 		}
