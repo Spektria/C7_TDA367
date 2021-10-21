@@ -162,6 +162,10 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 		Vector2D point = new Vector2D(x + 0.5, y + 0.5);
 
 		for (LayerInfo entry : layers) {
+
+			if (!entry.isVisible())
+				continue;
+
 			ILayer layer = entry.getLayer();
 
 			if (layer.isGlobalPointOnLayer(point)) {
