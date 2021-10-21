@@ -213,7 +213,10 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
      * @param layerID
      */
     @Override
-    public void removeLayer(int layerID){ layerManager.destroyLayer(layerID); }
+    public void removeLayer(int layerID){
+        layerManager.destroyLayer(layerID);
+        notify(new Tuple2<>(Vector2D.ZERO, new Vector2D(getWidth(), getHeight())));
+    }
 
     /**
      * Get the active layerID of this Project.
@@ -244,7 +247,7 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     public void setLayerIndex(int id, int index) {
         layerManager.setLayerIndex(id, index);
         //Should be changed to only update the area covered by the layer
-        notify(new Tuple2<>(new Vector2D(0, 0), new Vector2D(getWidth(), getHeight())));
+        notify(new Tuple2<>(Vector2D.ZERO, new Vector2D(getWidth(), getHeight())));
     }
 
     @Override

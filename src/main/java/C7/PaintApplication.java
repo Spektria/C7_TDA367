@@ -17,7 +17,7 @@ public class PaintApplication extends Application {
     public void start(Stage primaryStage) throws Exception{
 
         // Create model
-        IProject project = ProjectFactory.createProjectWithBaseLayer("Project1", 1920, 1080);
+        IProject project = ProjectFactory.createProjectWithBaseLayer("Project1", 700, 500);
 
         // Create view and controller
         IView view = ViewFactory.createView(project);

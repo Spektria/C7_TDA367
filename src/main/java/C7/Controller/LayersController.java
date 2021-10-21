@@ -2,6 +2,7 @@ package C7.Controller;
 
 import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
+import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
 import javafx.beans.property.SimpleObjectProperty;
@@ -49,6 +50,9 @@ public class LayersController extends AnchorPane {
         }
 
         parent.getChildren().add(this);
+
+        AnchorPane.setTopAnchor(this, 0d);
+        AnchorPane.setBottomAnchor(this, 0d);
 
         this.project = project;
 
@@ -126,7 +130,9 @@ public class LayersController extends AnchorPane {
             TableRow<Integer> row = new TableRow<>();
 
             row.setOnMouseClicked(event -> {
-                project.setActiveLayer(row.getItem());
+                if (row.getItem() != null) {
+                    project.setActiveLayer(row.getItem());
+                }
             });
 
             row.setOnDragDetected(event -> {
@@ -194,5 +200,17 @@ public class LayersController extends AnchorPane {
              project.getAllLayerIds()) {
             tableView.getItems().add(0, id);
         }
+    }
+
+    @FXML
+    private void newLayer() {
+        project.createLayer(project.getWidth(), project.getHeight(), Vector2D.ZERO);
+        updateLayers();
+    }
+
+    @FXML
+    private void deleteLayer() {
+        project.removeLayer(project.getActiveLayerID());
+        updateLayers();
     }
 }
