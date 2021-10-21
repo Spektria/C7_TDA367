@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 
 
 /**
+ * Main class for the controller module. Creates and attaches the other parts of the controller and controls the main view window.
  * @author Elias Ersson
  */
 class MainController implements IMainController {

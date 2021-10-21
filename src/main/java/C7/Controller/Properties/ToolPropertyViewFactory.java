@@ -4,6 +4,7 @@ import C7.Model.Tools.ToolProperties.IToolProperty;
 import javafx.scene.layout.AnchorPane;
 
 /**
+ * Used to generate a property widget appropriate for modifying the given property.
  * @author Elias Ersson
  */
 public class ToolPropertyViewFactory{

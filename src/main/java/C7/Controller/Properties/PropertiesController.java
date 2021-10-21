@@ -13,6 +13,7 @@ import javafx.scene.layout.FlowPane;
 import java.io.IOException;
 
 /**
+ * Controls a panel containing widgets for modifying the properties of the currently selected tool.
  * @author Elias Ersson
  */
 public class PropertiesController extends ScrollPane {

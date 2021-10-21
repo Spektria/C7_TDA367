@@ -12,6 +12,7 @@ import javafx.scene.layout.FlowPane;
 import java.io.IOException;
 
 /**
+ * Controls a panel with buttons for selecting all the different tools available in the program.
  * @author Elias Ersson
  */
 class ToolsController extends ScrollPane {

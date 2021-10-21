@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import java.io.IOException;
 
 /**
+ * Controls a tool property widget of the corresponding type.
  * @author Elias Ersson
  */
 class ColorProperty extends AnchorPane {

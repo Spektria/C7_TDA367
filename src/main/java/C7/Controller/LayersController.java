@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
+ * Controls a panel displaying a list of the layers in the current project, with controls to create/delete and show/hide layers.
  * @author Elias Ersson
 */
 public class LayersController extends AnchorPane {

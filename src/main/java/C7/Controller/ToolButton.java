@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.IOException;
 
 /**
+ * Controls a button that when pressed sets its assigned tool as the current one.
  * @author Elias Ersson
  */
 public class ToolButton extends AnchorPane {
