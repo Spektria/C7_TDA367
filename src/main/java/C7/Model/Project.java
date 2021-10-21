@@ -251,6 +251,12 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
     }
 
     @Override
+    public void setLayerVisibility(int id, boolean visible) {
+        layerManager.setLayerVisibility(id, visible);
+        notify(new Tuple2<>(Vector2D.ZERO, new Vector2D(getWidth(), getHeight())));
+    }
+
+    @Override
     public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
         observers.add(observer);
     }

@@ -146,4 +146,10 @@ public interface IProject extends IObservable<Tuple2<Vector2D, Vector2D>> {
      */
     void setLayerIndex(int id, int index);
 
+    /**
+     * Sets the visibility of the specified layer.
+     * @param id The ID number of the layer to set the visibility of.
+     * @param visible Whether or not the layer should be visible.
+     */
+    void setLayerVisibility(int id, boolean visible);
 }
