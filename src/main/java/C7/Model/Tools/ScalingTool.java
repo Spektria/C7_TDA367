@@ -14,7 +14,7 @@ class ScalingTool extends BaseTool {
 
     ScalingTool(){
         addProperties(
-                ToolPropertyFactory.createBooleanProperty("Continuous scaling",
+                ToolPropertyFactory.createBooleanProperty("Display live scaling (May negatively impact performance)",
                         (b) -> isContinuous = b, () -> isContinuous),
                 ToolPropertyFactory.createBooleanProperty("Relative to quadrant",
                         (b) -> relative = b, () -> relative)
