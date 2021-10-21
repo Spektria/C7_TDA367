@@ -6,6 +6,8 @@ import C7.Model.ProjectFactory;
 import C7.Util.Vector2D;
 import C7.View.IView;
 import C7.View.ViewFactory;
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
@@ -57,8 +59,12 @@ public class LayersController extends AnchorPane {
 
         parent.getChildren().add(this);
 
-        AnchorPane.setTopAnchor(this, 0d);
-        AnchorPane.setBottomAnchor(this, 0d);
+        parent.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                tableView.setPrefHeight(number.doubleValue()-25);
+            }
+        });
 
         this.project = project;
 
