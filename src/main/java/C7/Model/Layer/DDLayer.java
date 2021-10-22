@@ -107,6 +107,10 @@ public class DDLayer implements ILayer, Serializable {
         a[x][y] = color.getAlpha();
     }
 
+    private Color getColor(int x, int y){
+        return new Color(r[x][y], g[x][y], b[x][y], a[x][y]);
+    }
+
     @Override
     public Color getGlobalPixel(int x, int y) {
 
@@ -121,7 +125,7 @@ public class DDLayer implements ILayer, Serializable {
     public Color getLocalPixel(int x, int y) {
         if(!isPixelOnLocalLayer(x, y))
             throw new IllegalArgumentException();
-        return new Color(r[x][y], g[x][y], b[x][y], a[x][y]);
+        return getColor(x,y);
     }
 
     @Override
