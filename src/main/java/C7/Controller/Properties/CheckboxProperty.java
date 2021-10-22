@@ -30,8 +30,7 @@ class CheckboxProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        Tooltip.install(checkBox, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
-        checkBox.setText(PropertyDescription.getInstance().getName(prop));
+        checkBox.setText(prop.getName());
         checkBox.selectedProperty().setValue(prop.getBoolean());
 
         checkBox.setOnAction(new EventHandler<ActionEvent>() {

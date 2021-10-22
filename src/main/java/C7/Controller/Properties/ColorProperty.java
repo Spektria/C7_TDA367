@@ -34,8 +34,7 @@ class ColorProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(PropertyDescription.getInstance().getName(prop));
-        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
+        label.setText(prop.getName());
 
         C7.Util.Color color = prop.getColor();
         colorPicker.setValue(new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha()));
