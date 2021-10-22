@@ -4,10 +4,12 @@ import C7.Controller.ControllerFactory;
 import C7.Controller.IMainController;
 import C7.Model.IProject;
 import C7.Model.ProjectFactory;
+import C7.Util.ResourceIO;
 import C7.View.IView;
 import C7.View.ViewFactory;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -27,6 +29,8 @@ public class PaintApplication extends Application {
         // Setup window
         primaryStage.setTitle("PaintQlone");
         Scene scene = new Scene(root);
+        Image i = new Image(ResourceIO.getGlobalResource("icon.png").toString());
+        primaryStage.getIcons().add(i);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
