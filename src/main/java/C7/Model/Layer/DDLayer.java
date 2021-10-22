@@ -84,6 +84,7 @@ public class DDLayer implements ILayer, Serializable {
         else height = colorMatrix[0].length;
     }
 
+    //Color data modification methods
     private void setRBGASize(int width, int height){
         r = new float[width][height];
         g = new float[width][height];
@@ -93,7 +94,6 @@ public class DDLayer implements ILayer, Serializable {
         this.width = width;
         this.height = height;
     }
-
     private void setColor(int x, int y, float rD, float gD, float bD, float aD){
         r[x][y] = rD;
         g[x][y] = gD;
@@ -106,7 +106,6 @@ public class DDLayer implements ILayer, Serializable {
         b[x][y] = color.getBlue();
         a[x][y] = color.getAlpha();
     }
-
     private Color getColor(int x, int y){
         return new Color(r[x][y], g[x][y], b[x][y], a[x][y]);
     }
