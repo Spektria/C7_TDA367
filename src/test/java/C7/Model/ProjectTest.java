@@ -117,14 +117,6 @@ public class ProjectTest {
         Assertions.assertTrue(colorMatricesEqual(layer1Render, layer2Render));
     }
 
-    @Test
-    public void stressTest(){
-        Project proj = new Project("tst",1000,1000);
-        for (int i = 0; i < 1000; i++) {
-            proj.renderProject(0, 0, proj.getWidth(), proj.getHeight());
-        }
-    }
-
     private boolean colorMatricesEqual(Bitmap array1, Bitmap array2){
         Color a = new Color(0,0,0,0);
         Color b = new Color(0,0,0,0);
