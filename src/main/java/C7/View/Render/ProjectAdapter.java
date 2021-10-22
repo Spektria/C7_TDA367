@@ -16,7 +16,7 @@ class ProjectAdapter implements IRender {
     }
 
     @Override
-    public Color[][] render(int x, int y, int width, int height) {
+    public Bitmap render(int x, int y, int width, int height) {
         // Project already has a method for doing the requested action,
         // so we just use that.
         return proj.renderProject(x,y,width, height);

@@ -2,10 +2,7 @@ package C7.Model;
 
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
-import C7.Util.Color;
-import C7.Util.IObservable;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
+import C7.Util.*;
 
 /**
  * IProject is an interface representing a complete project.
@@ -64,7 +61,7 @@ public interface IProject extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @return Color matrix of the rendered region.
      * If position is out of scope of the Project the returned pixels are black.
      */
-    Color[][] renderProject(int x, int y, int width, int height);
+    Bitmap renderProject(int x, int y, int width, int height);
 
     /**
      * Renders only a specified layer
@@ -73,7 +70,7 @@ public interface IProject extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * If position is out of scope of the layer the returned pixels are black.
      * If the provided layer does not exist returns null.
      */
-    Color[][] renderLayer(int layerID);
+    Bitmap renderLayer(int layerID);
 
     //LAYERMANAGER PASSTHROUGH
     /**

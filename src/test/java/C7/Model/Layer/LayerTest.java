@@ -37,7 +37,7 @@ public class LayerTest {
 
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
-                Assertions.assertEquals(layer.getGlobalPixel(x, y), new Color(0, 0, 0, 1));
+                Assertions.assertEquals(layer.getGlobalPixel(x, y, new Color(0,0,0,0)), new Color(0, 0, 0, 1));
             }
         }
     }
@@ -68,7 +68,7 @@ public class LayerTest {
 
         layer.setGlobalPixel(0, 0, new Color(1, 0, 0, 1));
 
-        Assertions.assertEquals(new Color(1, 0, 0, 1), layer.getGlobalPixel(0, 0));
+        Assertions.assertEquals(new Color(1, 0, 0, 1), layer.getGlobalPixel(0, 0, new Color(0,0,0,0)));
     }
 
     @Test
@@ -132,9 +132,9 @@ public class LayerTest {
     @Test
     public void getPixelOutOfBounds(){
         ILayer layer = LayerFactory.createDefaultLayer(100, 100, new Color(0,0,0,1));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 5));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(5, 500));
-        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 500));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 5, new Color(0,0,0,0)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(5, 500, new Color(0,0,0,0)));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> layer.getGlobalPixel(500, 500, new Color(0,0,0,0)));
     }
 
     @Test
@@ -152,11 +152,11 @@ public class LayerTest {
 
         // This should be the center
         Vector2D center = new Vector2D(w / 2d, h / 2d).add(translation);
-        Assertions.assertEquals(new Color(1,0,1,1), layer.getGlobalPixel((int)center.getX(), (int)center.getY()));
+        Assertions.assertEquals(new Color(1,0,1,1), layer.getGlobalPixel((int)center.getX(), (int)center.getY(), new Color(0,0,0,0)));
 
         // This should be the rightmost edge. Which, if rotated 45 degrees, will be, if rotated back, the bottom right corner.
         Vector2D leftCorner = new Vector2D(w / 2d, h / 2d).add(translation).add(new Vector2D(-w / 2d, 0).mult(Math.sqrt(2) - 0.1d));
-        Assertions.assertEquals(new Color(1,1,1,1), layer.getGlobalPixel((int)leftCorner.getX(), (int)leftCorner.getY()));
+        Assertions.assertEquals(new Color(1,1,1,1), layer.getGlobalPixel((int)leftCorner.getX(), (int)leftCorner.getY(), new Color(0,0,0,0)));
     }
 
     @Test

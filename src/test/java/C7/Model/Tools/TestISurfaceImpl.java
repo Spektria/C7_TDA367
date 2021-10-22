@@ -30,12 +30,12 @@ public class TestISurfaceImpl implements ILayer {
 
 
     @Override
-    public Color getGlobalPixel(int x, int y) {
+    public Color getGlobalPixel(int x, int y, Color out) {
         return ar[x][y];
     }
 
     @Override
-    public Color getLocalPixel(int x, int y) {
+    public Color getLocalPixel(int x, int y, Color out) {
         return ar[x][y];
     }
 

@@ -72,6 +72,13 @@ public final class Color implements Serializable {
         setAlpha(color.getAlpha());
     }
 
+    public void setColor(float r, float g, float b, float a){
+        setRed(r);
+        setGreen(g);
+        setBlue(b);
+        setAlpha(a);
+    }
+
     /**
      * Gets the linear difference between two colors.
      * @param color1 The first color to compare.
@@ -96,7 +103,7 @@ public final class Color implements Serializable {
      * @param src
      * @return
      */
-    public static Color blend(Color dest, Color src) {
+    public static void blend(Color dest, Color src, Color destination) {
         float r, g, b, a;
 
         r = dest.getRed() * (1 - src.getAlpha()) + src.getRed() * src.getAlpha();
@@ -104,7 +111,7 @@ public final class Color implements Serializable {
         b = dest.getBlue() * (1 - src.getAlpha()) + src.getBlue() * src.getAlpha();
         a = dest.getAlpha() * (1 - src.getAlpha()) + src.getAlpha() * src.getAlpha();
 
-        return new Color(r, g, b, a);
+        destination.setColor(r, g, b, a);
     }
 
     /**

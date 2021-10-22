@@ -1,9 +1,6 @@
 package C7.View;
 
-import C7.Util.C7Math;
-import C7.Util.IObserver;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
+import C7.Util.*;
 import C7.View.Render.IRender;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,15 +69,20 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
         //Get color data from Project
         int width = xMax - xMin;
         int height = yMax - yMin;
-        C7.Util.Color[][] colorMatrix = render.render(xMin, yMin, width, height);
+        Bitmap colorMatrix = render.render(xMin, yMin, width, height);
+
+        Color tmpJavaFX = new Color(0,0,0,0);
+        C7.Util.Color tmpC7 = new C7.Util.Color(0,0,0,0);
 
         // Simply goes inside the given bounds and
         // draws onto the graphics context pixel by pixel.
         PixelWriter pw = gc.getPixelWriter();
         for (int y = yMin; y < yMax; y++) {
             for (int x = xMin; x < xMax; x++) {
+                // MBY OPTIMIZE BY NOT CREATING NEW COLOR IDK DON'T MIND WHAT'S BELOW ME, SOME OLD COMMENT
                 // Note, we need to change the color type from C7 color to JavaFX color.
-                pw.setColor(x, y, toJFXColor(colorMatrix[x - xMin][y - yMin]));
+                colorMatrix.getColor(tmpC7, x - xMin, y -yMin);
+                pw.setColor(x, y, new Color( tmpC7.getRed(), tmpC7.getGreen(), tmpC7.getBlue(), tmpC7.getAlpha()));
             }
         }
     }

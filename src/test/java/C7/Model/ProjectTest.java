@@ -2,12 +2,14 @@ package C7.Model;
 
 import C7.Model.Layer.LayerFactory;
 import C7.Services.ServiceFactory;
+import C7.Util.Bitmap;
 import C7.Util.ResourceIO;
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ITool;
 import C7.Model.Tools.ToolFactory;
 import C7.Util.Color;
 import C7.Util.Vector2D;
+import C7.View.Render.RenderAdapterFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -58,19 +60,21 @@ public class ProjectTest {
         Project proj = new Project("tst",15,15);
         ServiceFactory.createLayerImportService(ResourceIO.getGlobalResource("redsquares.png").getPath(), proj::addLayer).execute();
 
-        Color[][] render = proj.renderProject(0,0, proj.getWidth(), proj.getHeight());
+        Bitmap render = proj.renderProject(0,0, proj.getWidth(), proj.getHeight());
 
+        Color a = new Color(0,0,0,0);
+        Color b = new Color(0,0,0,0);
         //Colors of layer the right color
-        Assertions.assertEquals(render[0][0], render[3][2]);
-        Assertions.assertNotEquals(render[0][0], render[2][0]);
+        Assertions.assertEquals(render.getColor(a, 0,0), render.getColor(b, 3,2));
+        Assertions.assertNotEquals(render.getColor(a, 0,0), render.getColor(b, 2,0));
         //Colors outside of layer right color
-        Assertions.assertEquals(new Color(0,0,0,0), render[5][5]);
+        Assertions.assertEquals(new Color(0,0,0,0), render.getColor(a, 5,5));
     }
 
     @Test
     public void createAndRenderPaintedLayers(){
-        Color[][] layer1Render;
-        Color[][] layer2Render;
+        Bitmap layer1Render;
+        Bitmap layer2Render;
 
         Project proj = new Project("tst",10,10);
 
@@ -113,11 +117,21 @@ public class ProjectTest {
         Assertions.assertTrue(colorMatricesEqual(layer1Render, layer2Render));
     }
 
-    private boolean colorMatricesEqual(Color[][] array1, Color[][] array2){
-        for (int x = 0; x < array1.length; x++) {
-            for (int y = 0; y < array1[0].length; y++) {
+    @Test
+    public void stressTest(){
+        Project proj = new Project("tst",1000,1000);
+        for (int i = 0; i < 1000; i++) {
+            proj.renderProject(0, 0, proj.getWidth(), proj.getHeight());
+        }
+    }
+
+    private boolean colorMatricesEqual(Bitmap array1, Bitmap array2){
+        Color a = new Color(0,0,0,0);
+        Color b = new Color(0,0,0,0);
+        for (int x = 0; x < array1.getWidth(); x++) {
+            for (int y = 0; y < array1.getHeight(); y++) {
                 //If they are not the same return false
-                if (array1[x][y].equals(array2[x][y]) == false) return false;
+                if (array1.getColor(a, x, y).equals(array2.getColor(b,x,y)) == false) return false;
             }
         }
 

@@ -34,15 +34,14 @@ class BlendBrush extends StrokeTool {
 
     @Override
     protected void affectLayer(Collection<Vector2D> pointsOnLayer, ILayer layer) {
-
         // For every point, blend the color at the point on the canvas and this BlendBrush's color.
         pointsOnLayer.parallelStream()
                 .forEach(point -> {
                     int x = (int)point.getX();
                     int y = (int)point.getY();
-                    Color beforeColor = layer.getLocalPixel(x, y);
-                    Color blendedColor = Color.blend(beforeColor, this.color);
-                    layer.setLocalPixel(x, y, blendedColor);
+                    Color beforeColor = layer.getLocalPixel(x, y, new Color(0,0,0,0));
+                    Color.blend(beforeColor, this.color, beforeColor);
+                    layer.setLocalPixel(x, y, beforeColor);
                 });
     }
 

@@ -74,7 +74,7 @@ public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @param y Y position of pixel in project-space.
      * @return The color of the pixel at the specified position.
      */
-    Color getPixel(int x, int y);
+    Color getPixel(int x, int y, Color a);
 
     /**
      * Sets the index position of the specified layer. If the index is greater

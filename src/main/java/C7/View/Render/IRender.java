@@ -1,9 +1,6 @@
 package C7.View.Render;
 
-import C7.Util.Color;
-import C7.Util.IObservable;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
+import C7.Util.*;
 
 /**
  * IRender is an interface for classes which can return a
@@ -23,7 +20,7 @@ public interface IRender extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @param height the height of the rectangle
      * @return the 2d color array for the given rectangular area.
      */
-    Color[][] render(int x, int y, int width, int height);
+    Bitmap render(int x, int y, int width, int height);
 
 
 }

@@ -23,7 +23,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @throws IllegalArgumentException if (x,y) is outside of bounds of this layer
      * @return The color at the specified co-ordinates.
      */
-    Color getGlobalPixel(int x, int y);
+    Color getGlobalPixel(int x, int y, Color out);
 
     /**
      * Gets the pixel color at the specified layer-space x and y co-ordinates.
@@ -32,7 +32,7 @@ public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {
      * @throws IllegalArgumentException if (x,y) is outside of bounds of this layer
      * @return The color at the specified co-ordinates.
      */
-    Color getLocalPixel(int x, int y);
+    Color getLocalPixel(int x, int y, Color out);
 
     /**
      * Sets the pixel color at the specified picture-space x and y co-ordinates.

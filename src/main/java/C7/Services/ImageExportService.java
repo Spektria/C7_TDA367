@@ -1,6 +1,7 @@
 package C7.Services;
 
 import C7.Model.IProject;
+import C7.Util.Bitmap;
 import C7.Util.Color;
 
 import javax.imageio.ImageIO;
@@ -33,15 +34,16 @@ class ImageExportService implements IService {
         this.file = new File(exportPath);
     }
 
-    private void copyToBufferedImage(Color[][] pixels, BufferedImage img) {
+    private void copyToBufferedImage(Bitmap pixels, BufferedImage img) {
+        Color tmp = new Color(0,0,0,0);
         for(int x = 0; x < img.getWidth(); x++){
             for(int y = 0; y < img.getHeight(); y++){
-                Color color = pixels[x][y];
+                pixels.getColor(tmp, x, y);
                 img.setRGB(x,y, new java.awt.Color(
-                        color.getRed(),
-                        color.getGreen(),
-                        color.getBlue(),
-                        color.getAlpha()
+                        tmp.getRed(),
+                        tmp.getGreen(),
+                        tmp.getBlue(),
+                        tmp.getAlpha()
                 ).getRGB());
             }
         }
@@ -50,7 +52,7 @@ class ImageExportService implements IService {
     @Override
     public void execute() {
         BufferedImage img = new BufferedImage(proj.getWidth(),proj.getHeight(), BufferedImage.TYPE_INT_ARGB_PRE);
-        Color[][] pixels = proj.renderProject(0,0,img.getWidth(), img.getHeight());
+        Bitmap pixels = proj.renderProject(0,0,img.getWidth(), img.getHeight());
 
         copyToBufferedImage(pixels, img);
 

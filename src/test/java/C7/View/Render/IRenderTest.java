@@ -4,8 +4,10 @@ import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.LayerFactory;
 import C7.Model.ProjectFactory;
+import C7.Util.Bitmap;
 import C7.Util.Color;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -30,12 +32,13 @@ public class IRenderTest {
     @MethodSource("params")
     public void adaptionTest(IRender render){
 
-        Color[][] colors = render.render(49, 49, 50, 55);
+        Bitmap colors = render.render(49, 49, 50, 55);
+        Color tmp = new Color(0,0,0,0);
 
-        Assertions.assertEquals(Color.BLACK, colors[3][1]);
-        Assertions.assertEquals(Color.BLUE, colors[2][1]);
-        Assertions.assertEquals(50, colors.length);
-        Assertions.assertEquals(55, colors[0].length);
+        Assertions.assertEquals(Color.BLACK, colors.getColor(tmp, 3, 1));
+        Assertions.assertEquals(Color.BLUE, colors.getColor(tmp, 2, 1));
+        Assertions.assertEquals(50, colors.getWidth());
+        Assertions.assertEquals(55, colors.getHeight());
     }
 
     @ParameterizedTest
@@ -50,10 +53,10 @@ public class IRenderTest {
     @ParameterizedTest
     @MethodSource("params")
     public void adaptorOutsideBoundsTest(IRender render){
-        Color[][] colors = render.render(200, 200, 2, 2);
+        Bitmap colors = render.render(200, 200, 2, 2);
 
         // Anything outside the layer should be transparent since there is no data there.
-        Assertions.assertEquals(new Color(0,0,0,0), colors[0][0]);
+        Assertions.assertEquals(new Color(0,0,0,0), colors.getColor(new Color(0,0,0,0), 0, 0));
     }
 
 }

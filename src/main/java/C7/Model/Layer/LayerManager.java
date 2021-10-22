@@ -75,7 +75,7 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	@Override
 	public int createLayer(int width, int height, Vector2D position, double rotation, Vector2D scale) {
 		// Create and initialize layer object
-		ILayer layer = new Layer(width, height, new Color(0, 0, 0, 0));
+		ILayer layer = LayerFactory.createDefaultLayer(width, height, new Color(0, 0, 0, 0));
 		layer.setPosition(position);
 		layer.setRotation((float)rotation);
 		layer.setScale(scale);
@@ -155,8 +155,8 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 	}
 
 	@Override
-	public Color getPixel(int x, int y) {
-		Color color = new Color(0, 0, 0, 0); // Final color
+	public Color getPixel(int x, int y, Color out) {
+		out.setColor(0,0,0,0);
 
 		// Find colors at center of current pixel
 		Vector2D point = new Vector2D(x + 0.5, y + 0.5);
@@ -172,14 +172,14 @@ public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, V
 				Vector2D pixelPos = layer.toLocalPixel(point);
 
 				// Layer color to blend with
-				Color blendColor = layer.getLocalPixel((int)pixelPos.getX(), (int)pixelPos.getY());
+				Color blendColor = layer.getLocalPixel((int)pixelPos.getX(), (int)pixelPos.getY(), new Color(0,0,0,0));
 
 				// Blend colors
-				color = Color.blend(color, blendColor);
+				Color.blend(out, blendColor, out);
 			}
 		}
 
-		return color;
+		return out;
 	}
 
 	@Override

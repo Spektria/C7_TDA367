@@ -24,10 +24,10 @@ public class LayerImportServiceTest {
     @Test
     public void correctOrder() {
         Color[] colors = new Color[4];
-        colors[0] = importedLayer.getLocalPixel(0,0);
-        colors[1] = importedLayer.getLocalPixel(2,0);
-        colors[2] = importedLayer.getLocalPixel(1,2);
-        colors[3] = importedLayer.getLocalPixel(3,2);
+        colors[0] = importedLayer.getLocalPixel(0,0, new Color(0,0,0,0));
+        colors[1] = importedLayer.getLocalPixel(2,0, new Color(0,0,0,0));
+        colors[2] = importedLayer.getLocalPixel(1,2, new Color(0,0,0,0));
+        colors[3] = importedLayer.getLocalPixel(3,2, new Color(0,0,0,0));
 
         Assertions.assertTrue(colors[0].equals(colors[2]));
         Assertions.assertTrue(colors[0].equals(colors[3]));

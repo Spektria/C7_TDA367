@@ -21,7 +21,7 @@ public class FillBucketTest {
 
         for (int i = 0; i < testSurface.getWidth(); i++) {
             for (int j = 0; j < testSurface.getHeight(); j++) {
-                Assertions.assertNotEquals(testSurface.getLocalPixel(i, j), testSurface.getBaseColor());
+                Assertions.assertNotEquals(testSurface.getLocalPixel(i, j, new Color(0,0,0,0)), testSurface.getBaseColor());
             }
         }
     }
@@ -46,7 +46,7 @@ public class FillBucketTest {
 
         for (int y = 0; y < testSurface.getHeight(); y++) {
             for (int x = 0; x < testSurface.getWidth(); x++) {
-                Color pixel = testSurface.getLocalPixel(x, y);
+                Color pixel = testSurface.getLocalPixel(x, y, new Color(0,0,0,0));
                 if(y == 2 || x == 1 || testSurface.getHeight() - y == 2 || testSurface.getWidth() - x == 2){
 
                     if(pixel.getGreen() != 0.15f)
@@ -80,7 +80,7 @@ public class FillBucketTest {
 
         for (int x = 0; x < testSurface.getWidth(); x++) {
             for (int y = 0; y < testSurface.getHeight(); y++) {
-                Color pixel = testSurface.getLocalPixel(x, y);
+                Color pixel = testSurface.getLocalPixel(x, y, new Color(0,0,0,0));
 
                 if(x < 6)
                     Assertions.assertEquals(0, Float.compare(1f, pixel.getGreen()));

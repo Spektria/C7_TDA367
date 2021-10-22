@@ -30,7 +30,7 @@ public class EraserToolTest {
     private void assertLayerIsFullOf(ILayer layer, Color expected){
         for (int x = 0; x < layer.getWidth(); x++) {
             for (int y = 0; y < layer.getHeight(); y++) {
-                Assertions.assertEquals(expected, layer.getLocalPixel(x,y));
+                Assertions.assertEquals(expected, layer.getLocalPixel(x,y, new Color(0,0,0,0)));
             }
         }
     }

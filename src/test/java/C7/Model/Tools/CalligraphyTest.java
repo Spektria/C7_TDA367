@@ -19,25 +19,25 @@ public class CalligraphyTest {
         System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Check so that we have the center, top, and bottom points
-        Assertions.assertNotEquals(testISurface.getLocalPixel(1, 1), testISurface.getBaseColor());
-        Assertions.assertNotEquals(testISurface.getLocalPixel(6, 1), testISurface.getBaseColor());
-        Assertions.assertNotEquals(testISurface.getLocalPixel(11, 1), testISurface.getBaseColor());
+        Assertions.assertNotEquals(testISurface.getLocalPixel(1, 1, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertNotEquals(testISurface.getLocalPixel(6, 1, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertNotEquals(testISurface.getLocalPixel(11, 1, new Color(0,0,0,0)), testISurface.getBaseColor());
 
         // Check 1 pixel off up and down of center point
-        Assertions.assertEquals(testISurface.getLocalPixel(6, 0), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(6, 2), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(6, 0, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(6, 2, new Color(0,0,0,0)), testISurface.getBaseColor());
 
         // Check the same but with the ends.
 
         // Top
-        Assertions.assertEquals(testISurface.getLocalPixel(1, 0), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(1, 2), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(0, 1), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(1, 0, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(1, 2, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(0, 1, new Color(0,0,0,0)), testISurface.getBaseColor());
 
         // Bottom
-        Assertions.assertEquals(testISurface.getLocalPixel(11, 0), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(11, 2), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(12, 1), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(11, 0, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(11, 2, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(12, 1, new Color(0,0,0,0)), testISurface.getBaseColor());
     }
 
     @Test
@@ -50,23 +50,23 @@ public class CalligraphyTest {
         System.out.println("Surface: \n" + testISurface.getContentAs2DString());
 
         // Extreme points
-        Assertions.assertNotEquals(testISurface.getLocalPixel(4,4), testISurface.getBaseColor()); // Center
-        Assertions.assertNotEquals(testISurface.getLocalPixel(1,1), testISurface.getBaseColor()); // Top
-        Assertions.assertNotEquals(testISurface.getLocalPixel(6,6), testISurface.getBaseColor()); // Bottom
+        Assertions.assertNotEquals(testISurface.getLocalPixel(4,4, new Color(0,0,0,0)), testISurface.getBaseColor()); // Center
+        Assertions.assertNotEquals(testISurface.getLocalPixel(1,1, new Color(0,0,0,0)), testISurface.getBaseColor()); // Top
+        Assertions.assertNotEquals(testISurface.getLocalPixel(6,6, new Color(0,0,0,0)), testISurface.getBaseColor()); // Bottom
 
-        Assertions.assertNotEquals(testISurface.getLocalPixel(3,3), testISurface.getBaseColor()); // Extra point in line
+        Assertions.assertNotEquals(testISurface.getLocalPixel(3,3, new Color(0,0,0,0)), testISurface.getBaseColor()); // Extra point in line
 
         // Check so not cross is drawn
-        Assertions.assertEquals(testISurface.getLocalPixel(1,6), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(6,1), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(1,6, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(6,1, new Color(0,0,0,0)), testISurface.getBaseColor());
 
         // Check so that the points around the center are empty
-        Assertions.assertEquals(testISurface.getLocalPixel(4,5), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(5,4), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(4,5, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(5,4, new Color(0,0,0,0)), testISurface.getBaseColor());
 
         // Check so that the line is the correct length; that is, of 6 pixels.
-        Assertions.assertEquals(testISurface.getLocalPixel(0,0), testISurface.getBaseColor());
-        Assertions.assertEquals(testISurface.getLocalPixel(7,7), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(0,0, new Color(0,0,0,0)), testISurface.getBaseColor());
+        Assertions.assertEquals(testISurface.getLocalPixel(7,7, new Color(0,0,0,0)), testISurface.getBaseColor());
     }
 
 }

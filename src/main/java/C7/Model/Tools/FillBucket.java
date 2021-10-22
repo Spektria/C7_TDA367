@@ -60,16 +60,16 @@ class FillBucket extends BaseTool{
             int x = stack.pop();
 
             // Do a scan on a horizontal line so that we find the first x which should not be filled.
-            while(x >= 0 && shouldFill(surface.getLocalPixel(x, y), selectedColor)) x--;
+            while(x >= 0 && shouldFill(surface.getLocalPixel(x, y, new Color(0,0,0,0)), selectedColor)) x--;
             x++;
 
-            while(x < surface.getWidth() && shouldFill(surface.getLocalPixel(x,y), selectedColor)){
+            while(x < surface.getWidth() && shouldFill(surface.getLocalPixel(x,y, new Color(0,0,0,0)), selectedColor)){
 
                 // Fill pixel
                 surface.setLocalPixel(x, y, fill);
 
                 // Check if the y - 1 line should be filled, if it has not already been checked.
-                if(y > 0 && shouldFill(surface.getLocalPixel(x, y-1), selectedColor)){
+                if(y > 0 && shouldFill(surface.getLocalPixel(x, y-1, new Color(0,0,0,0)), selectedColor)){
 
                     // If it should be filled, push another coordinate in the stack
                     stack.push(x);
@@ -77,7 +77,7 @@ class FillBucket extends BaseTool{
                 }
 
                 // Do the same for below as for above. Except with y + 1.
-                if(y < surface.getHeight() - 1 && shouldFill(surface.getLocalPixel(x, y+1), selectedColor)){
+                if(y < surface.getHeight() - 1 && shouldFill(surface.getLocalPixel(x, y+1, new Color(0,0,0,0)), selectedColor)){
                     stack.push(x);
                     stack.push(y+1);
                 }
@@ -118,7 +118,7 @@ class FillBucket extends BaseTool{
             int y = (int)localVec.getY();
 
             // Perform flood fill
-            floodFill(x, y, layer, layer.getLocalPixel(x, y));
+            floodFill(x, y, layer, layer.getLocalPixel(x, y, new Color(0,0,0,0)));
 
             layer.update();
         }

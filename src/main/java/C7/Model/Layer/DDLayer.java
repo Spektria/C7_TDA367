@@ -5,18 +5,24 @@ import C7.Util.*;
 import java.io.Serializable;
 import java.util.*;
 
+//Mby crash with width == 0 or height == 0
 /**
  * Represents a basic image layer.
  * @author Elias Ersson
+ * @author Isak Gustafsson
  * @author Love Gustafsson
  * @author Hugo Ekstrand
  * @version 2.2
  */
-class Layer implements ILayer, Serializable {
+public class DDLayer implements ILayer, Serializable {
 
     private transient Collection<IObserver<Tuple2<Vector2D, Vector2D>>> observers = new ArrayList<>();
 
-    private Color[][] pixels;   // This layer's pixel data.
+    private float[][] r;
+    private float[][] g;
+    private float[][] b;
+    private float[][] a;
+
     private int width;          // The width, in pixels, of this layer.
     private int height;         // The height, in pixels of this layer.
 
@@ -36,19 +42,19 @@ class Layer implements ILayer, Serializable {
      * @param width The desired width of the new layer in pixels
      * @param height The desired height of the new layer in pixels
      */
-    public Layer(int width, int height, Color color) {
+    public DDLayer(int width, int height, Color color) {
         Objects.requireNonNull(color);
         if(width < 0 || height < 0)
             throw new IllegalArgumentException();
 
-        pixels = new Color[width][height];
+        setRBGASize(width,height);
         this.width  = width;
         this.height = height;
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 // Copy color values
-                pixels[x][y] = new Color(color);
+                setColor(x,y, color);
             }
         }
     }
@@ -57,20 +63,18 @@ class Layer implements ILayer, Serializable {
      * Constructs a new layer from a 2D matrix of Color
      * @param colorMatrix The matrix of color data of the new layer
      */
-    public Layer(Color[][] colorMatrix) {
+    public DDLayer(Color[][] colorMatrix) {
         /*pixels = colorMatrix; OPTIMIZATION this works faster but is technically bad because
         * it leaves an open reference somewhere to the new layer's color data
         * DEFENSIVE COPYING */
 
-        pixels = new Color[colorMatrix.length][];
+        setRBGASize(colorMatrix.length, colorMatrix[0].length);
 
         for (int x = 0; x < colorMatrix.length; x++) {
-            pixels[x] = new Color[colorMatrix[x].length];
-
             for (int y = 0; y < colorMatrix[x].length; y++) {
                 Color oldColor = colorMatrix[x][y];
                 //Would like a copy method for copying color data instead of this repeating pattern of GET
-                pixels[x][y] = new Color(oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
+                setColor(x, y, oldColor.getRed(), oldColor.getGreen(), oldColor.getBlue(), oldColor.getAlpha());
             }
         }
 
@@ -80,21 +84,45 @@ class Layer implements ILayer, Serializable {
         else height = colorMatrix[0].length;
     }
 
+    private void setRBGASize(int width, int height){
+        r = new float[width][height];
+        g = new float[width][height];
+        b = new float[width][height];
+        a = new float[width][height];
+
+        this.width = width;
+        this.height = height;
+    }
+
+    private void setColor(int x, int y, float rD, float gD, float bD, float aD){
+        r[x][y] = rD;
+        g[x][y] = gD;
+        b[x][y] = bD;
+        a[x][y] = aD;
+    }
+    private void setColor(int x, int y, Color color){
+        r[x][y] = color.getRed();
+        g[x][y] = color.getGreen();
+        b[x][y] = color.getBlue();
+        a[x][y] = color.getAlpha();
+    }
+
     @Override
-    public Color getGlobalPixel(int x, int y) {
+    public Color getGlobalPixel(int x, int y, Color out) {
 
         Vector2D localPos = toLocalPixel(new Vector2D(x, y));
         int localX = (int)localPos.getX();
         int localY = (int)localPos.getY();
 
-        return getLocalPixel(localX, localY);
+        return getLocalPixel(localX, localY, out);
     }
 
     @Override
-    public Color getLocalPixel(int x, int y) {
+    public Color getLocalPixel(int x, int y, Color out) {
         if(!isPixelOnLocalLayer(x, y))
            throw new IllegalArgumentException();
-        return pixels[x][y];
+        out.setColor(r[x][y], g[x][y], b[x][y], a[x][y]);
+        return out;
     }
 
     @Override
@@ -113,7 +141,7 @@ class Layer implements ILayer, Serializable {
 
         Vector2D global = toGlobal(new Vector2D(x, y));
         updateRectangleOfChange((int)global.getX(), (int)global.getY());
-        pixels[x][y] = color;
+        setColor(x,y, color);
     }
 
     /**
@@ -266,14 +294,27 @@ class Layer implements ILayer, Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Layer layer = (Layer) o;
-        return width == layer.width && height == layer.height && Arrays.deepEquals(pixels, layer.pixels);
+        DDLayer layer = (DDLayer) o;
+        if(width != layer.width || height != layer.height) return false;
+        Color layerColor = new Color(0,0,0,0);
+        for (int x = 0; x < r.length; x++) {
+            for (int y = 0; y < r[0].length; y++) {
+                layer.getLocalPixel(x, y, layerColor);
+                if (
+                        r[x][y] != layerColor.getRed() ||
+                        g[x][y] != layerColor.getGreen() ||
+                        b[x][y] != layerColor.getBlue() ||
+                        a[x][y] != layerColor.getAlpha()
+                ) return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
         int result = Objects.hash(width, height);
-        result = 31 * result + Arrays.hashCode(pixels);
+        result = 31 * result + Arrays.hashCode(r) + Arrays.hashCode(g) + Arrays.hashCode(b) + Arrays.hashCode(b);
         return result;
     }
 
@@ -294,24 +335,30 @@ class Layer implements ILayer, Serializable {
         if(width < 0 || height < 0)
             throw new IllegalArgumentException();
 
-        Color[][] newPixels = new Color[width][height];
+        float[][]oldR = r;
+        float[][]oldG = g;
+        float[][]oldB = b;
+        float[][]oldA = a;
+        int oldW = this.width;
+        int oldH = this.height;
+
+        setRBGASize(width, height);
 
         final Color emptyColor = new Color(0, 0, 0, 1);
 
         for (int x = 0; x < width; x++) {
-            if(x < this.width){
-                System.arraycopy(pixels[x], 0, newPixels[x], 0, Math.min(pixels[x].length, newPixels[x].length) - 1);
-                if(newPixels[x].length - pixels[x].length > 0)
-                    Arrays.fill(newPixels[x], pixels[x].length, newPixels[x].length, emptyColor);
-            }
-            else{
-                Arrays.fill(newPixels[x], emptyColor);
+            for (int y = 0; y < height; y++) {
+                //Exists old color
+                if (oldW - x > 0 && oldH - y > 0){
+                    setColor(x, y, oldR[x][y], oldG[x][y], oldB[x][y], oldA[x][y]);
+                }
+                //No old color just new
+                else{
+                    setColor(x, y, emptyColor);
+                }
             }
         }
 
-        pixels      = newPixels;
-        this.width  = width;
-        this.height = height;
         maxRectangleOfChange();
     }
 
@@ -348,7 +395,7 @@ class Layer implements ILayer, Serializable {
         return this;
     }
 
-    @java.lang.Override
+    @Override
     public LayerFormat getFormat() {
         return LayerFormat.RGBA32F32F32F32F;
     }

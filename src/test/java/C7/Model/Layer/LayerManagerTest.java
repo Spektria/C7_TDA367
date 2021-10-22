@@ -159,7 +159,7 @@ public class LayerManagerTest {
 		ILayer layer = layerManager.getLayer(id);
 		layer.setLocalPixel(0, 0, new Color(1, 0, 0, 1));
 
-		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0));
+		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0, new Color(0,0,0,0)));
 	}
 
 	@Test
@@ -176,6 +176,6 @@ public class LayerManagerTest {
 		layer = layerManager.getLayer(id);
 		layer.setLocalPixel(0, 0, new Color(1, 0, 0, 1));
 
-		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0));
+		Assertions.assertEquals(new Color(1, 0, 0, 1), layerManager.getPixel(0, 0, new Color(0,0,0,0)));
 	}
 }

@@ -4,10 +4,7 @@ import C7.Model.Layer.ILayer;
 import C7.Model.Layer.ILayerManager;
 import C7.Model.Layer.LayerManager;
 import C7.Model.Tools.ITool;
-import C7.Util.Color;
-import C7.Util.IObserver;
-import C7.Util.Tuple2;
-import C7.Util.Vector2D;
+import C7.Util.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -113,16 +110,18 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
      * If position is out of scope of the Project the returned pixels are black.
      */
     @Override
-    public Color[][] renderProject(int x, int y, int width, int height){
+    public Bitmap renderProject(int x, int y, int width, int height){
         //No negative width/height
         if (width < 0 || height < 0)
             throw new IllegalArgumentException("Unable to render Project with negative resolution");
 
-        Color[][] colorMatrix = new Color[width][height];
+        Bitmap colorMatrix = new Bitmap(width, height);
 
+        Color pixelColor = new Color(0,0,0,0);
         for (int xOffset = 0; xOffset < width; xOffset++) {
             for (int yOffset = 0; yOffset < height; yOffset++) {
-                colorMatrix[xOffset][yOffset] = layerManager.getPixel(x + xOffset, y + yOffset);
+                layerManager.getPixel(x + xOffset, y + yOffset, pixelColor);
+                colorMatrix.setColor(xOffset, yOffset, pixelColor);
             }
         }
 
@@ -137,22 +136,23 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
      * If the provided layer does not exist returns null.
      */
     @Override
-    public Color[][] renderLayer(int layerID){
+    public Bitmap renderLayer(int layerID){
         ILayer layer = layerManager.getLayer(layerID);
         if (layer == null) return null;
 
-        Color[][] colorMatrix = new Color[width][height];
+        Bitmap colorMatrix = new Bitmap(width, height);
 
+        Color pixelColor = new Color(0,0,0,0);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 Vector2D pointToGet = new Vector2D(x,y);
                 //Check if out of bounds
                 if (layer.isGlobalPointOnLayer(pointToGet)) {
-                    colorMatrix[x][y] = layer.getLocalPixel(x,y);
+                    colorMatrix.setColor(x, y, layer.getLocalPixel(x, y, pixelColor));
                 }
                 //Inside of bounds
                 else{
-                    colorMatrix[x][y] = new Color(0,0,0,0);
+                    colorMatrix.setColor(x, y,0,0,0,0);
                 }
             }
         }
