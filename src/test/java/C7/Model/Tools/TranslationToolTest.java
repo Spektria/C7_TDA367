@@ -24,15 +24,15 @@ public class TranslationToolTest {
     public void translateTest(){
         ILayer layer = LayerFactory.createDefaultLayer(10, 10, new Color(1,1,1,1));
 
-        // Move by (15, 20)/2
+        // Move by (15, 20)
         translationTool.apply(layer, new Vector2D(0, 0), new Vector2D(15, 20));
 
-        Assertions.assertEquals(new Vector2D(15/2d, 20/2d), layer.getPosition());
+        Assertions.assertEquals(new Vector2D(15, 20), layer.getPosition());
 
-        // Move by (10, 10)/2
+        // Move by (10, 10)
         translationTool.apply(layer, new Vector2D(10, 10), new Vector2D(20,20));
 
-        Assertions.assertEquals(new Vector2D(25/2d, 30/2d), layer.getPosition());
+        Assertions.assertEquals(new Vector2D(25, 30), layer.getPosition());
     }
 
     @Test

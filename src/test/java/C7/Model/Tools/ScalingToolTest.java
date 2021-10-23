@@ -27,7 +27,9 @@ public class ScalingToolTest {
         // Scale by 1/2
         Vector2D corner = new Vector2D(layer.getWidth(), layer.getHeight());
         Vector2D center = layer.getLocalCenterPoint();
-        scalingTool.apply(layer, center.add(corner.mult(1/2d)), center);
+        // If we move from point between the global top right corner and the center point to the center point
+        // then we should have 1/2 scale in both x and y
+        scalingTool.apply(layer, center.add(corner.mult(1/4d)), center);
 
         Assertions.assertEquals(new Vector2D(1/2d, 1/2d), layer.getScale());
     }
