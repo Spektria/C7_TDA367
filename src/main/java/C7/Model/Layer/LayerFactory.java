@@ -70,7 +70,7 @@ public final class LayerFactory {
 	 * @return A new layer object.
 	 */
 	static public ILayer createRGBA32f32f32f32fLayer(int width, int height, Color color, Vector2D position, double angle, Vector2D scale) {
-		ILayer layer = new DDLayer(width, height, color);
+		ILayer layer = new Layer(width, height, color);
 		layer.setPosition(position);
 		layer.setRotation(angle);
 		layer.setScale(scale);
@@ -85,6 +85,6 @@ public final class LayerFactory {
 	 * @return A new layer with the same dimensions and pixel data as the specified color matrix.
 	 */
 	static public ILayer createRGBA32f32f32f32fLayer(Color[][] colorMatrix) {
-		return new DDLayer(colorMatrix);
+		return new Layer(colorMatrix);
 	}
 }
