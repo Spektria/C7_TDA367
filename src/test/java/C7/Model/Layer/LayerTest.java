@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * @author Love Gustafsson
+ * @author Hugo Ekstrand
+ */
 public class LayerTest {
 
     @Test

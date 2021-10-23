@@ -12,6 +12,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class IRenderTest {
 
     public static Stream<Arguments> params() {
