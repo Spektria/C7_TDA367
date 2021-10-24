@@ -63,9 +63,15 @@ public class LayersController extends AnchorPane {
         parent.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                tableView.setPrefHeight(number.doubleValue()-25);
+                //This value is sometimes erroneously shown as 0
+                if (number.doubleValue() != 0.0) {
+                    tableView.setPrefHeight(number.doubleValue() - 25);
+                }
             }
         });
+
+        //Set initial height explicitly because JavaFX for some reason shows 0.0 as the height of the anchorpane before the splitpane is moved
+        tableView.setPrefHeight(288-25);
 
         this.project = project;
 
