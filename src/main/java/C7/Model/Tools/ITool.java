@@ -2,7 +2,7 @@ package C7.Model.Tools;
 
 import C7.Model.Layer.ILayer;
 import C7.Model.Tools.ToolProperties.IToolProperty;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Vector2D;
 
 import java.util.Collection;
 
@@ -40,4 +40,9 @@ public interface ITool {
      */
     boolean isContinuous();
 
+    /**
+     * Sets this tool to its default value.
+     * By calling this method this tools properties will be reset to their default values.
+     */
+    void setToDefault();
 }

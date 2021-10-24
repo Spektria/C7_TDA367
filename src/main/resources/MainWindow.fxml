@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+         <children>
+            <AnchorPane layoutX="-8.0" layoutY="25.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+               <children>
+                  <ScrollPane fx:id="scrollPaneCanvas" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="360.0" AnchorPane.topAnchor="0.0">
+                     <content>
+                        <Canvas fx:id="canvas" height="200.0" nodeOrientation="INHERIT" onDragDropped="#onCanvasDragDropped" onDragOver="#onCanvasDragOver" onMouseDragged="#onCanvasMouseDragged" onMousePressed="#onCanvasMousePressed" onMouseReleased="#onCanvasMouseReleased" width="200.0" />
+                     </content>
+                  </ScrollPane>
+                  <SplitPane dividerPositions="0.6666667" layoutX="920.0" orientation="VERTICAL" prefHeight="720.0" prefWidth="360.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane fx:id="contentPaneToolsProps" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                           <children>
+                              <SplitPane fx:id="splitPaneToolsProps" dividerPositions="0.5" orientation="VERTICAL" prefHeight="720.0" prefWidth="360.0">
+                                <items>
+                                  <AnchorPane fx:id="contentPaneTools" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="214.0" SplitPane.resizableWithParent="false" />
+                                  <AnchorPane fx:id="contentPaneProperties" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="358.0" />
+                                </items>
+                              </SplitPane>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane fx:id="layersArea" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                    </items>
+                  </SplitPane>
+               </children>
+            </AnchorPane>
+            <MenuBar fx:id="menuBar" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onNew" text="New" />
+                  <MenuItem mnemonicParsing="false" onAction="#onOpen" text="Open" />
+                  <MenuItem mnemonicParsing="false" onAction="#onSave" text="Save" />
+                        <MenuItem mnemonicParsing="false" onAction="#onImport" text="Import" />
+                  <MenuItem mnemonicParsing="false" onAction="#onExport" text="Export" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+</fx:root>

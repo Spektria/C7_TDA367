@@ -1,11 +1,16 @@
 package C7.Model.Tools;
 
-import C7.Model.Color;
+import C7.Model.Layer.LayerFormat;
+import C7.Util.Color;
+import C7.Util.IObserver;
 import C7.Model.Layer.ILayer;
-import C7.Model.Vector.Vector2D;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 
 /**
  * Mock class for ILayer implementation
+ * The class does not support rotation, translation, or scaling.
+ * It simply is a drawing surface in global space.
  * @author Hugo Ekstrand
  */
 public class TestISurfaceImpl implements ILayer {
@@ -25,13 +30,23 @@ public class TestISurfaceImpl implements ILayer {
 
 
     @Override
-    public Color getPixel(int x, int y) {
+    public Color getGlobalPixel(int x, int y) {
         return ar[x][y];
     }
 
     @Override
-    public void setPixel(int x, int y, Color color) {
-        if(isPixelOnLayer(x, y))
+    public Color getLocalPixel(int x, int y) {
+        return ar[x][y];
+    }
+
+    @Override
+    public void setGlobalPixel(int x, int y, Color color) {
+        ar[x][y] = color;
+    }
+
+    @Override
+    public void setLocalPixel(int x, int y, Color color) {
+        if(isPixelOnLocalLayer(x, y))
             ar[x][y] = color;
     }
 
@@ -51,17 +66,17 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public boolean isPixelOnLayer(int x, int y) {
+    public boolean isPixelOnLocalLayer(int x, int y) {
         return x >= 0 && y >= 0 && x < getWidth() && y < getHeight();
     }
 
     @Override
-    public void setRotation(float angle) {
+    public void setRotation(double angle) {
 
     }
 
     @Override
-    public float getRotation() {
+    public double getRotation() {
         return 0;
     }
 
@@ -91,13 +106,23 @@ public class TestISurfaceImpl implements ILayer {
     }
 
     @Override
-    public boolean isPointOnLayer(Vector2D point) {
-        return false;
+    public boolean isGlobalPointOnLayer(Vector2D point) {
+        return true;
     }
 
     @Override
-    public Vector2D getPixelPositionAtPoint(Vector2D point) {
-        return new Vector2D(0, 0);
+    public Vector2D toLocalPixel(Vector2D point) {
+        return point;
+    }
+
+    @Override
+    public Vector2D getLocalCenterPoint() {
+        return null;
+    }
+
+    @Override
+    public void update() {
+
     }
 
     public String getContentAs2DString(){
@@ -113,5 +138,20 @@ public class TestISurfaceImpl implements ILayer {
 
     public Color getBaseColor() {
         return new Color(0,0,0,0);
+    }
+
+    @Override
+    public void addObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+
+    }
+
+    @Override
+    public void removeObserver(IObserver<Tuple2<Vector2D, Vector2D>> observer) {
+
+    }
+
+    @Override
+    public LayerFormat getFormat() {
+        return LayerFormat.RGBA32F32F32F32F;
     }
 }

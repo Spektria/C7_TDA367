@@ -3,12 +3,15 @@ package C7.Model.Tools.ToolProperties;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-
+/**
+ * A property representing a double.
+ * @author Hugo Ekstrand
+ */
 class DoubleToolProperty extends NumericalToolProperty<Double> {
 
 
-    DoubleToolProperty(String name, String description, Consumer<Double> setter, Supplier<Double> getter, Number min, Number max) {
-        super(name, description, setter, getter, min, max);
+    DoubleToolProperty(String name, Consumer<Double> setter, Supplier<Double> getter, double min, double max) {
+        super(name, setter, getter, min, max);
     }
 
     @Override
@@ -23,6 +26,7 @@ class DoubleToolProperty extends NumericalToolProperty<Double> {
 
     @Override
     public void setDouble(double d) {
+        requireBounds(d);
         this.setter.accept(d);
     }
 }

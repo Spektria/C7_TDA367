@@ -1,6 +1,6 @@
 package C7.Model.Tools.ToolProperties;
 
-import C7.Model.Color;
+import C7.Util.Color;
 import C7.Model.Tools.ITool;
 
 
@@ -15,20 +15,14 @@ public interface IToolProperty {
      * Consists of all the types a {@link IToolProperty} can be.
      */
     enum ToolPropertyType {
-        INTEGER, DOUBLE, FLOAT, BOOLEAN, COLOR
+        INTEGER, DOUBLE, BOOLEAN, COLOR
     }
 
     /**
      * Returns the name of this property.
      * @return the name of this property.
      */
-    String name();
-
-    /**
-     * Returns a string with a description of what this property does.
-     * @return the description as a string
-     */
-    String description();
+    String getName();
 
     /**
      * Returns the type of this property.
@@ -56,7 +50,9 @@ public interface IToolProperty {
 
     /**
      * Sets the value of this property as an integer.
+     * The value must be in the range given by the methods {@link #upperBound()} and {@link #lowerBound()}.
      * @throws UnsupportedOperationException if this is the wrong type of this property
+     * @throws IllegalArgumentException if the value is outside this property's range.
      * @param i the value this property will be set to.
      */
     void setInteger(int i);
@@ -70,7 +66,9 @@ public interface IToolProperty {
 
     /**
      * Sets the value of this property as a double.
+     * The value must be in the range given by the methods {@link #upperBound()} and {@link #lowerBound()}.
      * @throws UnsupportedOperationException if this is the wrong type of this property
+     * @throws IllegalArgumentException if the value is outside this property's range.
      * @param d the value this property will be set to.
      */
     void setDouble(double d);
@@ -78,23 +76,10 @@ public interface IToolProperty {
     /**
      * Returns the value of this property as a double.
      * @throws UnsupportedOperationException if this is the wrong type of this property
+     * @throws IllegalArgumentException if the value is outside this property's range.
      * @return the value of this property.
      */
     double getDouble();
-
-    /**
-     * Sets the value of this property as a float.
-     * @throws UnsupportedOperationException if this is the wrong type of this property
-     * @param f the value this property will be set to.
-     */
-    void setFloat(float f);
-
-    /**
-     * Returns the value of this property as a float.
-     * @throws UnsupportedOperationException if this is the wrong type of this property
-     * @return the value of this property.
-     */
-    float getFloat();
 
     /**
      * Sets the value of this property as a boolean.
@@ -124,4 +109,9 @@ public interface IToolProperty {
      */
     Color getColor();
 
+    /**
+     * Resets this property to its default, start, value.
+     * This value is the first value this property registered.
+     */
+    void setToDefault();
 }
