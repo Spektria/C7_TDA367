@@ -159,7 +159,7 @@ class MainController implements IMainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose project to import");
         List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("C7Paint Project", formats));
 
         File file = fileChooser.showOpenDialog(menuBar.getScene().getWindow());
         if (file != null) importFileAsProject(file);
@@ -171,7 +171,7 @@ class MainController implements IMainController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choose where to save the project");
         List<String> formats = Arrays.stream(ProjectFormatName.values()).map(ProjectFormatName::toString).map(str -> "*." + str).collect(Collectors.toList());
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PaintQlone Project", formats));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("C7Paint Project", formats));
         fileChooser.setInitialFileName(project.getName());
         fileChooser.setInitialDirectory(FileSystemView.getFileSystemView().getDefaultDirectory());
 
