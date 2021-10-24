@@ -27,7 +27,7 @@ public class PaintApplication extends Application {
         IMainController controller = ControllerFactory.createController(view, project, root);
 
         // Setup window
-        primaryStage.setTitle("PaintQlone");
+        primaryStage.setTitle("C7Paint");
         Scene scene = new Scene(root);
         Image i = new Image(ResourceIO.getGlobalResource("icon.png").toString());
         primaryStage.getIcons().add(i);
