@@ -9,7 +9,7 @@ import C7.Util.Vector2D;
  * <code>ILayerManager</code> is an interface for a collection of ordered layers in a picture.
  * Layer managers are responsible for creating, destroying, and providing access
  * to layers inside of an image project.
- * @author Love Gustafsson
+ * @author Love Svalby
  * @version 1.3
  */
 public interface ILayerManager extends IObservable<Tuple2<Vector2D, Vector2D>> {

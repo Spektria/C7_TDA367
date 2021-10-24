@@ -11,7 +11,7 @@ import C7.Util.Vector2D;
  * retrieved.
  *
  * @author Elias Ersson
- * @author Love Gustafsson
+ * @author Love Svalby
  * @version 1.5
  */
 public interface ILayer extends IObservable<Tuple2<Vector2D, Vector2D>> {

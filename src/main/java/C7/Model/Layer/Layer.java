@@ -9,7 +9,7 @@ import java.util.*;
  * Represents a basic image layer.
  * @author Elias Ersson
  * @author Isak Gustafsson
- * @author Love Gustafsson
+ * @author Love Svalby
  * @author Hugo Ekstrand
  * @version 2.2
  */

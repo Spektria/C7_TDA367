@@ -11,7 +11,7 @@ import java.nio.channels.NotYetBoundException;
 import java.util.*;
 
 /**
- * @author Love Gustafsson
+ * @author Love Svalby
  * @version 1.1
  */
 public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {

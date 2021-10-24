@@ -9,7 +9,7 @@ import java.util.Objects;
  * point value, usually between 0 and 1, where 0 is no intensity and 1 is
  * maximum intensity. The color format supports channel intensities above 1 for
  * high dynamic range imaging.
- * @author Love Gustafsson
+ * @author Love Svalby
  * @version 1.1
  */
 public final class Color {
