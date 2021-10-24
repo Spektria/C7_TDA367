@@ -237,8 +237,8 @@ public class Layer implements ILayer, Serializable {
     private Vector2D toGlobal(Vector2D point){
         return point
                 .sub(getLocalCenterPoint())             // Translate so that the center of the layer is at (0,0)
-                .rotatedAround(Vector2D.ZERO, rotation) // Rotate the layer
                 .scale(scale)                           // Scale the layer
+                .rotatedAround(Vector2D.ZERO, rotation) // Rotate the layer
                 .add(getLocalCenterPoint())             // Translate the layer back to its original position
                 .add(position);                         // Translate it to its global position
     }
@@ -252,8 +252,8 @@ public class Layer implements ILayer, Serializable {
         return point
                 .sub(position)                          // Translate to local
                 .sub(getLocalCenterPoint())             // Translate so that the center of the layer is at (0,0)
-                .scale(inverseScale)                    // Scale the plane
                 .rotatedAround(Vector2D.ZERO, -rotation)// Rotate it
+                .scale(inverseScale)                    // Scale the plane
                 .add(getLocalCenterPoint());            // Move it back to its local position
     }
 
