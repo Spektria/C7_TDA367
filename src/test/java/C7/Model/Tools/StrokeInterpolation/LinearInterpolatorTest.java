@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Stream;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class LinearInterpolatorTest {
 
     public static Stream<Arguments> interpolationPointCountTestArgs() {

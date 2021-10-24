@@ -32,8 +32,7 @@ class IntProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(PropertyDescription.getInstance().getName(prop));
-        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
+        label.setText(prop.getName());
 
         spinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(prop.lowerBound().intValue(), prop.upperBound().intValue(), prop.getInteger()));
 

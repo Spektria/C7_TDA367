@@ -85,7 +85,6 @@ class Project implements IProject, IObserver<Tuple2<Vector2D, Vector2D>>, Serial
      */
     @Override
     public void applyTool(ITool tool, Vector2D v0, Vector2D v1){
-        tool.apply(activeLayer, v0, v1);
         int layerID = layerManager.getActiveLayerId();
         ILayer activeLayer = layerManager.getLayer(layerID);
         tool.apply(activeLayer, v0, v1);

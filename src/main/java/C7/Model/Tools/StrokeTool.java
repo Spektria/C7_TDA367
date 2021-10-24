@@ -73,7 +73,7 @@ abstract class StrokeTool extends BaseTool {
         // 2: Round the points to the closest integer so that they represent pixels.
         // Lastly, after doing this collect all the created points as a set so that any duplicate points are removed.
         return strokeInterpolator.interpolate(pointFrequency, v0, v1)
-                .stream()
+                .parallelStream()
                 .flatMap(interpolatedPoint -> patternPoints.stream().map(v -> v.add(interpolatedPoint)))
                 .map(v -> new Vector2D((int)v.getX(), (int)v.getY()))
                 //.map(v -> new Tuple2<>((int)v.getX(), (int)v.getY()))

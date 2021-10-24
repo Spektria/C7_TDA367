@@ -27,7 +27,7 @@ class RotationTool extends BaseTool {
         if(v0.equals(center) || v1.equals(center) || v0.equals(v1))
             return;
 
-        double rot = center.sub(v0).angleBetweenWithSign(center.sub(v1)) / 2d;
+        double rot = center.sub(v0).angleBetweenWithSign(center.sub(v1));
         layer.setRotation(layer.getRotation() + rot);
         layer.update();
     }

@@ -3,6 +3,9 @@ package C7.Model.Tools.ToolProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class NumericalPropertyTest {
 
     private double d;

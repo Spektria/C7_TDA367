@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class LayerManager implements ILayerManager, IObserver<Tuple2<Vector2D, Vector2D>>, Serializable {
 
-	private class LayerInfo {
+	private class LayerInfo implements Serializable {
 
 		final private ILayer layer;
 		final private int id;

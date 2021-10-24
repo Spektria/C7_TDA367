@@ -48,9 +48,6 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
 
     @Override
     public void render() {
-        Objects.requireNonNull(height);
-        Objects.requireNonNull(width);
-
         render(0, 0, (int)width.get(), (int)height.get());
     }
 
@@ -63,6 +60,9 @@ class View implements IView, IObserver<Tuple2<Vector2D, Vector2D>> {
     @Override
     public void render(int x0, int y0, int x1, int y1) {
         Objects.requireNonNull(gc);
+        Objects.requireNonNull(height);
+        Objects.requireNonNull(width);
+        Objects.requireNonNull(render);
 
         int xMin = C7Math.limit(x0, 0, this.width.intValue());
         int yMin = C7Math.limit(y0, 0, this.height.intValue());

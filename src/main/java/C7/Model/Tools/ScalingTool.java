@@ -29,7 +29,7 @@ class ScalingTool extends BaseTool {
         // that when we drag a layer it "moves with the mouse".
         // To do this we calculate how much we need to add / subtract to the scale to get that distance.
         // For the x-axis the change is scaleToAdd = dx / width.
-        Vector2D scaleToAdd = delta.scale(new Vector2D(1d/layer.getWidth(), 1d/layer.getHeight()));
+        Vector2D scaleToAdd = delta.scale(new Vector2D(1d/layer.getWidth(), 1d/layer.getHeight())).mult(2);
 
         if(relative)
             // If the scaling is supposed to be relative to the quadrants we need to compensate for
