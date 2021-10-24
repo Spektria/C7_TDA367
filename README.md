@@ -7,7 +7,7 @@ There are two ways to run the project:
 
 ### Run jar file
 Use maven to pacakge the project by running the command `mvn package` while in the root folder.
-This will package a jar file which can be executed with the command `java -jar "target//C7Paint-1.0-SNAPSHOT.jar"`.
+This will package a jar file which can be executed with the command `javaw -jar "target//C7Paint-1.0-SNAPSHOT.jar"`.
 
 ### Run class files in IDE 
 Alternativly, the project could be run with its class files. This can be done with an IDE, such as Intellij.
