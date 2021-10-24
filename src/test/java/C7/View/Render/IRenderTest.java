@@ -4,14 +4,23 @@ import C7.Model.IProject;
 import C7.Model.Layer.ILayer;
 import C7.Model.Layer.LayerFactory;
 import C7.Model.ProjectFactory;
+import C7.Model.Tools.ToolFactory;
 import C7.Util.Color;
+import C7.Util.IObserver;
+import C7.Util.Tuple2;
+import C7.Util.Vector2D;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Stream;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class IRenderTest {
 
     public static Stream<Arguments> params() {
@@ -54,6 +63,45 @@ public class IRenderTest {
 
         // Anything outside the layer should be transparent since there is no data there.
         Assertions.assertEquals(new Color(0,0,0,0), colors[0][0]);
+    }
+
+    @Test
+    public void observerTestProject(){
+
+        IProject proj = ProjectFactory.createProjectWithBaseLayer("tst",10,10);
+        IRender render = RenderAdapterFactory.createAdapter(proj);
+
+        // Simply check that the observer fires.
+        AtomicBoolean hasObserved = new AtomicBoolean(false);
+        IObserver<Tuple2<Vector2D, Vector2D>> observer = data -> hasObserved.set(!hasObserved.get());
+        render.addObserver(observer);
+        proj.applyTool(ToolFactory.createTranslationTool(),new Vector2D(0,0), new Vector2D(10, 10));
+        Assertions.assertTrue(hasObserved.get());
+
+        // Now we remove the observer and check that it actually gets removed.
+        render.removeObserver(observer);
+        proj.applyTool(ToolFactory.createTranslationTool(),new Vector2D(0,0), new Vector2D(10, 10));
+        Assertions.assertTrue(hasObserved.get());
+
+    }
+
+    @Test
+    public void observerTestLayer(){
+
+        ILayer layer = LayerFactory.createDefaultLayer(10, 10, Color.RED);
+        IRender render = RenderAdapterFactory.createAdapter(layer);
+
+        // Simply check that the observer fires.
+        AtomicBoolean hasObserved = new AtomicBoolean(false);
+        IObserver<Tuple2<Vector2D, Vector2D>> observer = data -> hasObserved.set(!hasObserved.get());
+        render.addObserver(observer);
+        ToolFactory.createTranslationTool().apply(layer, new Vector2D(0,0), new Vector2D(10, 10));
+        Assertions.assertTrue(hasObserved.get());
+
+        // Now we remove the observer and check that it actually gets removed.
+        render.removeObserver(observer);
+        ToolFactory.createTranslationTool().apply(layer, new Vector2D(0,0), new Vector2D(10, 10));
+        Assertions.assertTrue(hasObserved.get());
     }
 
 }

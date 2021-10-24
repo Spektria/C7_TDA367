@@ -20,7 +20,7 @@ class TranslationTool extends BaseTool {
 
     @Override
     public void apply(ILayer layer, Vector2D v0, Vector2D v1) {
-        Vector2D movement = v1.sub(v0).scale(new Vector2D(1d/2, 1d/2));
+        Vector2D movement = v1.sub(v0);
         layer.setPosition(layer.getPosition().add(movement));
         layer.update();
     }

@@ -30,6 +30,7 @@ public class FillBucketTest {
     public void rectangleFillTest(){
         TestISurfaceImpl testSurface = new TestISurfaceImpl(10, 10, new Vector2D(1,1));
 
+        // Encapsulate the area within 2<x<10 and 1<y<10
         for (int i = 0; i < testSurface.getHeight(); i++) {
             for (int j = 0; j < testSurface.getWidth(); j++) {
                 if(i == 2 || j == 1 || testSurface.getHeight() - i == 1 + 1 || testSurface.getWidth() - j == 1 + 1)
@@ -39,11 +40,13 @@ public class FillBucketTest {
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
+        // Fill the area
         ITool brush = ToolFactory.createFillBucket(0.05f, new Color(0,0,0,1f));
         brush.apply(testSurface, new Vector2D(3,3), new Vector2D(3,3));
 
         System.out.println("Surface: \n" + testSurface.getContentAs2DString());
 
+        // Check so that the area was filled, and nothing outside it.
         for (int y = 0; y < testSurface.getHeight(); y++) {
             for (int x = 0; x < testSurface.getWidth(); x++) {
                 Color pixel = testSurface.getLocalPixel(x, y);

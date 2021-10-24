@@ -3,6 +3,9 @@ package C7.Util;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class C7MathTest {
 
     @Test

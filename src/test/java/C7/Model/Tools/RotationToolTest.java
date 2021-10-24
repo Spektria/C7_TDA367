@@ -8,6 +8,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * @author Hugo Ekstrand
+ */
 public class RotationToolTest {
 
 
@@ -24,15 +27,17 @@ public class RotationToolTest {
 
         Vector2D center = layer.getLocalCenterPoint();
 
-        // Rotate by 45/2deg
+        // Rotate by 45deg
         rotationTool.apply(layer, center.add(new Vector2D(1, 0)), center.add(new Vector2D(Math.cos(Math.PI / 4d), Math.sin((Math.PI / 4d)))));
 
-        Assertions.assertEquals(Math.PI / 8d, layer.getRotation());
+        // Now we are at 45deg
+        Assertions.assertEquals(Math.PI / 4d, layer.getRotation());
 
-        // Rotate by 45/2deg
+        // Rotate by 45deg
         rotationTool.apply(layer, center.add(new Vector2D(0, 1)), center.add(new Vector2D(Math.cos(Math.PI / 2d + Math.PI / 4d), Math.sin((Math.PI / 2d + Math.PI / 4d)))));
 
-        Assertions.assertEquals(Math.PI / 4d, layer.getRotation());
+        // Now we should be at 90deg
+        Assertions.assertEquals(Math.PI / 2d, layer.getRotation());
     }
 
     @Test

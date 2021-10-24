@@ -18,6 +18,7 @@ public class CircularBrushTest {
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
 
+        // Check so that we've drawn a single pixel since the size of the brush is 1.
         Assertions.assertNotEquals(testSurface.getLocalPixel(0,0), testSurface.getBaseColor());
         Assertions.assertEquals(testSurface.getLocalPixel(0, 1), testSurface.getBaseColor());
         Assertions.assertEquals(testSurface.getLocalPixel(1, 0), testSurface.getBaseColor());
@@ -30,6 +31,8 @@ public class CircularBrushTest {
         brush.apply(testSurface, new Vector2D(10, 10), new Vector2D(10,10));
 
         System.out.println("Surface:\n" + testSurface.getContentAs2DString());
+
+        // Check so that we've drawn the shape correctly
 
         // Center
         Assertions.assertNotEquals(testSurface.getLocalPixel(10, 10), testSurface.getBaseColor());

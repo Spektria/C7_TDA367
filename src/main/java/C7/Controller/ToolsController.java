@@ -40,7 +40,7 @@ class ToolsController extends ScrollPane {
         AnchorPane.setTopAnchor(this, 0d);
         AnchorPane.setBottomAnchor(this, 0d);
 
-        //This really needs to be reworked
+        //Should be created elsewhere so the array of tools can be modified without modifying this class
         ITool toolThatWeCreateSeparatelyToSetItAsTheDefault = ToolFactory.createCircularBrush(5, new Color(0, 0, 0, 1));
         setCurrentTool(toolThatWeCreateSeparatelyToSetItAsTheDefault);
         flowPaneTools.getChildren().add(new ToolButton(toolThatWeCreateSeparatelyToSetItAsTheDefault, "Circle", this));

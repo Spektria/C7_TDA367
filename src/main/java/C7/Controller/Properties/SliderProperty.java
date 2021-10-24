@@ -32,8 +32,7 @@ class SliderProperty extends AnchorPane {
             throw new RuntimeException(exception);
         }
 
-        label.setText(PropertyDescription.getInstance().getName(prop));
-        Tooltip.install(label, new Tooltip(PropertyDescription.getInstance().getDescription(prop)));
+        label.setText(prop.getName());
 
         double value = prop.getDouble();
         slider.setValue(value);
