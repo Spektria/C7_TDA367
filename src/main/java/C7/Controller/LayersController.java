@@ -116,8 +116,6 @@ public class LayersController extends AnchorPane {
 
             @Override
             protected void updateItem(Canvas item, boolean empty) {
-                //This line was in the reference code, I don't think it does anything but I'm not sure. Delete it later if it all keeps working
-                //super.updateItem(item, empty);
                 if (!empty) {
                     setGraphic(item);
                 } else {
